@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/empLayout.xhtml">
+
+    <ui:define name="contenido">
+        <style>
+    .fila1 td, .fila2 td {
+        padding: 12px !important;
+        vertical-align: middle;
+    }
+
+    /* Alternar colores suaves */
+    .fila1 { background: lightgray; }
+    .fila2 { background: whitesmoke; }
+
+    .table th {
+        padding: 12px !important;
+        background: white;
+        color: #C89B3C;
+    }
+</style>
+        <f:event type="preRenderView" listener="#{usuarioBean.listar()}" />
+
+        <h2 class="text-center text-primary mb-4">Administrar Usuarios</h2>
+        
+        <h:form>
+                <h:dataTable value="#{usuarioBean.listaU}" var="usr"
+             styleClass="table table-bordered shadow-sm"
+             rowClasses="fila1,fila2"
+             columnClasses="columna,columna,columna,columna,columna,columna"
+             style="background:black; font-size:15px;">
+
+    <h:column>
+        <f:facet name="header">
+            <span style="font-weight:bold; color:#C89B3C;">ID</span>
+        </f:facet>
+        <span style="display:block; padding:10px 5px; color: black;">#{usr.id_usuario}</span>
+    </h:column>
+
+    <h:column>
+        <f:facet name="header">
+            <span style="font-weight:bold; color:#C89B3C;">Documento</span>
+        </f:facet>
+        <span style="display:block; padding:10px 5px;color: black;">#{usr.documento}</span>
+    </h:column>
+
+    <h:column>
+        <f:facet name="header">
+            <span style="font-weight:bold; color:#C89B3C;">Nombre Completo</span>
+        </f:facet>
+        <span style="display:block; padding:10px 5px;color: black;">#{usr.nombre_completo}</span>
+    </h:column>
+
+    <h:column>
+        <f:facet name="header">
+            <span style="font-weight:bold; color:#C89B3C;">Correo</span>
+        </f:facet>
+        <span style="display:block; padding:10px 5px;color: black;">#{usr.correo}</span>
+    </h:column>
+
+    <h:column>
+        <f:facet name="header">
+            <span style="font-weight:bold; color:#C89B3C;">Tipo</span>
+        </f:facet>
+        <span style="display:block; padding:10px 5px;color: black;">#{usr.tipo}</span>
+    </h:column>
+
+</h:dataTable>                 
+        </h:form>
+    </ui:define>
+</ui:composition>

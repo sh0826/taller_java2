@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <h:head>
-    <title>Panel de Administración - Ágora Vibes</title>
+    <title>Panel de Empleado - Ágora Vibes</title>
 
     <style>
         body {
@@ -83,18 +83,15 @@
 </h:head>
 
 <h:body>
-    <f:event type="preRenderView" listener="#{loginBean.verif_sesion('A')}"/>
-    <div class="header">Panel de Administración - Ágora Vibes Gastro BAR</div>
+    <f:event type="preRenderView" listener="#{loginBean.verif_sesion('E')}"/>
+    <div class="header">Panel de Empleado - Ágora Vibes Gastro BAR</div>
     <div class="container">
         <div class="sidebar">
             <div class="sidebar-title">Menú</div>
-            <a class="menu-item" href="/proyectoBar2/faces/admin/usuario/index.xhtml">Usuarios</a>
-            <a class="menu-item" href="/proyectoBar2/faces/admin/producto/index.xhtml">Productos</a>
-            <a class="menu-item" href="/proyectoBar2/faces/admin/reservacion/index.xhtml">Reservaciones</a>
-            <a class="menu-item" href="/proyectoBar2/faces/admin/evento/index.xhtml">Eventos</a>
-            <a class="menu-item" href="/proyectoBar2/faces/admin/ventas/index.xhtml">Ventas</a>
-            <a class="menu-item" href="/proyectoBar2/faces/admin/boleta/index.xhtml">Boletas</a>
-            <a class="menu-item" href="/proyectoBar2/faces/admin/detalleVenta/index.xhtml">Detalle Venta</a>
+            <a class="menu-item" href="/proyectoBar2/faces/emp/usuario/index.xhtml">Tu informacion</a>
+            <a class="menu-item" href="/proyectoBar2/faces/emp/producto/index.xhtml">Productos</a>
+            <a class="menu-item" href="/proyectoBar2/faces/emp/reservacion/index.xhtml">Reservaciones</a>
+            <a class="menu-item" href="/proyectoBar2/faces/emp/ventas/index.xhtml">Ventas</a>
             <h:form>
                 <h:commandLink value="Cerrar Sesión" 
                                actionListener="#{loginBean.cerrar_sesion}" 
