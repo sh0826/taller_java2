@@ -1,28 +1,49 @@
 package beans;
 
 import dao.ProductoDAO;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
+import javax.faces.view.ViewScoped;
 import modelo.Producto;
 
-
 @Named
-@SessionScoped
-@ManagedBean
 @ViewScoped
-public class ProductoBean {
+public class ProductoBean implements Serializable {
 
     private Producto producto = new Producto();
     private List<Producto> lista;
-      @Inject
+    private List<Producto> listaFiltrada;
+
+    private String filtroNombre = "";
+    private String filtroTipo = "";
+
     private ProductoDAO dao = new ProductoDAO();
 
     public Producto getProducto() { return producto; }
     public void setProducto(Producto producto) { this.producto = producto; }
+
+    public String getFiltroNombre() { return filtroNombre; }
+    public void setFiltroNombre(String filtroNombre) { this.filtroNombre = filtroNombre; }
+
+    public String getFiltroTipo() { return filtroTipo; }
+    public void setFiltroTipo(String filtroTipo) { this.filtroTipo = filtroTipo; }
+
+    public List<Producto> getListaFiltrada() {
+        if (listaFiltrada == null) {  
+            try {
+                listaFiltrada = dao.listar();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return listaFiltrada;
+    }
+
+    public void setListaFiltrada(List<Producto> listaFiltrada) {
+        this.listaFiltrada = listaFiltrada;
+    }
 
     public List<Producto> getLista() {
         try {
@@ -40,7 +61,10 @@ public class ProductoBean {
             } else {
                 dao.insertar(producto);
             }
-            producto = new Producto(); // limpiar
+
+            producto = new Producto(); 
+            actualizarLista();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,6 +77,43 @@ public class ProductoBean {
     public void eliminar(int id) {
         try {
             dao.eliminar(id);
+            actualizarLista();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void filtrar() {
+        try {
+            List<Producto> todos = dao.listar();
+            listaFiltrada = new ArrayList<>();
+
+            for (Producto p : todos) {
+
+                boolean coincide = true;
+
+                if (filtroNombre != null && !filtroNombre.isEmpty()) {
+                    coincide &= p.getNombre().toLowerCase()
+                            .contains(filtroNombre.toLowerCase());
+                }
+
+                if (filtroTipo != null && !filtroTipo.isEmpty()) {
+                    coincide &= p.getTipo_producto().equalsIgnoreCase(filtroTipo);
+                }
+
+                if (coincide) {
+                    listaFiltrada.add(p);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void actualizarLista() {
+        try {
+            listaFiltrada = dao.listar();
         } catch (Exception e) {
             e.printStackTrace();
         }
