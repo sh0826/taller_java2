@@ -57,7 +57,7 @@ public class LoginBean {
                         dir = "/faces/cliente";
                         break;
                     case "E":
-                        dir = "/faces/empl";
+                        dir = "/faces/emp";
                         break;
                 }
                 
