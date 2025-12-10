@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Detalle Venta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</h:head>
+<h:body>
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Administrar Detalles de Venta</h2>
+
+    <h:form class="mb-5">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <h:outputLabel value="Producto:" for="producto" class="form-label"/>
+                <h:selectOneMenu id="producto" value="#{detalleVentaBean.detalle.id_producto}" styleClass="form-select">
+                    <f:selectItem itemLabel="Seleccione..." itemValue=""/>
+                    <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
+                </h:selectOneMenu>
+            </div>
+            <div class="col-md-3">
+                <h:outputLabel value="Descripción:" for="desc" class="form-label"/>
+                <h:inputText id="desc" value="#{detalleVentaBean.detalle.descripcion}" styleClass="form-control"/>
+            </div>
+            <div class="col-md-2">
+                <h:outputLabel value="Cantidad:" for="cant" class="form-label"/>
+                <h:inputText id="cant" value="#{detalleVentaBean.detalle.cantidad_productos}" styleClass="form-control"/>
+            </div>
+            <div class="col-md-2">
+                <h:outputLabel value="Precio Unitario:" for="precio" class="form-label"/>
+                <h:inputText id="precio" value="#{detalleVentaBean.detalle.precio_unitario}" styleClass="form-control"/>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <h:commandButton value="Guardar" action="#{detalleVentaBean.guardar()}" styleClass="btn btn-success w-100"/>
+            </div>
+        </div>
+    </h:form>
+
+    <h:form>
+        <h:dataTable value="#{detalleVentaBean.lista}" var="d" styleClass="table table-striped table-bordered">
+            <h:column>
+                <f:facet name="header">ID</f:facet>
+                #{d.id_detalleV}
+            </h:column>
+            
+            <h:column><f:facet name="header">Producto</f:facet>
+                #{d.id_producto}
+            </h:column>
+            
+            <h:column><f:facet name="header">Descripción
+                </f:facet>#{d.descripcion}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Cantidad</f:facet>
+                #{d.cantidad_productos}
+            </h:column>
+            
+            <h:column><f:facet name="header">Precio Unitario
+                </f:facet>#{d.precio_unitario}
+            </h:column>
+            
+            <h:column>
+                <h:commandButton value="Editar" action="#{detalleVentaBean.editar(d)}" styleClass="btn btn-primary btn-sm"/>
+                <h:commandButton value="Eliminar" action="#{detalleVentaBean.eliminar(d.id_detalleV)}" 
+                                 onclick="return confirm('¿Está seguro de eliminar este detalle?');" 
+                                 styleClass="btn btn-danger btn-sm ms-2"/>
+            </h:column>
+        </h:dataTable>
+    </h:form>
+    <h:link value="Volver" outcome="/faces/admin/producto/index" styleClass="btn btn-primary"/>
+</div>
+</h:body>
+</html>
+

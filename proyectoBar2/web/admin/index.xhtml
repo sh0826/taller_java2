@@ -23,7 +23,7 @@
             <h:form>
                 <h:commandButton value="Administrar Usuarios" action="/faces/admin/usuario/index"/>
                 <br/><br/>
-                <h:commandButton value="Administrar Productos" action="/faces/producto/index"/>
+                <h:commandButton value="Administrar Productos" action="/faces/admin/producto/index"/>
                 <br/><br/>
                 <h:commandButton value="Administrar Reservacion" action="/faces/admin/reservacion/index"/>
                 <br/><br/>
@@ -32,6 +32,8 @@
                 <h:commandButton value="Administrar Venta" action="/faces/admin/ventas/index"/>
                 <br/><br/>
                 <h:commandButton value="Administrar Boleta" action="/faces/admin/boleta/index"/>
+                <br/><br/>
+                <h:commandButton value="Administrar Detalle venta" action="/faces/admin/detalleVenta/index"/>
                 <br/><br/>
                 <h:commandButton value="Cerrar Sesión" actionListener="#{loginBean.cerrar_sesion()}" />
             </h:form>
