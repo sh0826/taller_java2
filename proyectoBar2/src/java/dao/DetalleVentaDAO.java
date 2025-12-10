@@ -37,8 +37,8 @@ public class DetalleVentaDAO {
         ps.setInt(1, d.getId_venta());
         ps.setInt(2, d.getId_producto());
         ps.setString(3, d.getDescripcion());
-        ps.setInt(4, d.getCantidad_productos());
-        ps.setDouble(5, d.getPrecio_unitario());
+        ps.setObject(4, d.getCantidad_productos(), java.sql.Types.INTEGER);
+        ps.setObject(5, d.getPrecio_unitario(), java.sql.Types.DECIMAL);
         ps.executeUpdate();
     }
 
@@ -49,8 +49,8 @@ public class DetalleVentaDAO {
         ps.setInt(1, d.getId_venta());
         ps.setInt(2, d.getId_producto());
         ps.setString(3, d.getDescripcion());
-        ps.setInt(4, d.getCantidad_productos());
-        ps.setDouble(5, d.getPrecio_unitario());
+        ps.setObject(4, d.getCantidad_productos(), java.sql.Types.INTEGER);
+        ps.setObject(5, d.getPrecio_unitario(), java.sql.Types.DECIMAL);
         ps.setInt(6, d.getId_detalleV());
         ps.executeUpdate();
     }

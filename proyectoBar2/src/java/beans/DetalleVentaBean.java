@@ -37,16 +37,19 @@ public class DetalleVentaBean {
     }
 
     public void guardar() {
-        System.out.print("Esto es guardar");
+        System.out.println("Esto es guardar");
+
         try {
+            detalle.setId_venta(1);  // ← TEMPORAL (prueba)
+
             if(detalle.getId_detalleV() > 0) {
                 dao.modificar(detalle);
-            } else{ 
+            } else {
                 dao.insertar(detalle);
             }
             detalle = new DetalleVenta();
-        } catch(Exception e){ 
-            e.printStackTrace(); 
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 

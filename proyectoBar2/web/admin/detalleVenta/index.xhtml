@@ -10,13 +10,13 @@
 <h:body>
 <div class="container mt-5">
     <h2 class="text-center text-primary mb-4">Administrar Detalles de Venta</h2>
-
+    
     <h:form class="mb-5">
         <div class="row g-3">
             <div class="col-md-3">
                 <h:outputLabel value="Producto:" for="producto" class="form-label"/>
                 <h:selectOneMenu id="producto" value="#{detalleVentaBean.detalle.id_producto}" styleClass="form-select">
-                    <f:selectItem itemLabel="Seleccione..." itemValue=""/>
+                    <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
                     <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
                 </h:selectOneMenu>
             </div>
@@ -68,6 +68,7 @@
                                  onclick="return confirm('¿Está seguro de eliminar este detalle?');" 
                                  styleClass="btn btn-danger btn-sm ms-2"/>
             </h:column>
+            
         </h:dataTable>
     </h:form>
     <h:link value="Volver" outcome="/admin/index" styleClass="btn btn-primary"/>
