@@ -15,6 +15,8 @@ public class UsuarioBean {
     UsuarioDAO uDAO = new UsuarioDAO();
     
     public void registrarCliente(){
+        usuario.setPass(Utils.encriptar(usuario.getPass()));
+        uDAO.guardar(usuario);
         usuario.setTipo("C");
         uDAO.guardar(usuario);
         usuario = new Usuario();

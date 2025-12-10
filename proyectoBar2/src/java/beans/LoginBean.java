@@ -57,7 +57,7 @@ public class LoginBean {
                         dir = "/faces/cliente";
                         break;
                     case "E":
-                        dir = "/faces/empl";
+                        dir = "/faces/emp";
                         break;
                 }
                 
@@ -66,7 +66,7 @@ public class LoginBean {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(rootPath + dir + "/index.xhtml");
                 FacesContext.getCurrentInstance().responseComplete();
             }else{
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/inicio_sesion/error.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/inicio_sesion/error.xhtml");
             }            
         } catch (SQLException | IOException e) {
         }        
