@@ -13,6 +13,12 @@ public class UsuarioBean {
     Usuario usuario = new Usuario();
     List<Usuario> listaU = new ArrayList<>();
     UsuarioDAO uDAO = new UsuarioDAO();
+    
+    public void registrarCliente(){
+        usuario.setTipo("C");
+        uDAO.guardar(usuario);
+        usuario = new Usuario();
+    }
 
     public Usuario getUsuario() {
         return usuario;
