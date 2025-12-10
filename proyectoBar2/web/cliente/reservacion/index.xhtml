@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Administrar Reservaciones</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+              rel="stylesheet"/>
+        <style>
+              .tabla-dark th, .tabla-dark td {
+        background-color: #111 !important;
+        color: white !important;
+        border: 1px solid #333 !important;
+        padding: 12px;
+        text-align: center;
+    }
+
+    .tabla-dark th {
+        background-color: #000 !important;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .tabla-dark tr:nth-child(even) td {
+        background-color: #1a1a1a !important;
+    }
+
+   
+    body {
+        margin: 0;
+        padding: 0;
+    }
+        </style>
+    </h:head>
+
+    <h:body style="background-color:#f7f7f7;">
+
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4">
+            
+
+            <div style="width: 100%; background-color: #000; padding: 15px 20px; 
+            display: flex; align-items: center; gap: 30px;">
+
+   
+    <span style="color: white; font-size: 22px; font-weight: bold;">
+        Agora Vives Pub
+    </span>
+
+    
+    <a href="#" style="color: white; text-decoration: none; font-size: 16px;">
+        Inicio
+    </a>
+
+    <a href="/faces/cliente/reservacion/index" 
+       style="color: white; text-decoration: none; font-size: 16px;">
+        Reservaciones
+    </a>
+
+    <a href="#" style="color: white; text-decoration: none; font-size: 16px;">
+        Contactos
+    </a>
+
+</div>
+        </nav>
+
+        <f:event type="preRenderView"
+                 listener="#{reservacionBean.listar()}" />
+
+        <h2 class="text-center text-primary mb-4">Administrar Reservaciones</h2>
+
+        <h:form class="container">
+                <div class="mb-4 text-center">
+
+            <h:commandLink value="Nueva Reservación"
+                           styleClass="btn btn-primary me-3"
+                           action="/faces/cliente/reservacion/create" />
+
+            <h:commandLink value="Menú Anterior"
+                           styleClass="btn btn-secondary"
+                           action="/faces/index" />
+                </div>
+            
+
+            <br/><br/>
+
+           
+            <h:dataTable value="#{reservacionBean.lstReserv}"
+             var="reserv"
+             styleClass="tabla-dark w-100"
+             headerClass="tabla-dark"
+             rowClasses="tabla-dark">
+             
+    <h:column>
+        <f:facet name="header">ID</f:facet>
+        #{reserv.id_reservacion}
+    </h:column>
+
+    <h:column>
+        <f:facet name="header">Ocasión</f:facet>
+        #{reserv.ocasion}
+    </h:column>
+
+    <h:column>
+        <f:facet name="header">Cantidad de Personas</f:facet>
+        #{reserv.catindad_personas}
+    </h:column>
+
+    <h:column>
+        <f:facet name="header">Cantidad de Mesas</f:facet>
+        #{reserv.cantidad_mesas}
+    </h:column>
+
+    <h:column>
+        <f:facet name="header">Fecha de Reservación</f:facet>
+        <h:outputText value="#{reserv.fecha_reservacion}">
+            <f:convertDateTime pattern="dd/MM/yyyy"/>
+        </h:outputText>
+    </h:column>
+
+    <h:column>
+        <f:facet name="header">Opciones</f:facet>
+
+        <h:commandLink value="Editar"
+                       styleClass="text-info fw-bold me-3"
+                       actionListener="#{reservacionBean.buscar(reserv.id_reservacion)}"
+                       action="editar"/>
+
+        <h:commandLink value="Eliminar"
+                       styleClass="text-danger fw-bold"
+                       actionListener="#{reservacionBean.eliminar(reserv.id_reservacion)}"
+                       onclick="return confirm('¿Está seguro de ELIMINAR la Reservación ID: #{reserv.id_reservacion}?');"/>
+    </h:column>
+
+</h:dataTable>
+
+        </h:form>
+
+
+        <!-- ========================================================= -->
+        <!-- FOOTER NEGRO CON CONTACTO Y REDES -->
+        <!-- ========================================================= -->
+
+        <footer class="bg-dark text-white text-center py-4 mt-5">
+
+            <h4 class="fw-bold">Contáctanos</h4>
+
+            <div class="mt-3">
+
+                <a href="/faces/contacto/index"
+                   class="text-white mx-3 text-decoration-none">📩 Contacto</a>
+
+                <a href="https://www.facebook.com"
+                   class="text-white mx-3 text-decoration-none" target="_blank">👍 Facebook</a>
+
+                <a href="https://www.instagram.com"
+                   class="text-white mx-3 text-decoration-none" target="_blank">📸 Instagram</a>
+
+                <a href="https://wa.me/573001234567"
+                   class="text-white mx-3 text-decoration-none" target="_blank">💬 WhatsApp</a>
+
+            </div>
+
+            <p class="mt-3 text-secondary small mb-0">
+                © 2025 Agora Vives Pub — Todos los derechos reservados
+            </p>
+
+        </footer>
+
+    </h:body>
+
+</html>

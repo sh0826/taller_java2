@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Ver Reservaciones - Empleado</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+        <style>
+            body {
+                background: #f5f5f5;
+                min-height: 100vh;
+                padding: 15px 0;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            .card {
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background: white;
+            }
+            .card-header {
+                background: #000 !important;
+                color: white !important;
+                border-radius: 8px 8px 0 0 !important;
+                padding: 12px 20px !important;
+                font-size: 14px;
+            }
+            .card-body {
+                padding: 15px;
+            }
+            /* Filtros compactos */
+            .filtros-compactos {
+                background: white !important;
+                border: 1px solid #ddd !important;
+            }
+            .filtros-compactos .card-header {
+                background: #000 !important;
+                color: white !important;
+                padding: 6px 12px !important;
+                font-size: 11px !important;
+            }
+            .filtros-compactos .form-label {
+                font-size: 11px;
+                font-weight: 600;
+                margin-bottom: 3px;
+                color: #333;
+            }
+            .filtros-compactos .form-control,
+            .filtros-compactos .form-select,
+            .filtros-compactos .ui-inputfield {
+                font-size: 12px;
+                padding: 4px 8px;
+                height: 28px;
+                border: 1px solid #ddd;
+                background: white;
+                color: #000;
+            }
+            .filtros-compactos .form-control:focus,
+            .filtros-compactos .form-select:focus,
+            .filtros-compactos .ui-inputfield:focus {
+                border-color: #000;
+                box-shadow: 0 0 0 0.15rem rgba(0,0,0,0.25);
+            }
+            .filtros-compactos .btn {
+                font-size: 11px;
+                padding: 4px 12px;
+                height: 28px;
+                border: 1px solid #333;
+            }
+            .filtros-compactos .btn-dark {
+                background: #000;
+                color: white;
+            }
+            .filtros-compactos .btn-outline-dark {
+                background: white;
+                color: #000;
+            }
+            .filtros-compactos .btn-outline-dark:hover {
+                background: #f5f5f5;
+            }
+            .filtros-compactos .row {
+                margin-bottom: 8px;
+            }
+            /* Tabla compacta blanco y negro */
+            .table-compact {
+                font-size: 12px;
+            }
+            /* Override PrimeFaces table styles */
+            .ui-datatable .ui-datatable-thead > tr > th {
+                background-color: #000 !important;
+                color: white !important;
+                border: 1px solid #333 !important;
+                padding: 8px 10px !important;
+                font-size: 11px !important;
+                text-align: center;
+            }
+            .ui-datatable .ui-datatable-data > tr > td {
+                background-color: white !important;
+                color: #000 !important;
+                border: 1px solid #ddd !important;
+                padding: 6px 10px !important;
+                font-size: 11px !important;
+            }
+            .ui-datatable .ui-datatable-data > tr.ui-state-highlight > td,
+            .ui-datatable .ui-datatable-data > tr:nth-child(even) > td {
+                background-color: #f8f8f8 !important;
+            }
+            .ui-datatable .ui-datatable-data > tr:hover > td {
+                background-color: #e8e8e8 !important;
+            }
+            .btn-dashboard {
+                font-size: 11px;
+                padding: 5px 12px;
+                border: 1px solid #333;
+            }
+            .btn-dashboard:hover {
+                background: #333;
+                color: white;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <f:event type="preRenderView" listener="#{reservacionBean.listar()}" />
+        <div class="container-fluid mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="h5 mb-0" style="font-weight: 600;">RESERVACIONES - EMPLEADO</h2>
+                </div>
+                <div class="card-body">
+                    <h:form id="formReservaciones">
+                        <p:messages id="messages" showDetail="true" closable="true" />
+                        
+                        <div class="mb-2">
+                            <h:commandLink value="Menú" class="btn btn-dashboard btn-outline-dark me-1" action="/faces/index" />
+                            <h:commandLink value="Ventas" class="btn btn-dashboard btn-outline-dark me-1" action="/faces/ventas/empleado/index" />
+                        </div>
+                        
+                        <!-- Filtros de búsqueda compactos -->
+                        <div class="card mb-3 filtros-compactos">
+                            <div class="card-header">
+                                <h6 class="mb-0">FILTROS</h6>
+                            </div>
+                            <div class="card-body" style="padding: 10px;">
+                                <div class="row g-2">
+                                    <div class="col-md-3">
+                                        <h:outputLabel for="searchId" value="ID:" styleClass="form-label" />
+                                        <p:inputNumber id="searchId" value="#{reservacionBean.searchId}" 
+                                                      styleClass="form-control" />
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <h:outputLabel for="searchOcasion" value="Ocasión:" styleClass="form-label" />
+                                        <h:inputText id="searchOcasion" value="#{reservacionBean.searchOcasion}" 
+                                                    styleClass="form-control" />
+                                    </div>
+                                    
+                                    <div class="col-md-6 d-flex align-items-end">
+                                        <h:commandButton value="Filtrar" action="#{reservacionBean.listarConFiltros()}" 
+                                                       styleClass="btn btn-dark me-1" />
+                                        <h:commandButton value="Limpiar" action="#{reservacionBean.limpiarFiltros()}" 
+                                                       styleClass="btn btn-outline-dark" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tabla de reservaciones compacta -->
+                        <p:dataTable id="dtReserv" value="#{reservacionBean.lstReservFiltered.isEmpty() ? reservacionBean.lstReserv : reservacionBean.lstReservFiltered}" 
+                                    var="reserv" 
+                                    styleClass="table-compact"
+                                    emptyMessage="No hay registros en la Base de Datos" 
+                                    paginator="true" paginatorPosition="bottom" rows="15"
+                                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
+                                    rowsPerPageTemplate="5,10,15,20">
+                
+                <p:column headerText="ID" style="text-align: center;">                    
+                    <h:outputText value="#{reserv.id_reservacion}" />
+                </p:column>
+                
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputLabel value="Ocasión" />
+                    </f:facet>
+                    <h:outputText value="#{reserv.ocasion}" />
+                </p:column>
+                
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputLabel value="Cantidad de Personas" />
+                    </f:facet>
+                    <h:outputText value="#{reserv.catindad_personas}" />
+                </p:column>
+                
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputLabel value="Cantidad de Mesas" />
+                    </f:facet>
+                    <h:outputText value="#{reserv.cantidad_mesas}" />
+                </p:column>
+                
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputLabel value="Fecha de Reservación" />
+                    </f:facet>
+                    <h:outputText value="#{reserv.fecha_reservacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+                
+                <p:column style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputLabel value="Opciones" />
+                    </f:facet>
+                    <h:commandLink value="Eliminar" styleClass="btn btn-sm btn-outline-dark" 
+                                   actionListener="#{reservacionBean.eliminar(reserv.id_reservacion)}" 
+                                   onclick="return confirm('¿Está seguro de ELIMINAR la Reservación ID: #{reserv.id_reservacion} ??!!');" />
+                </p:column>
+                
+            </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
+
