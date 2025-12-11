@@ -10,22 +10,33 @@
 </h:head>
 <h:body>
 <div class="container mt-5">
-    <h2 class="text-center text-primary mb-4">Administrar Detalles de Venta</h2>
-    
-    <!-- Botones de exportación -->
-    <h:form id="formTabla">
-        <div class="mb-3">
-            <p:commandLink ajax="false" styleClass="me-2" title="Exportar a PDF"
-                          action="#{detalleVentaBean.exportarPDF}">
-                <p:graphicImage value="/iconos/pdf.png" width="30" />
-            </p:commandLink>
-            <p:commandLink ajax="false" title="Exportar a Excel"
-                          action="#{detalleVentaBean.exportarExcel}">
-                <p:graphicImage value="/iconos/xls.png" width="35" />
-            </p:commandLink>
+    <h:link value="Volver" outcome="/admin/index" styleClass="btn btn-primary"/><h2 class="text-center text-primary mb-4">Administrar Detalles de Venta</h2>
+    <br></br>
+    <h:form class="mb-5">
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <h:outputLabel value="Filtrar por ID Venta:"/>
+                <h:inputText value="#{detalleVentaBean.filtroIdVenta}" styleClass="form-control"/>
+            </div>
+            
+            <div class="col-md-3">
+                <h:outputLabel value="Filtrar por Producto:"/>
+                <h:selectOneMenu value="#{detalleVentaBean.filtroIdProducto}" styleClass="form-select">
+                    <f:selectItem itemLabel="Todos" itemValue="0"/>
+                    <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
+                </h:selectOneMenu>
+            </div>
+            
+            <div class="col-md-3">
+                <h:outputLabel value="Filtrar por Descripción:"/>
+                <h:inputText value="#{detalleVentaBean.filtroDescripcion}" styleClass="form-control"/>
+            </div>
+            
+            <div class="col-md-3 d-flex align-items-end">
+                <h:commandButton value="Filtrar" action="#{detalleVentaBean.filtrar()}" styleClass="btn btn-primary me-2"/>
+                <h:commandButton value="Limpiar" action="#{detalleVentaBean.limpiarFiltros()}" styleClass="btn btn-outline-secondary"/>
+            </div>
         </div>
-    
-    <!-- Formulario de registro/edición -->
     <h:form class="mb-5">
         <div class="row g-3">
             <div class="col-md-3">
@@ -52,36 +63,20 @@
             </div>
         </div>
     </h:form>
-
-    <!-- Formulario de filtros -->
-    <h:form class="mb-5">
-        <div class="row g-3 mb-4">
-            <div class="col-md-3">
-                <h:outputLabel value="Filtrar por ID Venta:"/>
-                <h:inputText value="#{detalleVentaBean.filtroIdVenta}" styleClass="form-control" placeholder="ID Venta"/>
-            </div>
-            
-            <div class="col-md-3">
-                <h:outputLabel value="Filtrar por Producto:"/>
-                <h:selectOneMenu value="#{detalleVentaBean.filtroIdProducto}" styleClass="form-select">
-                    <f:selectItem itemLabel="Todos" itemValue="0"/>
-                    <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
-                </h:selectOneMenu>
-            </div>
-            
-            <div class="col-md-3">
-                <h:outputLabel value="Filtrar por Descripción:"/>
-                <h:inputText value="#{detalleVentaBean.filtroDescripcion}" styleClass="form-control" placeholder="Descripción"/>
-            </div>
-            
-            <div class="col-md-3 d-flex align-items-end">
-                <h:commandButton value="Filtrar" action="#{detalleVentaBean.filtrar()}" styleClass="btn btn-primary me-2"/>
-                <h:commandButton value="Limpiar" action="#{detalleVentaBean.limpiarFiltros()}" styleClass="btn btn-outline-secondary"/>
-            </div>
-        </div>
+    
     </h:form>
+    <h:form id="formTabla">
+        <div class="mb-3">
+            <p:commandLink ajax="false" styleClass="me-2" title="Exportar a PDF"
+                          action="#{detalleVentaBean.exportarPDF}">
+                <p:graphicImage value="/iconos/pdf.png" width="30" />
+            </p:commandLink>
+            <p:commandLink ajax="false" title="Exportar a Excel"
+                          action="#{detalleVentaBean.exportarExcel}">
+                <p:graphicImage value="/iconos/xls.png" width="35" />
+            </p:commandLink>
+        </div>
 
-    <!-- Tabla de detalles -->
         <p:dataTable id="dtDetalleVenta" value="#{detalleVentaBean.listaFiltrada}" var="d" 
                     styleClass="table table-striped table-bordered"
                     emptyMessage="No hay detalles de venta registrados"
@@ -142,7 +137,6 @@
             
         </p:dataTable>
     </h:form>
-    <h:link value="Volver" outcome="/admin/index" styleClass="btn btn-primary"/>
 </div>
 </h:body>
 </html>
