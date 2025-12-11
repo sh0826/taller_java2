@@ -18,9 +18,7 @@
                     <h:outputLabel value="Documento: " for="doc" />
                     <h:inputText id="doc" value="#{usuarioBean.usuario.documento}" class="form-control"
                                  required="true" requiredMessage="Debe especificar un Documento" />
-                    <h:message for="doc" class="text-danger" />
-                    
-                    
+                    <h:message for="doc" class="text-danger" />                    
                     <h:outputLabel for="nom" value="Nombre del Usuario: " />
                     <h:inputText id="nom" value="#{usuarioBean.usuario.nombre_completo}" class="form-control"
                                  required="true" requiredMessage="Debe especificar un Nombre" />
@@ -46,8 +44,7 @@
                     
                     <h:column />
                     <h:column>
-                        <h:commandButton class="btn btn-success" value="Actualizar"
-     action="#{usuarioBean.actualizar}" />
+                        <h:commandButton class="btn btn-success" value="Actualizar" action="#{usuarioBean.actualizar}" />
 
                         <h:commandButton class="btn btn-secondary" value="Cancelar" action="index" 
                                          style="margin-left: 15px;" immediate="true" />
