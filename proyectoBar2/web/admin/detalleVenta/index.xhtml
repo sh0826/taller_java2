@@ -138,7 +138,7 @@
             </div>
         </h:panelGroup>
         
-        <h:form id="formDetalleVenta">
+         <h:form id="formDetalleVenta">
             <p:messages id="messages" showDetail="true" closable="true" />
             
             <!-- Panel de Filtros -->
@@ -176,9 +176,9 @@
                 </h:panelGrid>
             </div>
             
-            <!-- Formulario para agregar detalles -->
-            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
-                <h3 style="color: #C89B3C; margin-top: 0;">Agregar Detalle</h3>
+            <!-- Formulario para agregar detalles - Fuera del cuadro -->
+            <div style="margin: 20px 0;">
+                <h3 style="color: #C89B3C; margin-top: 0; margin-bottom: 15px;">Agregar Detalle</h3>
                 <h:panelGrid columns="5" cellpadding="5" style="width: 100%;">
                     <h:outputLabel value="Producto:" style="color: #C89B3C;"/>
                     <h:selectOneMenu value="#{detalleVentaBean.detalle.id_producto}" styleClass="form-select">
