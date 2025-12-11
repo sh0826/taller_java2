@@ -6,6 +6,16 @@ public class Producto {
     private String tipo_producto;
     private int stock;
     private double precio_unitario;
+    private String imagen;
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+    
 
     public Producto() {}
 

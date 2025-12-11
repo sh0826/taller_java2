@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
+    
 <h:head>
     <title>Administrar Productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -11,12 +14,12 @@
     <div class="container mt-5">
         <h2 class="text-center text-primary mb-4">Administrar Productos</h2>
 
-        <h:form>
+        <h:form >
             <h:commandButton value="Descargar PDF" action="#{productoBean.exportarPDF}" styleClass="btn btn-danger"/>
             <h:commandButton value="Descargar Excel" action="#{productoBean.exportarExcel}" styleClass="btn btn-success ms-2"/>
         </h:form>
 
-        <h:form class="mb-5">
+        <h:form enctype="multipart/form-data" class="mb-5">
             <div class="row g-3">
 
                 <div class="col-md-3">
@@ -44,9 +47,9 @@
                     <h:inputText id="precio" value="#{productoBean.producto.precio_unitario}" styleClass="form-control"/>
                 </div>
 
-                <div class="col-md-2">
-                    <h:outputLabel value="Imagen:" for="imagen" class="form-label"/>
-                    <h:inputText id="imagen" value="#{productoBean.producto.imagen}" styleClass="form-control"/>
+                <div class="col-md-4">
+                    <h:outputLabel value="Imagen del Producto:" />
+                    <p:fileUpload value="#{productoBean.archivoImagen}" mode="simple" />
                 </div>
                 
                 <div class="col-md-2 d-flex align-items-end">
@@ -56,7 +59,7 @@
             </div>
         </h:form>
 
-        <h:form>
+        <h:form enctype="multipart/form-data" class="mb-5">
             <div class="row g-3 mb-4">
 
                 <div class="col-md-4">
@@ -80,7 +83,7 @@
 
             </div>
         </h:form>
-        <h:form>
+        <h:form enctype="multipart/form-data" class="mb-5">
             <h:dataTable value="#{productoBean.listaFiltrada}" var="p" styleClass="table table-striped table-bordered">
 
                 <h:column>
@@ -110,7 +113,7 @@
                 
                 <h:column>
                     <f:facet name="header">Imagen</f:facet>
-                    #{p.imagen}
+                    <img src="#{p.imagen}" width="60"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Acciones</f:facet>

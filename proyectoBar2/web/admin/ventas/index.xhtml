@@ -202,7 +202,6 @@
                             </div>
                         </div>
                         
-                        <!-- Tabla de ventas compacta -->
                         <p:dataTable id="dtVentas" value="#{ventaBean.lstVentas}" var="venta" 
                                     styleClass="table-compact"
                                     emptyMessage="No hay registros en la Base de Datos" 
@@ -261,6 +260,8 @@
                                 <h:commandLink value="Eliminar" class="btn btn-sm btn-dark" 
                                               actionListener="#{ventaBean.eliminar(venta.id_venta)}" 
                                               onclick="return confirm('¿Está seguro de ELIMINAR la Venta ID: #{venta.id_venta}?');" />
+                                <h:commandButton class="btn btn-success" 
+                                         action="/proyectoBar2/faces/admin/detalleVenta/index.xhtml" action="index" />
                             </p:column>
                             
                         </p:dataTable>

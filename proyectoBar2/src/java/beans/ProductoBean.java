@@ -7,6 +7,8 @@ import java.util.List;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import modelo.Producto;
+import org.primefaces.model.file.UploadedFile;
+
 
 @Named
 @ViewScoped
@@ -15,11 +17,19 @@ public class ProductoBean implements Serializable {
     private Producto producto = new Producto();
     private List<Producto> lista;
     private List<Producto> listaFiltrada;
-
     private String filtroNombre = "";
     private String filtroTipo = "";
-
     private ProductoDAO dao = new ProductoDAO();
+    private UploadedFile archivoImagen;
+
+    public UploadedFile getArchivoImagen() {
+    return archivoImagen;
+    }
+
+    public void setArchivoImagen(UploadedFile archivoImagen) {
+    this.archivoImagen = archivoImagen;
+}
+
 
     public Producto getProducto() { 
         return producto; 
