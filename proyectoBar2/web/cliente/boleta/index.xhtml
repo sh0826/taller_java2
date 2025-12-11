@@ -153,6 +153,13 @@
             <f:event type="preRenderView" listener="#{boletaBean.listar}"/>
             
             <h:form class="container">
+                <!-- Botón Menú Anterior arriba -->
+                <div class="mb-3" style="margin-top: 20px;">
+                    <h:commandLink value="Menú Anterior"
+                                   styleClass="btn btn-secondary"
+                                   action="/faces/cliente/index" />
+                </div>
+                
                 <h2 class="text-center mb-4" style="color: #C89B3C !important;">Administrar Boletas</h2>
 
                 <div class="mb-4 text-center" style="display: flex; justify-content: center; gap: 0;">

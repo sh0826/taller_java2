@@ -36,6 +36,13 @@
             background: #1a1a1a;
             padding: 15px 0;
             box-shadow: 0 2px 5px rgba(255, 215, 0, 0.1);
+            align-items: center;
+        }
+
+        .navbar form {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-item {
@@ -46,15 +53,17 @@
             border-radius: 0;
             transition: 0.2s;
             display: inline-block;
-            border-right: 1px solid #333;
             margin: 0;
+            border: none;
+            border-right: 1px solid #333;
         }
 
-        .nav-item:first-child {
+        .navbar > a.nav-item:first-child {
             border-radius: 5px 0 0 5px;
         }
 
-        .nav-item:last-child {
+        .navbar > form:last-child .nav-item,
+        .navbar > a.nav-item:last-of-type {
             border-radius: 0 5px 5px 0;
             border-right: none;
         }
@@ -88,11 +97,9 @@
     <div class="header">Bienvenido - Ágora Vibes Gastro BAR</div>
 
     <div class="navbar">
-
         <a class="nav-item" href="/proyectoBar2/faces/cliente/reservacion/index.xhtml">Mis Reservas</a>
         <a class="nav-item" href="/proyectoBar2/faces/cliente/boleta/index.xhtml">Mis Boletas</a>
-
-        <h:form>
+        <h:form style="display: inline-block; margin: 0; padding: 0;">
             <h:commandLink value="Cerrar Sesión"
                            styleClass="nav-item"
                            actionListener="#{loginBean.cerrar_sesion}" />

@@ -11,6 +11,10 @@
 
     <ui:define name="contenido">
         <style>
+            body {
+                background: #111 !important;
+            }
+            
             .form-container {
                 width: 60%;
                 margin: 30px auto;
@@ -51,17 +55,79 @@
             .form-select {
                 width: 100%;
                 padding: 10px 12px;
-                background: #262626;
-                color: #eee;
-                border: 1px solid #444;
+                background: #262626 !important;
+                color: #eee !important;
+                border: 1px solid #444 !important;
                 border-radius: 5px;
             }
 
             .form-control:focus,
             .form-select:focus {
                 outline: none;
-                border-color: #C89B3C;
+                border-color: #C89B3C !important;
                 box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
+            }
+
+            /* Estilos para PrimeFaces inputNumber */
+            .ui-inputnumber {
+                width: 100% !important;
+                background: transparent !important;
+            }
+            
+            .ui-inputnumber .ui-inputnumber-input,
+            .ui-inputnumber input,
+            .ui-inputnumber-input {
+                background: #262626 !important;
+                background-color: #262626 !important;
+                color: #eee !important;
+                border: 1px solid #444 !important;
+                padding: 10px 12px !important;
+                width: 100% !important;
+            }
+            
+            .ui-inputnumber .ui-inputnumber-input:focus,
+            .ui-inputnumber input:focus,
+            .ui-inputnumber-input:focus {
+                background: #262626 !important;
+                background-color: #262626 !important;
+                color: #eee !important;
+                border-color: #C89B3C !important;
+                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3) !important;
+                outline: none !important;
+            }
+            
+            .ui-inputnumber .ui-inputnumber-input:hover,
+            .ui-inputnumber input:hover {
+                background: #262626 !important;
+                background-color: #262626 !important;
+            }
+            
+            /* Forzar estilo en todos los elementos internos */
+            .ui-inputnumber * {
+                background-color: transparent !important;
+            }
+            
+            .ui-inputnumber input[type="text"],
+            .ui-inputnumber input {
+                background: #262626 !important;
+                background-color: #262626 !important;
+                color: #eee !important;
+            }
+            
+            /* Estilos para el wrapper del inputNumber */
+            .form-group .ui-inputnumber,
+            .form-group .ui-widget {
+                background: transparent !important;
+                background-color: transparent !important;
+            }
+            
+            /* Asegurar que el input interno tenga el estilo correcto */
+            .form-group input.ui-inputnumber-input,
+            .form-group .ui-inputnumber input {
+                background: #262626 !important;
+                background-color: #262626 !important;
+                color: #eee !important;
+                border: 1px solid #444 !important;
             }
 
             .text-danger {
