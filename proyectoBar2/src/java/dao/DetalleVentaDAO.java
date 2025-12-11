@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import modelo.DetalleVenta;
+import modelo.DetalleVentaAgrupado;
 
 public class DetalleVentaDAO {
 
@@ -100,6 +101,52 @@ public class DetalleVentaDAO {
             d.setDescripcion(rs.getString("descripcion"));
             d.setCantidad_productos(rs.getInt("cantidad_productos"));
             d.setPrecio_unitario(rs.getDouble("precio_unitario"));
+            lista.add(d);
+        }
+        return lista;
+    }
+    
+    /**
+     * Agrupa los detalles de venta por producto, sumando las cantidades totales
+     * y mostrando el precio unitario del producto
+     */
+    public List<DetalleVentaAgrupado> listarAgrupadoPorProducto(Integer idVenta) throws Exception {
+        List<DetalleVentaAgrupado> lista = new ArrayList<>();
+        conn = ConnBD.conectar();
+        
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT dv.id_producto, ");
+        sql.append("       MAX(dv.descripcion) as descripcion, ");
+        sql.append("       COALESCE(p.nombre, 'Producto Desconocido') as nombre_producto, ");
+        sql.append("       SUM(dv.cantidad_productos) as total_cantidad, ");
+        sql.append("       MAX(dv.precio_unitario) as precio_unitario ");
+        sql.append("FROM detalle_venta dv ");
+        sql.append("LEFT JOIN producto p ON dv.id_producto = p.id_producto ");
+        sql.append("WHERE 1=1 ");
+        
+        List<Object> params = new ArrayList<>();
+        
+        if (idVenta != null && idVenta > 0) {
+            sql.append("AND dv.id_venta = ? ");
+            params.add(idVenta);
+        }
+        
+        sql.append("GROUP BY dv.id_producto ");
+        sql.append("ORDER BY total_cantidad DESC, dv.id_producto");
+        
+        ps = conn.prepareStatement(sql.toString());
+        for (int i = 0; i < params.size(); i++) {
+            ps.setObject(i + 1, params.get(i));
+        }
+        
+        rs = ps.executeQuery();
+        while(rs.next()) {
+            DetalleVentaAgrupado d = new DetalleVentaAgrupado();
+            d.setId_producto(rs.getInt("id_producto"));
+            d.setDescripcion(rs.getString("descripcion"));
+            d.setNombreProducto(rs.getString("nombre_producto"));
+            d.setTotalCantidad(rs.getInt("total_cantidad"));
+            d.setPrecioUnitario(rs.getDouble("precio_unitario"));
             lista.add(d);
         }
         return lista;

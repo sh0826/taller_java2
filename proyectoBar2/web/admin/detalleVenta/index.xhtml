@@ -214,6 +214,12 @@
             </div>
             
             <div style="margin: 20px 0; text-align: center;">
+                <p:commandButton value="#{detalleVentaBean.mostrarAgrupado ? 'Ver Detalles Individuales' : 'Ver Totales por Producto'}" 
+                                 action="#{detalleVentaBean.alternarVista}" 
+                                 update="dtDetalleVenta dtDetalleVentaAgrupado formDetalleVenta"
+                                 process="@this"
+                                 styleClass="boton"
+                                 style="margin-right: 10px;"/>
                 <p:commandLink ajax="false" styleClass="me-2" title="Exportar a PDF"
                               action="#{detalleVentaBean.exportarPDF}">
                     <p:graphicImage value="/iconos/pdf.png" width="30" />
@@ -223,7 +229,53 @@
                     <p:graphicImage value="/iconos/xls.png" width="35" />
                 </p:commandLink>
             </div>
+            
+            <!-- Tabla de Detalles Agrupados por Producto -->
+            <h:panelGroup rendered="#{detalleVentaBean.mostrarAgrupado}">
+            <div class="container">
+                <h3 style="color: #C89B3C; margin: 20px 0;">Totales de Ventas por Producto</h3>
+                <p:dataTable id="dtDetalleVentaAgrupado" value="#{detalleVentaBean.listaAgrupada}" var="d" 
+                            styleClass="table table-bordered shadow-sm miAutoTabla"
+                            style="font-size:15px;"
+                            emptyMessage="No hay productos con ventas registradas"
+                            paginator="true" paginatorPosition="bottom" rows="15"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
+                            rowsPerPageTemplate="15,30,50">
+                    
+                    <p:column headerText="ID Producto">
+                        <h:outputText value="#{d.id_producto}" style="display:block; padding:10px 5px; color:black;" />
+                    </p:column>
+                    
+                    <p:column headerText="Nombre del Producto">
+                        <h:outputText value="#{d.nombreProducto}" style="display:block; padding:10px 5px; color:black;" />
+                    </p:column>
+                    
+                    <p:column headerText="Descripción">
+                        <h:outputText value="#{d.descripcion}" style="display:block; padding:10px 5px; color:black;" />
+                    </p:column>
+                    
+                    <p:column headerText="Total Cantidad Vendida">
+                        <h:outputText value="#{d.totalCantidad}" style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
+                    </p:column>
+                    
+                    <p:column headerText="Precio Unitario">
+                        <h:outputText value="#{d.precioUnitario}" style="display:block; padding:10px 5px; color:black;">
+                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Total Venta">
+                        <h:outputText value="#{d.totalVenta}" style="display:block; padding:10px 5px; color:black; font-weight: bold; color: #C89B3C;">
+                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                        </h:outputText>
+                    </p:column>
+                    
+                </p:dataTable>
+            </div>
+            </h:panelGroup>
 
+            <h:panelGroup rendered="#{!detalleVentaBean.mostrarAgrupado}">
             <div class="container">
                 <p:dataTable id="dtDetalleVenta" value="#{detalleVentaBean.listaFiltrada}" var="d" 
                             styleClass="table table-bordered shadow-sm miAutoTabla"
@@ -313,6 +365,7 @@
                     
                 </p:dataTable>
             </div>
+            </h:panelGroup>
         </h:form>
     </ui:define>
 </ui:composition>

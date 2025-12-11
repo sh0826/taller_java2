@@ -16,6 +16,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.servlet.http.HttpServletResponse;
 import modelo.DetalleVenta;
+import modelo.DetalleVentaAgrupado;
 import modelo.Producto;
 import modelo.venta;
 
@@ -26,6 +27,7 @@ public class DetalleVentaBean {
     private DetalleVenta detalle = new DetalleVenta();
     private List<DetalleVenta> lista;
     private List<DetalleVenta> listaFiltrada;
+    private List<DetalleVentaAgrupado> listaAgrupada;
     private DetalleVentaDAO dao = new DetalleVentaDAO();
     private List<Producto> listaProductos;
     private ProductoDAO productoDAO = new ProductoDAO();
@@ -34,6 +36,7 @@ public class DetalleVentaBean {
     private Integer filtroIdVenta;
     private Integer filtroIdProducto;
     private String filtroDescripcion = "";
+    private boolean mostrarAgrupado = false; // Control para mostrar vista agrupada o normal
 
     public DetalleVenta getDetalle() { return detalle; }
     public void setDetalle(DetalleVenta detalle) { this.detalle = detalle; }
@@ -46,6 +49,9 @@ public class DetalleVentaBean {
 
     public String getFiltroDescripcion() { return filtroDescripcion; }
     public void setFiltroDescripcion(String filtroDescripcion) { this.filtroDescripcion = filtroDescripcion; }
+    
+    public boolean isMostrarAgrupado() { return mostrarAgrupado; }
+    public void setMostrarAgrupado(boolean mostrarAgrupado) { this.mostrarAgrupado = mostrarAgrupado; }
 
     public List<DetalleVenta> getLista() {
         try {
@@ -86,6 +92,51 @@ public class DetalleVentaBean {
         return listaFiltrada;
     }
     
+    /**
+     * Obtiene la lista de detalles agrupados por producto
+     * Muestra el total de ventas de cada producto en TODAS las ventas y su precio unitario
+     * Si hay un filtro de venta, muestra solo los productos de esa venta pero con el total general
+     */
+    public List<DetalleVentaAgrupado> getListaAgrupada() {
+        if (listaAgrupada == null) {
+            try {
+                // Si hay un filtro de venta, primero obtenemos los productos de esa venta
+                // y luego calculamos el total de ventas de cada producto en todas las ventas
+                if (filtroIdVenta != null && filtroIdVenta > 0) {
+                    // Obtener todos los productos con sus totales (sin filtrar por venta)
+                    List<DetalleVentaAgrupado> todosProductos = dao.listarAgrupadoPorProducto(null);
+                    // Obtener los productos de la venta actual
+                    List<DetalleVenta> detallesVenta = dao.listarConFiltros(filtroIdVenta, null, null);
+                    // Filtrar solo los productos que están en esta venta
+                    List<Integer> productosEnVenta = new ArrayList<>();
+                    for (DetalleVenta dv : detallesVenta) {
+                        if (!productosEnVenta.contains(dv.getId_producto())) {
+                            productosEnVenta.add(dv.getId_producto());
+                        }
+                    }
+                    // Crear lista filtrada con los productos de esta venta pero con totales generales
+                    listaAgrupada = new ArrayList<>();
+                    for (DetalleVentaAgrupado da : todosProductos) {
+                        if (productosEnVenta.contains(da.getId_producto())) {
+                            listaAgrupada.add(da);
+                        }
+                    }
+                } else {
+                    // Sin filtro de venta, mostrar todos los productos con sus totales
+                    listaAgrupada = dao.listarAgrupadoPorProducto(null);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                listaAgrupada = new ArrayList<>();
+            }
+        }
+        return listaAgrupada;
+    }
+    
+    public void setListaAgrupada(List<DetalleVentaAgrupado> listaAgrupada) {
+        this.listaAgrupada = listaAgrupada;
+    }
+    
     private venta ventaSeleccionada;
     private ventaDao ventaDAO = new ventaDao();
     
@@ -103,6 +154,7 @@ public class DetalleVentaBean {
                 ventaSeleccionada = ventaDAO.buscarPorId(filtroIdVenta);
                 // Aplicar el filtro automáticamente
                 listaFiltrada = null; // Forzar recarga
+                listaAgrupada = null; // Forzar recarga de lista agrupada
                 try {
                     Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
                     listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
@@ -142,6 +194,7 @@ public class DetalleVentaBean {
             // Si filtroIdProducto es 0 (Todos), pasar null
             Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
             listaFiltrada = null; // Forzar recarga
+            listaAgrupada = null; // Forzar recarga de lista agrupada
             listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
             // Si hay un ID de venta, cargar la información de la venta
             if (filtroIdVenta != null && filtroIdVenta > 0) {
@@ -152,11 +205,23 @@ public class DetalleVentaBean {
         }
     }
     
+    /**
+     * Alterna entre vista normal y vista agrupada
+     */
+    public void alternarVista() {
+        mostrarAgrupado = !mostrarAgrupado;
+        listaAgrupada = null; // Forzar recarga
+        listaFiltrada = null; // Forzar recarga
+    }
+    
     public void limpiarFiltros() {
         filtroIdVenta = null;
         filtroIdProducto = null;
         filtroDescripcion = "";
+        ventaSeleccionada = null;
         try {
+            listaFiltrada = null;
+            listaAgrupada = null;
             listaFiltrada = dao.listar();
         } catch (Exception e) {
             e.printStackTrace();
