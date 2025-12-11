@@ -11,26 +11,9 @@
         <f:event type="preRenderView" listener="#{boletaBean.listarEven()}" />
         <h2 class="text-center text-success">Editar Boleta</h2>
         <center>
-            <h:form>
+            <h:form id="frmBoleta">
                 <h:inputHidden value="#{boletaBean.boleta.id_boleta}" />
-                <h:panelGrid columns="3">
-                    
-                    <h:outputLabel value="Precio: " for="precio" />
-                    <h:inputText id="precio" value="#{boletaBean.boleta.precio_boleta}" class="form-control"
-                                 required="true" requiredMessage="Debe especificar un Precio">
-                        <f:convertNumber pattern="#,##0.00" />
-                    </h:inputText>
-                    <h:message for="precio" class="text-danger" />
-                    
-                    <h:outputLabel value="Cantidad de Boletos: " for="cantidad" />
-                    <h:inputText id="cantidad" value="#{boletaBean.boleta.cantidad_boletos}" class="form-control"
-                                 required="true" requiredMessage="Debe especificar la Cantidad de Boletos" />
-                    <h:message for="cantidad" class="text-danger" />
-                    
-                    <h:outputLabel value="ID Usuario: " for="idUsuario" />
-                    <h:inputText id="idUsuario" value="#{boletaBean.boleta.id}" class="form-control"
-                                 required="true" requiredMessage="Debe especificar el ID del Usuario" />
-                    <h:message for="idUsuario" class="text-danger" />
+                <h:panelGrid columns="6">
                     
                     <h:outputLabel value="Evento: " for="evento" />
                     <h:selectOneMenu id="evento" value="#{boletaBean.boleta.id_evento}" class="form-control"
@@ -38,9 +21,23 @@
                         <f:selectItem itemLabel="Seleccione un evento..." itemValue="" />
                         <f:selectItems value="#{boletaBean.lstEven}" var="evento" 
                                       itemLabel="#{evento.nombre_evento}" itemValue="#{evento.id_evento}" />
+                        <f:ajax listener="#{boletaBean.cargarPrecioEvento}"
+                                render="frmBoleta:precio"/>
+                        
                     </h:selectOneMenu>
-                    <h:message for="evento" class="text-danger" />
+                    <h:inputText id="precio" value="#{boletaBean.boleta.precio_boleta}" readonly="true"/>
+
                     
+                    
+                    <h:outputLabel value="Cantidad de Boletos: " for="cantidad" />
+                    <h:inputText id="cantidad" value="#{boletaBean.boleta.cantidad_boletos}" class="form-control"
+                                 required="true" requiredMessage="Debe especificar la Cantidad de Boletos" />
+                    <h:message for="cantidad" class="text-danger" />
+                    
+                    <h:outputLabel value="Usuario: " for="idUsuario" />
+                    <h:outputText id="idUsuario" value="#{boletaBean.usuarioNombre}" class="form-control" />
+                    <h:message for="idUsuario" class="text-danger" />
+                                        
                     <h:column /><h:column><br/></h:column><h:column />
                     
                     <h:column />

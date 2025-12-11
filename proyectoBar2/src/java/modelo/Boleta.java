@@ -9,7 +9,7 @@ package modelo;
  * @author marce
  */
 public class Boleta {
-    private int id_boleta, cantidad_boletos, id, id_evento;
+    private int id_boleta, cantidad_boletos, id_usuario, id_evento;
     private double precio_boleta;
     private Evento even;
     private Usuario usuario;
@@ -21,7 +21,15 @@ public class Boleta {
     public void setId_boleta(int id_boleta) {
         this.id_boleta = id_boleta;
     }
+    
+    public int getId_usuario() {
+        return id_usuario;
+    }
 
+    public void setId_usuario(int id_usuario) {
+        this.id_usuario = id_usuario;
+    }
+    
     public int getCantidad_boletos() {
         return cantidad_boletos;
     }
@@ -30,13 +38,7 @@ public class Boleta {
         this.cantidad_boletos = cantidad_boletos;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getId_evento() {
         return id_evento;
