@@ -32,9 +32,22 @@ public class EventoBean implements Serializable {
     
     Evento evento = new Evento();
     List<Evento> lstEvento = new ArrayList<>();
+    List<Evento> lstEventoFiltrada = new ArrayList<>();
     private transient EventoDAO eventoDAO;
     private transient Part imagen;
     
+    // Campos de filtro
+    private String filtroNombre = "";
+    private String filtroFecha = "";
+    private String filtroCapacidad = "";
+    private String filtroPrecio = "";
+    
+    public void preRender() {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            listar();
+        }
+    }
+
     private EventoDAO getEventoDAO() {
         if (eventoDAO == null) {
             eventoDAO = new EventoDAO();
@@ -44,6 +57,21 @@ public class EventoBean implements Serializable {
     
     public void listar(){
         lstEvento = getEventoDAO().listar();
+        lstEventoFiltrada = lstEvento;
+    }
+    
+    public void buscar(){
+        lstEventoFiltrada = getEventoDAO().buscarConFiltros(
+            filtroNombre, filtroFecha, filtroCapacidad, filtroPrecio
+        );
+    }
+    
+    public void limpiarFiltros(){
+        filtroNombre = "";
+        filtroFecha = "";
+        filtroCapacidad = "";
+        filtroPrecio = "";
+        listar();
     }
     
     public void nuevoEvento(){
@@ -339,6 +367,47 @@ public class EventoBean implements Serializable {
             total += e.getCapacidad_maxima();
         }
         return total;
+    }
+    
+    // Getters y setters para filtros
+    public String getFiltroNombre() {
+        return filtroNombre;
+    }
+
+    public void setFiltroNombre(String filtroNombre) {
+        this.filtroNombre = filtroNombre;
+    }
+
+    public String getFiltroFecha() {
+        return filtroFecha;
+    }
+
+    public void setFiltroFecha(String filtroFecha) {
+        this.filtroFecha = filtroFecha;
+    }
+
+    public String getFiltroCapacidad() {
+        return filtroCapacidad;
+    }
+
+    public void setFiltroCapacidad(String filtroCapacidad) {
+        this.filtroCapacidad = filtroCapacidad;
+    }
+
+    public String getFiltroPrecio() {
+        return filtroPrecio;
+    }
+
+    public void setFiltroPrecio(String filtroPrecio) {
+        this.filtroPrecio = filtroPrecio;
+    }
+    
+    public List<Evento> getLstEventoFiltrada() {
+        return lstEventoFiltrada;
+    }
+
+    public void setLstEventoFiltrada(List<Evento> lstEventoFiltrada) {
+        this.lstEventoFiltrada = lstEventoFiltrada;
     }
     
 }

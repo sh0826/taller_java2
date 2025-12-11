@@ -83,40 +83,40 @@ public class BoletaDAO {
     }
     
     
-public List<Boleta> listarPorUsuario(int idUsuario) {
-    List<Boleta> lista = new ArrayList<>();
+    public List<Boleta> listarPorUsuario(int idUsuario) {
+        List<Boleta> lista = new ArrayList<>();
 
-    try {
-        String sql = "SELECT b.*, e.nombre_evento "
-                   + "FROM boleta b "
-                   + "INNER JOIN evento e ON b.id_evento = e.id_evento "
-                   + "WHERE b.id_usuario = ?";
-        
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, idUsuario);
-        ResultSet rs = ps.executeQuery();
+        try {
+            String sql = "SELECT b.*, e.nombre_evento "
+                       + "FROM boleta b "
+                       + "INNER JOIN evento e ON b.id_evento = e.id_evento "
+                       + "WHERE b.id_usuario = ?";
 
-        while (rs.next()) {
-            Boleta b = new Boleta();
-            b.setId_boleta(rs.getInt("id_boleta"));
-            b.setId_usuario(rs.getInt("id_usuario"));
-            b.setId_evento(rs.getInt("id_evento"));
-            b.setPrecio_boleta(rs.getInt("precio_boleta"));
-            b.setCantidad_boletos(rs.getInt("cantidad_boletos"));
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idUsuario);
+            ResultSet rs = ps.executeQuery();
 
-            Evento ev = new Evento();
-            ev.setNombre_evento(rs.getString("nombre_evento"));
+            while (rs.next()) {
+                Boleta b = new Boleta();
+                b.setId_boleta(rs.getInt("id_boleta"));
+                b.setId_usuario(rs.getInt("id_usuario"));
+                b.setId_evento(rs.getInt("id_evento"));
+                b.setPrecio_boleta(rs.getInt("precio_boleta"));
+                b.setCantidad_boletos(rs.getInt("cantidad_boletos"));
 
-            b.setEven(ev); 
+                Evento ev = new Evento();
+                ev.setNombre_evento(rs.getString("nombre_evento"));
 
-            lista.add(b);
+                b.setEven(ev); 
+
+                lista.add(b);
+            }
+        } catch (Exception e) {
+            System.out.println("Error listarPorUsuario: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println("Error listarPorUsuario: " + e.getMessage());
-    }
 
-    return lista;
-}
+        return lista;
+    }
 
     
     
@@ -249,6 +249,246 @@ public List<Boleta> listarPorUsuario(int idUsuario) {
         }catch (SQLException e){
             return null;
         }
+    }
+    
+    public List<Boleta> buscarPorNombreEvento(String nombreEvento){
+        List<Boleta> lista = new ArrayList<>();
+        try{
+            String sql = "SELECT b.* FROM boleta b "
+                    + "INNER JOIN evento e ON b.id_evento = e.id_evento "
+                    + "WHERE e.nombre_evento LIKE ?";
+            
+            ps = con.prepareStatement(sql);
+            ps.setString(1, "%" + nombreEvento + "%");
+            
+            rs = ps.executeQuery();
+            
+            while (rs.next()){
+                Boleta b = new Boleta();
+                b.setId_boleta(rs.getInt("id_boleta"));
+                b.setPrecio_boleta(rs.getDouble("precio_boleta"));
+                b.setCantidad_boletos(rs.getInt("cantidad_boletos"));
+                b.setId_usuario(rs.getInt("id_usuario"));
+                b.setId_evento(rs.getInt("id_evento"));
+                
+                // Cargar el objeto Evento completo
+                Evento evento = evenDAO.buscar(rs.getInt("id_evento"));
+                if (evento != null) {
+                    b.setEven(evento);
+                }
+                
+                // Cargar el objeto Usuario completo
+                Usuario usuario = usuaDAO.buscar(rs.getInt("id_usuario"));
+                if (usuario != null) {
+                    b.setUsuario(usuario);
+                }
+                
+                lista.add(b);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return lista;
+    }
+    
+    public List<Boleta> buscarConFiltros(String nombreEvento, String nombreUsuario, String precio, String cantidad) {
+        List<Boleta> lista = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = ConnBD.conectar();
+            if (conn == null) {
+                System.err.println("Error: No se pudo establecer conexión con la base de datos");
+                return lista;
+            }
+            
+            StringBuilder sql = new StringBuilder("SELECT b.* FROM boleta b "
+                    + "INNER JOIN evento e ON b.id_evento = e.id_evento "
+                    + "INNER JOIN usuario u ON b.id_usuario = u.id_usuario "
+                    + "WHERE 1=1");
+            List<Object> parametros = new ArrayList<>();
+            int paramIndex = 1;
+            
+            if (nombreEvento != null && !nombreEvento.trim().isEmpty()) {
+                sql.append(" AND e.nombre_evento LIKE ?");
+                parametros.add("%" + nombreEvento.trim() + "%");
+            }
+            
+            if (nombreUsuario != null && !nombreUsuario.trim().isEmpty()) {
+                sql.append(" AND u.nombre_completo LIKE ?");
+                parametros.add("%" + nombreUsuario.trim() + "%");
+            }
+            
+            if (precio != null && !precio.trim().isEmpty()) {
+                try {
+                    double prec = Double.parseDouble(precio.trim());
+                    sql.append(" AND b.precio_boleta = ?");
+                    parametros.add(prec);
+                } catch (NumberFormatException e) {
+                    // Si no es un número válido, ignorar este filtro
+                }
+            }
+            
+            if (cantidad != null && !cantidad.trim().isEmpty()) {
+                try {
+                    int cant = Integer.parseInt(cantidad.trim());
+                    sql.append(" AND b.cantidad_boletos = ?");
+                    parametros.add(cant);
+                } catch (NumberFormatException e) {
+                    // Si no es un número válido, ignorar este filtro
+                }
+            }
+            
+            ps = conn.prepareStatement(sql.toString());
+            
+            for (int i = 0; i < parametros.size(); i++) {
+                Object param = parametros.get(i);
+                if (param instanceof String) {
+                    ps.setString(i + 1, (String) param);
+                } else if (param instanceof Integer) {
+                    ps.setInt(i + 1, (Integer) param);
+                } else if (param instanceof Double) {
+                    ps.setDouble(i + 1, (Double) param);
+                }
+            }
+            
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Boleta b = new Boleta();
+                b.setId_boleta(rs.getInt("id_boleta"));
+                b.setPrecio_boleta(rs.getDouble("precio_boleta"));
+                b.setCantidad_boletos(rs.getInt("cantidad_boletos"));
+                b.setId_usuario(rs.getInt("id_usuario"));
+                b.setId_evento(rs.getInt("id_evento"));
+                
+                // Cargar el objeto Evento completo
+                Evento evento = evenDAO.buscar(rs.getInt("id_evento"));
+                if (evento != null) {
+                    b.setEven(evento);
+                }
+                
+                // Cargar el objeto Usuario completo
+                Usuario usuario = usuaDAO.buscar(rs.getInt("id_usuario"));
+                if (usuario != null) {
+                    b.setUsuario(usuario);
+                }
+                
+                lista.add(b);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar boletas con filtros: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
+        
+        return lista;
+    }
+    
+    public List<Boleta> buscarConFiltrosPorUsuario(int idUsuario, String nombreEvento, String precio, String cantidad) {
+        List<Boleta> lista = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = ConnBD.conectar();
+            if (conn == null) {
+                System.err.println("Error: No se pudo establecer conexión con la base de datos");
+                return lista;
+            }
+            
+            StringBuilder sql = new StringBuilder("SELECT b.* FROM boleta b "
+                    + "INNER JOIN evento e ON b.id_evento = e.id_evento "
+                    + "WHERE b.id_usuario = ?");
+            List<Object> parametros = new ArrayList<>();
+            parametros.add(idUsuario);
+            
+            if (nombreEvento != null && !nombreEvento.trim().isEmpty()) {
+                sql.append(" AND e.nombre_evento LIKE ?");
+                parametros.add("%" + nombreEvento.trim() + "%");
+            }
+            
+            if (precio != null && !precio.trim().isEmpty()) {
+                try {
+                    double prec = Double.parseDouble(precio.trim());
+                    sql.append(" AND b.precio_boleta = ?");
+                    parametros.add(prec);
+                } catch (NumberFormatException e) {
+                    // Si no es un número válido, ignorar este filtro
+                }
+            }
+            
+            if (cantidad != null && !cantidad.trim().isEmpty()) {
+                try {
+                    int cant = Integer.parseInt(cantidad.trim());
+                    sql.append(" AND b.cantidad_boletos = ?");
+                    parametros.add(cant);
+                } catch (NumberFormatException e) {
+                    // Si no es un número válido, ignorar este filtro
+                }
+            }
+            
+            ps = conn.prepareStatement(sql.toString());
+            
+            for (int i = 0; i < parametros.size(); i++) {
+                Object param = parametros.get(i);
+                if (param instanceof String) {
+                    ps.setString(i + 1, (String) param);
+                } else if (param instanceof Integer) {
+                    ps.setInt(i + 1, (Integer) param);
+                } else if (param instanceof Double) {
+                    ps.setDouble(i + 1, (Double) param);
+                }
+            }
+            
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Boleta b = new Boleta();
+                b.setId_boleta(rs.getInt("id_boleta"));
+                b.setPrecio_boleta(rs.getDouble("precio_boleta"));
+                b.setCantidad_boletos(rs.getInt("cantidad_boletos"));
+                b.setId_usuario(rs.getInt("id_usuario"));
+                b.setId_evento(rs.getInt("id_evento"));
+                
+                // Cargar el objeto Evento completo
+                Evento evento = evenDAO.buscar(rs.getInt("id_evento"));
+                if (evento != null) {
+                    b.setEven(evento);
+                }
+                
+                // Cargar el objeto Usuario completo
+                Usuario usuario = usuaDAO.buscar(rs.getInt("id_usuario"));
+                if (usuario != null) {
+                    b.setUsuario(usuario);
+                }
+                
+                lista.add(b);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar boletas con filtros por usuario: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
+        
+        return lista;
     }
     
     public void actualizar (Boleta bole) {
