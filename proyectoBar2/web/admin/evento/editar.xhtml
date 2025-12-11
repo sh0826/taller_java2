@@ -8,10 +8,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
     </h:head>
     <h:body>
-        <f:event type="preRenderView" listener="#{eventoBean.listar()}" />        
         <h2 class="text-center text-success">Editar Evento</h2>
         <center>
-            <h:form enctype="multipart/form-data">
+            <h:messages globalOnly="false" styleClass="alert" errorClass="alert-danger" infoClass="alert-info" warnClass="alert-warning" />
+            <h:form enctype="multipart/form-data" id="frmEditar">
                 <h:inputHidden value="#{eventoBean.evento.id_evento}" />
                 <h:inputHidden value="#{eventoBean.evento.imagen}" />
                 <h:panelGrid columns="3">
@@ -22,8 +22,10 @@
                     <h:message for="nom" class="text-danger" />
                     
                     <h:outputLabel value="Capacidad Máxima: " for="capa" />
-                    <h:inputTextarea id="capa" value="#{eventoBean.evento.capacidad_maxima}" class="form-control"
-                                 required="true" requiredMessage="Debe especificar una Capacidad Máxima" />
+                    <h:inputText id="capa" value="#{eventoBean.evento.capacidad_maxima}" class="form-control"
+                                 required="true" requiredMessage="Debe especificar una Capacidad Máxima">
+                        <f:convertNumber integerOnly="true" />
+                    </h:inputText>
                     <h:message for="capa" class="text-danger" />
                     
                     <h:outputLabel value="Descripción: " for="des" />
@@ -64,7 +66,8 @@
                     <h:column />
                     <h:column>
                         <h:commandButton class="btn btn-primary" value="Actualizar" 
-                                         action="#{eventoBean.actualizar()}" />
+                                         action="#{eventoBean.actualizar()}" 
+                                         id="btnActualizar" />
                         <h:commandButton class="btn btn-secondary" value="Cancelar" action="index" 
                                          style="margin-left: 15px;" immediate="true" />
                     </h:column>

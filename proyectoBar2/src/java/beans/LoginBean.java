@@ -45,9 +45,22 @@ public class LoginBean {
             ResultSet rs = ps.executeQuery();
                        
             if(rs.next()){
+                // Guardar nombre y tipo (para compatibilidad con código existente)
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", rs.getString("nombre_completo"));
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tipo", rs.getString("tipo"));
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("id_usuario", rs.getInt("id_usuario"));
+                
+                // Crear y guardar el objeto Usuario completo en la sesión
+                Usuario usuarioSesion = new Usuario();
+                usuarioSesion.setId_usuario(rs.getInt("id_usuario"));
+                usuarioSesion.setDocumento(rs.getInt("documento"));
+                usuarioSesion.setNombre_completo(rs.getString("nombre_completo"));
+                usuarioSesion.setCorreo(rs.getString("correo"));
+                usuarioSesion.setTipo(rs.getString("tipo"));
+                
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuarioSesion);
+                
+                System.out.println("Usuario guardado en sesión - ID: " + usuarioSesion.getId_usuario() + ", Nombre: " + usuarioSesion.getNombre_completo());
                 
                 String dir = "";
                 switch(rs.getString("tipo")){

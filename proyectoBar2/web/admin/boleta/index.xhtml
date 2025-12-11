@@ -8,15 +8,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
     </h:head>
     <h:body>
-        <f:event type="preRenderView" listener="#{boletaBean.listar()}" />
+        <f:event type="preRenderView" listener="#{boletaBean.listar}" />
         <f:event type="preRenderView" listener="#{boletaBean.listarEven()}" />
         <h2 class="text-center text-primary">Administrar Boletas</h2>
-        <h:form>
-            <h:commandLink value="Nueva Boleta" class="text-primary" action="nuevo" />
-            <h:commandLink value="Menú Principal" class="text-secondary" action="/faces/index"
-                               style="margin-left: 15px;" />
-            <br/><br/>
-            
+        <h:form>            
             <h:dataTable value="#{boletaBean.lstBole}" var="boleta" class="table table-bordered table-striped">
                 <h:column>
                     <f:facet name="header">
@@ -45,7 +40,7 @@
                     <f:facet name="header">
                         <h:outputLabel value="Usuario" />
                     </f:facet>
-                    <h:outputText value="#{boleta.usuario != null ? boleta.usuario.nombre : 'N/A'}" />
+                    <h:outputText value="#{boleta.usuario != null ? boleta.usuario.nombre_completo : 'N/A'}" />
                 </h:column>
                 
                 <h:column>

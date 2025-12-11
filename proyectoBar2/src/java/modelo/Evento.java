@@ -4,6 +4,7 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
 
@@ -11,7 +12,8 @@ import java.util.Date;
  *
  * @author marce
  */
-public class Evento {
+public class Evento implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id_evento, capacidad_maxima;
     private double precio_boleta;
     private String nombre_evento, descripcion, imagen;

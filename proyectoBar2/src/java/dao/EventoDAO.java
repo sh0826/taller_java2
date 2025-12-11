@@ -54,10 +54,10 @@ public class EventoDAO {
         return listaEvento;
     }
     
-    public void guardar (Evento evento) {
+    public int guardar (Evento evento) {
         try {
             String sql = "INSERT INTO evento VALUES (null, ?, ?, ?, ?, ?, ?, ?)";
-            ps = con.prepareStatement (sql);
+            ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             
             ps.setString(1, evento.getNombre_evento());
             ps.setInt(2, evento.getCapacidad_maxima());
@@ -67,13 +67,25 @@ public class EventoDAO {
             } else {
                 ps.setDate(4, null);
             }
-            ps.setTime(5, evento.getHora_inicio());
+            if (evento.getHora_inicio() != null) {
+                ps.setTime(5, evento.getHora_inicio());
+            } else {
+                ps.setTime(5, null);
+            }
             ps.setDouble(6, evento.getPrecio_boleta());
             ps.setString(7, evento.getImagen());
             
             ps.executeUpdate();
-        }catch (SQLException e){
+            
+            // Obtener el ID generado
+            rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
         }
+        return 0;
     }
     
     public Evento buscar (int id_evento) {
@@ -103,7 +115,7 @@ public class EventoDAO {
         return null;
     }
     
-    public void actualizar (Evento evento){
+    public boolean actualizar (Evento evento){
         try {
             String sql = "UPDATE evento SET nombre_evento = ?, "
                     + "capacidad_maxima = ?, descripcion = ?, fecha = ?, hora_inicio = ?, "
@@ -119,14 +131,20 @@ public class EventoDAO {
             } else {
                 ps.setDate(4, null);
             }
-            ps.setTime(5, evento.getHora_inicio());
+            if (evento.getHora_inicio() != null) {
+                ps.setTime(5, evento.getHora_inicio());
+            } else {
+                ps.setTime(5, null);
+            }
             ps.setDouble(6, evento.getPrecio_boleta());
             ps.setString(7, evento.getImagen());
             ps.setInt(8, evento.getId_evento());
             
-            ps.executeUpdate();
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
         } catch (SQLException e){
-            
+            e.printStackTrace();
+            return false;
         }
     }
     
