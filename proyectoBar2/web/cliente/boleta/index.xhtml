@@ -27,13 +27,13 @@
                 <div class="card-body">
                     <h:panelGrid columns="4" columnClasses="col-md-3,col-md-3,col-md-3,col-md-3">
                         <h:outputLabel value="Nombre del Evento:" />
-                        <h:inputText value="#{boletaBean.filtroEvento}" class="form-control" placeholder="Buscar por evento..." />
+                        <h:inputText value="#{boletaBean.filtroEvento}" class="form-control"/>
 
                         <h:outputLabel value="Precio:" />
-                        <h:inputText value="#{boletaBean.filtroPrecio}" class="form-control" placeholder="Ej: 100.00" />
+                        <h:inputText value="#{boletaBean.filtroPrecio}" class="form-control"/>
 
                         <h:outputLabel value="Cantidad de Boletos:" />
-                        <h:inputText value="#{boletaBean.filtroCantidad}" class="form-control" placeholder="Ej: 2" />
+                        <h:inputText value="#{boletaBean.filtroCantidad}" class="form-control"/>
                     </h:panelGrid>
                     <br/>
                     <h:commandButton value="Buscar" action="#{boletaBean.buscarPorEvento}" class="btn btn-primary" />

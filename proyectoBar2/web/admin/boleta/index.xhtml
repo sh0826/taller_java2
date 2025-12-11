@@ -1,104 +1,165 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="/templates/adminLayout.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/templates/adminLayout.xhtml" xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="contenido">
-    <h:head>
-        <title>Administrar Boletas</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
-    </h:head>
-    <h:body>
+        <style>
+            .miAutoTabla a.boton {
+                color: white !important;
+            }
+
+            .miAutoTabla a.boton:hover {
+                color: black !important;
+            }
+
+            .miAutoTabla .ui-datatable-tablewrapper {
+                width: auto !important;
+                display: inline-block !important;
+            }
+
+            .miAutoTabla table {
+                width: auto !important;
+                table-layout: auto !important;
+            }
+
+            .miAutoTabla .ui-datatable-data td,
+            .miAutoTabla .ui-datatable-data th {
+                white-space: nowrap;
+                padding: 8px 12px;
+            }
+
+            .miAutoTabla .ui-datatable-tablewrapper {
+                margin: 0 auto;
+                display: table !important;
+            }
+
+            .table th {
+                padding: 12px !important;
+                background: #1a1a1a;
+                color: #C89B3C;
+            }
+
+            .boton {
+                display: inline-block;
+                color: white;
+                padding: 6px 10px;
+                margin: 5px 0;
+                text-decoration: none;
+                border-radius: 5px;
+                background: #6D0823;
+                border: none;
+            }
+
+            .boton:hover {
+                background: #C89B3C;
+                color: black;
+                font-weight: bold;
+            }
+        </style>
         <f:event type="preRenderView" listener="#{boletaBean.preRender}" />
-        <h2 class="text-center text-primary">Administrar Boletas</h2>
-        
+
+        <h2 style="text-align: center; color: #C89B3C; margin-bottom: 20px; font-weight: bold;">Administrar Boletas</h2>
+
         <h:form>
-            <div class="card mb-3">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Filtros de Búsqueda</h5>
-                </div>
-                <div class="card-body">
-                    <h:panelGrid columns="4" columnClasses="col-md-3,col-md-3,col-md-3,col-md-3">
-                        <h:outputLabel value="Nombre del Evento:" />
-                        <h:inputText value="#{boletaBean.filtroEvento}" class="form-control" placeholder="Buscar por evento..." />
+            <p:messages id="messages" showDetail="true" closable="true" />
+            <!-- Panel de Filtros -->
+            <div
+                style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+                <h3 style="color: #C89B3C; margin-top: 0;">Filtros de Búsqueda</h3>
+                <h:panelGrid columns="4" cellpadding="5" style="width: 100%;">
+                    <h:outputLabel value="Nombre del Evento:" style="color: #C89B3C;" />
+                    <h:inputText value="#{boletaBean.filtroEvento}"
+                        style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
 
-                        <h:outputLabel value="Nombre del Usuario:" />
-                        <h:inputText value="#{boletaBean.filtroUsuario}" class="form-control" placeholder="Buscar por usuario..." />
+                    <h:outputLabel value="Nombre del Usuario:" style="color: #C89B3C;" />
+                    <h:inputText value="#{boletaBean.filtroUsuario}"
+                        style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
 
-                        <h:outputLabel value="Precio:" />
-                        <h:inputText value="#{boletaBean.filtroPrecio}" class="form-control" placeholder="Ej: 100.00" />
+                    <h:outputLabel value="Precio:" style="color: #C89B3C;" />
+                    <h:inputText value="#{boletaBean.filtroPrecio}"
+                        style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
 
-                        <h:outputLabel value="Cantidad de Boletos:" />
-                        <h:inputText value="#{boletaBean.filtroCantidad}" class="form-control" placeholder="Ej: 2" />
-                    </h:panelGrid>
-                    <br/>
-                    <h:commandButton value="Buscar" action="#{boletaBean.buscarPorEvento}" class="btn btn-primary" />
-                    <h:commandButton value="Limpiar Filtros" action="#{boletaBean.limpiarFiltros}" class="btn btn-secondary" style="margin-left: 10px;" />
-                </div>
+                    <h:outputLabel value="Cantidad de Boletos:" style="color: #C89B3C;" />
+                    <h:inputText value="#{boletaBean.filtroCantidad}"
+                        style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
+
+                    <h:outputLabel value="" />
+                    <h:panelGroup span="3">
+                        <p:commandButton value="Buscar" action="#{boletaBean.buscarPorEvento}"
+                            update="dtBoletas messages" process="@form" styleClass="boton" style="margin-right: 10px;"
+                            ajax="true" />
+                        <p:commandButton value="Limpiar Filtros" action="#{boletaBean.limpiarFiltros}"
+                            update="dtBoletas messages" process="@this" styleClass="boton" ajax="true" />
+                    </h:panelGroup>
+                </h:panelGrid>
             </div>
-            
-            <h:commandLink value="Nueva Boleta" class="text-primary" action="nuevo" />
-            <h:commandLink value="Menú Anterior" class="text-secondary" action="/faces/admin/index"
-                               style="margin-left: 15px;" />
-            <br/><br/>
-            
-            <h:dataTable value="#{boletaBean.listaFiltrada}" var="boleta" class="table table-bordered table-striped">
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="ID Boleta" />
-                    </f:facet>
-                    <h:outputText value="#{boleta.id_boleta}" />
-                </h:column>
-                
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Precio" />
-                    </f:facet>
-                    <h:outputText value="#{boleta.precio_boleta}">
-                        <f:convertNumber pattern="#,##0.00" />
-                    </h:outputText>
-                </h:column>
-                
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Cantidad Boletos" />
-                    </f:facet>
-                    <h:outputText value="#{boleta.cantidad_boletos}" />
-                </h:column>
-                
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Usuario" />
-                    </f:facet>
-                    <h:outputText value="#{boleta.usuario != null ? boleta.usuario.nombre_completo : 'N/A'}" />
-                </h:column>
-                
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Evento" />
-                    </f:facet>
-                    <h:outputText value="#{boleta.even != null ? boleta.even.nombre_evento : 'N/A'}" />
-                </h:column>
-                
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Opciones" />
-                    </f:facet>
-                    <h:commandLink value="Editar" class="text-success"  
-                                   actionListener="#{boletaBean.buscar(boleta.id_boleta)}" action="editar" />
-                    <h:commandLink value="Eliminar" class="text-danger" style="margin-left: 15px;" 
-                                   action="#{boletaBean.eliminar(boleta.id_boleta)}" 
-                                   onclick="return confirm('¿Está seguro de ELIMINAR la Boleta #{boleta.id_boleta}?');" />
-                </h:column>
-            </h:dataTable>            
-        </h:form>            
-    </h:body>
-</ui:define>
-</ui:composition>
+            <div class="container">
 
+                <p:dataTable id="dtBoletas" value="#{boletaBean.listaFiltrada}" var="boleta"
+                    styleClass="table table-bordered shadow-sm miAutoTabla" style="font-size:15px;"
+                    emptyMessage="No se encontraron boletas">
+
+                    <p:column headerText="ID Boleta">
+                        <h:outputText value="#{boleta.id_boleta}"
+                            style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{boleta.id_boleta}" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="Precio">
+                        <h:outputText value="#{boleta.precio_boleta}"
+                            style="display:block; padding:10px 5px; color:black;">
+                            <f:convertNumber pattern="#,##0.00" />
+                        </h:outputText>
+                        <f:facet name="exportar">
+                            <h:outputText value="#{boleta.precio_boleta}">
+                                <f:convertNumber pattern="#,##0.00" />
+                            </h:outputText>
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="Cantidad Boletos">
+                        <h:outputText value="#{boleta.cantidad_boletos}"
+                            style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{boleta.cantidad_boletos}" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="Usuario">
+                        <h:outputText value="#{boleta.usuario != null ? boleta.usuario.nombre_completo : 'N/A'}"
+                            style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{boleta.usuario != null ? boleta.usuario.nombre_completo : 'N/A'}" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="Evento">
+                        <h:outputText value="#{boleta.even != null ? boleta.even.nombre_evento : 'N/A'}"
+                            style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{boleta.even != null ? boleta.even.nombre_evento : 'N/A'}" />
+                        </f:facet>
+                    </p:column>
+                </p:dataTable>
+            </div>
+
+            <div style="margin-top: 10px; text-align: center;">
+                <p:commandLink ajax="false" styleClass="boton" style="margin-right: 10px;">
+                    <h:outputText value="📄 Click para sacar el reporte de PDF" />
+                    <p:dataExporter target="dtBoletas" type="pdf" fileName="Boletas" />
+                </p:commandLink>
+
+                <p:commandLink ajax="false" styleClass="boton">
+                    <h:outputText value="📊 Click para sacar el reporte de Excel" />
+                    <p:dataExporter target="dtBoletas" type="xls" fileName="Boletas" />
+                </p:commandLink>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
