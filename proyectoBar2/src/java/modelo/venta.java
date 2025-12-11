@@ -16,7 +16,8 @@ public class venta {
     private Timestamp fecha;
     private BigDecimal total;
     private String metodo_pago; // efectivo, tarjeta, transferencia
-    private long id; // ID del usuario/cliente
+    private int id; // ID del usuario/cliente (foreign key a usuario.id_usuario)
+    private String nombre_usuario; // Nombre del usuario que realizó la venta
 
     public int getId_venta() {
         return id_venta;
@@ -50,12 +51,20 @@ public class venta {
         this.metodo_pago = metodo_pago;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public String getNombre_usuario() {
+        return nombre_usuario;
+    }
+
+    public void setNombre_usuario(String nombre_usuario) {
+        this.nombre_usuario = nombre_usuario;
     }
 }
 

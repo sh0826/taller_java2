@@ -81,6 +81,17 @@ public class ventaBean {
             return null;
         }
         
+        // Obtener automáticamente el ID del usuario desde la sesión (foreign key)
+        Object idUsuarioObj = facesContext.getExternalContext().getSessionMap().get("id_usuario");
+        if (idUsuarioObj != null) {
+            int idUsuario = ((Number) idUsuarioObj).intValue();
+            venta.setId(idUsuario);
+            System.out.println("ID de usuario asignado automáticamente: " + idUsuario);
+        } else {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se encontró el usuario en la sesión. Por favor, inicie sesión nuevamente."));
+            return null;
+        }
+        
         boolean exito = ventaDAO.insertar(venta);
         if (exito) {
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Venta guardada correctamente"));
@@ -88,9 +99,9 @@ public class ventaBean {
             // Redirigir según desde dónde se llamó
             String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
             if (viewId.contains("admin")) {
-                return "/ventas/admin/index?faces-redirect=true";
+                return "/faces/admin/ventas/index?faces-redirect=true";
             } else {
-                return "/ventas/empleado/index?faces-redirect=true";
+                return "/faces/emp/ventas/index?faces-redirect=true";
             }
         } else {
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo guardar la venta"));
@@ -100,6 +111,11 @@ public class ventaBean {
     
     public void buscar(int id){
         venta = ventaDAO.buscarPorId(id);
+        if (venta == null) {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "No se encontró la venta con ID: " + id));
+            venta = new venta(); // Inicializar para evitar NullPointerException
+        }
     }
     
     public void actualizar(){

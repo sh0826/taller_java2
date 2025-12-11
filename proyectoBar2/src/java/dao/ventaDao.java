@@ -39,7 +39,7 @@ public class ventaDao {
         // Obtener el siguiente ID disponible
         int siguienteId = obtenerSiguienteId();
         
-        String sql = "INSERT INTO venta (id_venta, total, metodo_pago, id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO venta (id_venta, total, metodo_pago, id_usuario) VALUES (?, ?, ?, ?)";
         
         Connection conn = null;
         PreparedStatement ps = null;
@@ -51,7 +51,7 @@ public class ventaDao {
             ps.setInt(1, siguienteId);
             ps.setBigDecimal(2, v.getTotal());
             ps.setString(3, v.getMetodo_pago());
-            ps.setLong(4, v.getId());
+            ps.setInt(4, v.getId()); // ID del usuario (foreign key a usuario.id_usuario)
             
             int filas = ps.executeUpdate();
             
@@ -83,7 +83,10 @@ public class ventaDao {
     
     public List<venta> listar() {
         List<venta> lista = new ArrayList<>();
-        String sql = "SELECT * FROM venta ORDER BY fecha DESC";
+        String sql = "SELECT v.*, u.nombre_completo AS nombre_usuario " +
+                     "FROM venta v " +
+                     "INNER JOIN usuario u ON v.id_usuario = u.id_usuario " +
+                     "ORDER BY v.fecha DESC";
         
         try (Connection conn = ConnBD.conectar();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -95,7 +98,8 @@ public class ventaDao {
                 v.setFecha(rs.getTimestamp("fecha"));
                 v.setTotal(rs.getBigDecimal("total"));
                 v.setMetodo_pago(rs.getString("metodo_pago"));
-                v.setId(rs.getLong("id"));
+                v.setId(rs.getInt("id_usuario")); // ID del usuario (foreign key)
+                v.setNombre_usuario(rs.getString("nombre_usuario")); // Nombre del usuario
                 lista.add(v);
             }
             
@@ -109,13 +113,16 @@ public class ventaDao {
     public List<venta> listarConFiltros(String search, String metodoPago, String fechaDesde, 
                                        String fechaHasta, BigDecimal totalMin, BigDecimal totalMax) {
         List<venta> lista = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT v.* FROM venta v WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT v.*, u.nombre_completo AS nombre_usuario " +
+                                              "FROM venta v " +
+                                              "INNER JOIN usuario u ON v.id_usuario = u.id_usuario " +
+                                              "WHERE 1=1");
         List<Object> params = new ArrayList<>();
-        int paramIndex = 1;
         
         if (search != null && !search.trim().isEmpty()) {
-            sql.append(" AND (CAST(v.id_venta AS CHAR) LIKE ? OR CAST(v.id AS CHAR) LIKE ?)");
+            sql.append(" AND (CAST(v.id_venta AS CHAR) LIKE ? OR CAST(v.id_usuario AS CHAR) LIKE ? OR u.nombre_completo LIKE ?)");
             String searchParam = "%" + search + "%";
+            params.add(searchParam);
             params.add(searchParam);
             params.add(searchParam);
         }
@@ -162,7 +169,8 @@ public class ventaDao {
                 v.setFecha(rs.getTimestamp("fecha"));
                 v.setTotal(rs.getBigDecimal("total"));
                 v.setMetodo_pago(rs.getString("metodo_pago"));
-                v.setId(rs.getLong("id"));
+                v.setId(rs.getInt("id_usuario")); // ID del usuario (foreign key)
+                v.setNombre_usuario(rs.getString("nombre_usuario")); // Nombre del usuario
                 lista.add(v);
             }
             
@@ -174,7 +182,10 @@ public class ventaDao {
     }
     
     public venta buscarPorId(int id) {
-        String sql = "SELECT * FROM venta WHERE id_venta = ?";
+        String sql = "SELECT v.*, u.nombre_completo AS nombre_usuario " +
+                     "FROM venta v " +
+                     "INNER JOIN usuario u ON v.id_usuario = u.id_usuario " +
+                     "WHERE v.id_venta = ?";
         venta v = null;
         
         try (Connection conn = ConnBD.conectar();
@@ -189,7 +200,8 @@ public class ventaDao {
                 v.setFecha(rs.getTimestamp("fecha"));
                 v.setTotal(rs.getBigDecimal("total"));
                 v.setMetodo_pago(rs.getString("metodo_pago"));
-                v.setId(rs.getLong("id"));
+                v.setId(rs.getInt("id_usuario")); // ID del usuario (foreign key)
+                v.setNombre_usuario(rs.getString("nombre_usuario")); // Nombre del usuario
             }
             
         } catch (SQLException e) {
@@ -200,14 +212,14 @@ public class ventaDao {
     }
     
     public boolean actualizar(venta v) {
-        String sql = "UPDATE venta SET total = ?, metodo_pago = ?, id = ? WHERE id_venta = ?";
+        String sql = "UPDATE venta SET total = ?, metodo_pago = ?, id_usuario = ? WHERE id_venta = ?";
         
         try (Connection conn = ConnBD.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setBigDecimal(1, v.getTotal());
             ps.setString(2, v.getMetodo_pago());
-            ps.setLong(3, v.getId());
+            ps.setInt(3, v.getId()); // ID del usuario (foreign key)
             ps.setInt(4, v.getId_venta());
             
             int filas = ps.executeUpdate();

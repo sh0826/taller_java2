@@ -47,6 +47,7 @@ public class LoginBean {
             if(rs.next()){
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", rs.getString("nombre_completo"));
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tipo", rs.getString("tipo"));
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("id_usuario", rs.getInt("id_usuario"));
                 
                 String dir = "";
                 switch(rs.getString("tipo")){
