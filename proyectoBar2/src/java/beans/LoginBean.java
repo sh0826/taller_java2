@@ -36,7 +36,6 @@ public class LoginBean {
             Connection con = ConnBD.conectar();
             
             String pwd = Utils.encriptar(usuario.getPass());
-            
             String sql = "SELECT * FROM usuario WHERE documento = ? AND pass = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, usuario.getDocumento());

@@ -99,6 +99,25 @@
                 transition: 0.3s;
                 margin-top: 10px;
             }
+            .btn-salir {
+                width: 100%;
+                padding: 12px;
+                background: lightgray;
+                color: #eee;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.3s;
+                margin-top: 10px;
+            }
+            .btn-salir:hover {
+                background: white;
+                color: #000;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(200, 155, 60, 0.4);
+            }
             
             .btn-login:hover {
                 background: #C89B3C;
@@ -161,13 +180,18 @@
                                  styleClass="btn-login" />
             </h:form>
             
-            <div class="register-link">
                 <h:form>
+                    <h:commandButton value="Volver"
+                 action="#{loginBean.cerrar_sesion()}"
+                 styleClass="btn-salir" />
+
+            <div class="register-link">
                     <h:commandLink value="¿No tienes cuenta? Regístrate aquí" 
                                    action="/faces/inicio_sesion/crear_cliente"
                                    style="color: #C89B3C; text-decoration: none; font-size: 14px;" />
+                    </div>
                 </h:form>
-            </div>
+            
         </div>
     </h:body>
 </html>

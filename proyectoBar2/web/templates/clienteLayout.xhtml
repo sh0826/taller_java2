@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Cliente - Ágora Vibes</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #eee;
+        }
+
+        /* Header principal */
+        .header {
+            background: #000;
+            padding: 20px;
+            text-align: center;
+            color: #C89B3C;
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* NAVBAR HORIZONTAL */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background: #1a1a1a;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(255, 215, 0, 0.1);
+        }
+
+        .nav-item {
+            color: #eee;
+            padding: 10px 18px;
+            text-decoration: none;
+            background: #262626;
+            border-radius: 5px;
+            transition: 0.2s;
+            display: inline-block;
+        }
+
+        .nav-item:hover {
+            background: #C89B3C;
+            color: black;
+            font-weight: bold;
+        }
+
+        /* Contenido */
+        .content {
+            padding: 40px;
+            min-height: 70vh;
+        }
+
+        /* Footer */
+        .footer {
+            background: #222;
+            color: #C89B3C;
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{loginBean.verif_sesion('C')}"/>
+
+    <div class="header">Bienvenido - Ágora Vibes Gastro BAR</div>
+
+    <div class="navbar">
+        <a class="nav-item" href="/proyectoBar2/faces/cliente/reservacion/index.xhtml">Mis Reservas</a>
+        <a class="nav-item" href="/proyectoBar2/faces/cliente/boleta/index.xhtml">Mis Boletas</a>
+        
+        <h:form>
+            <h:commandLink value="Volver al menú"
+                           styleClass="nav-item"
+                           action="/proyectoBar2/faces/cliente/index.xhtml" />
+        </h:form>
+        <h:form>
+            <h:commandLink value="Cerrar Sesión"
+                           styleClass="nav-item"
+                           actionListener="#{loginBean.cerrar_sesion}" />
+        </h:form>
+    </div>
+
+    <div class="content">
+        <ui:insert name="contenido">Contenido cliente…</ui:insert>
+    </div>
+
+    <div class="footer">© 2025 Ágora Vibes Gastro BAR</div>
+</h:body>
+
+</html>
