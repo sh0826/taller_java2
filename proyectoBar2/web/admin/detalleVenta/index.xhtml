@@ -168,9 +168,13 @@
             </p:column>
             
             <p:column headerText="Precio Unitario">
-                <h:outputText value="#{d.precio_unitario}" />
+                <h:outputText value="#{d.precio_unitario}">
+                    <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                </h:outputText>
                 <f:facet name="exportar">
-                    <h:outputText value="#{d.precio_unitario}" />
+                    <h:outputText value="#{d.precio_unitario}">
+                        <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                    </h:outputText>
                 </f:facet>
             </p:column>
             

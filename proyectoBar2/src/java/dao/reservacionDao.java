@@ -160,6 +160,40 @@ public class reservacionDao {
         return lista; // Retornar la lista con todas las reservaciones
     }
     
+    // Método para LISTAR reservaciones por ID de usuario
+    public List<reservacion> listarPorUsuario(int idUsuario) {
+        List<reservacion> lista = new ArrayList<>();
+        String sql = "SELECT r.*, u.nombre_completo AS nombre_usuario " +
+                     "FROM reservacion r " +
+                     "INNER JOIN usuario u ON r.id_usuario = u.id_usuario " +
+                     "WHERE r.id_usuario = ? " +
+                     "ORDER BY r.id_reservacion ASC";
+        
+        try (Connection conn = ConnBD.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, idUsuario);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                reservacion res = new reservacion();
+                res.setId_reservacion(rs.getInt("id_reservacion"));
+                res.setId_usuario(rs.getInt("id_usuario"));
+                res.setCatindad_personas(rs.getInt("cantidad_personas"));
+                res.setCantidad_mesas(rs.getInt("cantidad_mesas"));
+                res.setOcasion(rs.getString("ocasion"));
+                res.setFecha_reservacion(rs.getDate("fecha_reservacion"));
+                res.setNombre_usuario(rs.getString("nombre_usuario"));
+                lista.add(res);
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error al listar reservaciones por usuario: " + e.getMessage());
+        }
+        
+        return lista;
+    }
+    
     // Método para BUSCAR una reservación por su ID
     public reservacion buscarPorId(int id) {
         String sql = "SELECT r.*, u.nombre_completo AS nombre_usuario " +

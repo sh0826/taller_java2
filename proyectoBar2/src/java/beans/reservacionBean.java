@@ -42,7 +42,29 @@ public class reservacionBean {
     // Método para cargar todas las reservaciones desde la base de datos
     public void listar(){
         reservacion = new reservacion(); // Limpiar el objeto del formulario
-        lstReserv = reservDAO.listar(); // Llamar al DAO para obtener todas las reservaciones
+        
+        // Verificar si es cliente para filtrar solo sus reservaciones
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext != null) {
+            String viewId = facesContext.getViewRoot().getViewId();
+            // Si está en la página del cliente, filtrar por su id_usuario
+            if (viewId != null && viewId.contains("cliente")) {
+                Object idUsuarioObj = facesContext.getExternalContext().getSessionMap().get("id_usuario");
+                if (idUsuarioObj != null) {
+                    int idUsuario = ((Number) idUsuarioObj).intValue();
+                    lstReserv = reservDAO.listarPorUsuario(idUsuario);
+                    System.out.println("Cliente - Reservaciones cargadas para usuario ID: " + idUsuario + " - Total: " + lstReserv.size());
+                } else {
+                    lstReserv = new ArrayList<>(); // Si no hay sesión, lista vacía
+                }
+            } else {
+                // Para admin/empleado, cargar todas las reservaciones
+                lstReserv = reservDAO.listar();
+            }
+        } else {
+            lstReserv = reservDAO.listar(); // Fallback: cargar todas
+        }
+        
         lstReservFiltered = new ArrayList<>(); // Limpiar la lista filtrada
         filtrosAplicados = false;
     }

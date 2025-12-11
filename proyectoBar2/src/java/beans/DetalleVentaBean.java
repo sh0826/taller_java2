@@ -63,6 +63,19 @@ public class DetalleVentaBean {
                     // Si hay un filtro de ID de venta, filtrar automáticamente
                     Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
                     listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
+                    
+                    // Si no hay detalles pero hay una venta seleccionada, crear un detalle virtual con el total
+                    if ((listaFiltrada == null || listaFiltrada.isEmpty()) && ventaSeleccionada != null && ventaSeleccionada.getTotal() != null) {
+                        DetalleVenta detalleTotal = new DetalleVenta();
+                        detalleTotal.setId_detalleV(0); // ID virtual
+                        detalleTotal.setId_venta(ventaSeleccionada.getId_venta());
+                        detalleTotal.setId_producto(0); // Sin producto
+                        detalleTotal.setDescripcion("Total de la Venta");
+                        detalleTotal.setCantidad_productos(1); // Cantidad = 1
+                        detalleTotal.setPrecio_unitario(ventaSeleccionada.getTotal().doubleValue()); // Precio unitario = total
+                        listaFiltrada = new ArrayList<>();
+                        listaFiltrada.add(detalleTotal);
+                    }
                 } else {
                     listaFiltrada = dao.listar();
                 }
@@ -93,6 +106,19 @@ public class DetalleVentaBean {
                 try {
                     Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
                     listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
+                    
+                    // Si no hay detalles pero hay una venta seleccionada, crear un detalle virtual con el total
+                    if ((listaFiltrada == null || listaFiltrada.isEmpty()) && ventaSeleccionada != null && ventaSeleccionada.getTotal() != null) {
+                        DetalleVenta detalleTotal = new DetalleVenta();
+                        detalleTotal.setId_detalleV(0); // ID virtual
+                        detalleTotal.setId_venta(ventaSeleccionada.getId_venta());
+                        detalleTotal.setId_producto(0); // Sin producto
+                        detalleTotal.setDescripcion("Total de la Venta");
+                        detalleTotal.setCantidad_productos(1); // Cantidad = 1
+                        detalleTotal.setPrecio_unitario(ventaSeleccionada.getTotal().doubleValue()); // Precio unitario = total
+                        listaFiltrada = new ArrayList<>();
+                        listaFiltrada.add(detalleTotal);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
