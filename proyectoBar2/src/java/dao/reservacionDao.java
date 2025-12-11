@@ -52,7 +52,8 @@ public class reservacionDao {
         }
         
         // SQL con parámetros (?) para prevenir inyección SQL
-        String sql = "INSERT INTO reservacion (cantidad_de_personas, cantidad_mesas, ocasion, fecha_reservacion) VALUES (?, ?, ?, ?)";
+        // Incluir id_usuario que es requerido por la tabla
+        String sql = "INSERT INTO reservacion (id_usuario, cantidad_personas, cantidad_mesas, ocasion, fecha_reservacion) VALUES (?, ?, ?, ?, ?)";
         
         Connection conn = null; // Variable para la conexión a la BD
         PreparedStatement ps = null; // Variable para la consulta preparada
@@ -69,14 +70,22 @@ public class reservacionDao {
             
             ps = conn.prepareStatement(sql); // Preparar la consulta SQL
             
+            // Validar que id_usuario esté asignado
+            if (res.getId_usuario() == 0) {
+                System.err.println("Error: El ID de usuario no está asignado");
+                return false;
+            }
+            
             // Asignar valores a los parámetros (?) del SQL
-            ps.setInt(1, res.getCatindad_personas()); // Primer ? = cantidad de personas
-            ps.setInt(2, res.getCantidad_mesas()); // Segundo ? = cantidad de mesas
-            ps.setString(3, res.getOcasion()); // Tercer ? = ocasión
-            ps.setDate(4, new Date(res.getFecha_reservacion().getTime())); // Cuarto ? = fecha (convierte java.util.Date a java.sql.Date)
+            ps.setInt(1, res.getId_usuario()); // Primer ? = id_usuario
+            ps.setInt(2, res.getCatindad_personas()); // Segundo ? = cantidad de personas
+            ps.setInt(3, res.getCantidad_mesas()); // Tercer ? = cantidad de mesas
+            ps.setString(4, res.getOcasion()); // Cuarto ? = ocasión
+            ps.setDate(5, new Date(res.getFecha_reservacion().getTime())); // Quinto ? = fecha (convierte java.util.Date a java.sql.Date)
             
             System.out.println("Ejecutando INSERT con valores:");
             System.out.println("  SQL: " + sql);
+            System.out.println("  ID Usuario: " + res.getId_usuario());
             System.out.println("  Personas: " + res.getCatindad_personas());
             System.out.println("  Mesas: " + res.getCantidad_mesas());
             System.out.println("  Ocasión: " + res.getOcasion());
@@ -120,7 +129,10 @@ public class reservacionDao {
     // Método para LISTAR todas las reservaciones de la base de datos
     public List<reservacion> listar() {
         List<reservacion> lista = new ArrayList<>(); // Lista vacía para almacenar las reservaciones
-        String sql = "SELECT * FROM reservacion"; // SQL para obtener todos los registros
+        String sql = "SELECT r.*, u.nombre_completo AS nombre_usuario " +
+                     "FROM reservacion r " +
+                     "INNER JOIN usuario u ON r.id_usuario = u.id_usuario " +
+                     "ORDER BY r.fecha_reservacion DESC"; // SQL para obtener todos los registros con nombre de usuario
         
         // try-with-resources: Cierra automáticamente los recursos al terminar
         try (Connection conn = ConnBD.conectar(); // Obtener conexión
@@ -132,10 +144,12 @@ public class reservacionDao {
                 reservacion res = new reservacion(); // Crear nuevo objeto reservación
                 // Llenar el objeto con los datos de la fila actual
                 res.setId_reservacion(rs.getInt("id_reservacion")); // Obtener ID de la columna
-                res.setCatindad_personas(rs.getInt("cantidad_de_personas")); // Obtener cantidad de personas
+                res.setId_usuario(rs.getInt("id_usuario")); // Obtener ID del usuario
+                res.setCatindad_personas(rs.getInt("cantidad_personas")); // Obtener cantidad de personas
                 res.setCantidad_mesas(rs.getInt("cantidad_mesas")); // Obtener cantidad de mesas
                 res.setOcasion(rs.getString("ocasion")); // Obtener ocasión
                 res.setFecha_reservacion(rs.getDate("fecha_reservacion")); // Obtener fecha
+                res.setNombre_usuario(rs.getString("nombre_usuario")); // Obtener nombre del usuario
                 lista.add(res); // Agregar el objeto a la lista
             }
             
@@ -148,7 +162,10 @@ public class reservacionDao {
     
     // Método para BUSCAR una reservación por su ID
     public reservacion buscarPorId(int id) {
-        String sql = "SELECT * FROM reservacion WHERE id_reservacion = ?"; // SQL con parámetro
+        String sql = "SELECT r.*, u.nombre_completo AS nombre_usuario " +
+                     "FROM reservacion r " +
+                     "INNER JOIN usuario u ON r.id_usuario = u.id_usuario " +
+                     "WHERE r.id_reservacion = ?"; // SQL con parámetro y nombre de usuario
         reservacion res = null; // Inicializar como null (si no se encuentra, retorna null)
         
         try (Connection conn = ConnBD.conectar(); // Obtener conexión
@@ -161,10 +178,12 @@ public class reservacionDao {
                 res = new reservacion(); // Crear nuevo objeto
                 // Llenar el objeto con los datos encontrados
                 res.setId_reservacion(rs.getInt("id_reservacion"));
-                res.setCatindad_personas(rs.getInt("cantidad_de_personas"));
+                res.setId_usuario(rs.getInt("id_usuario"));
+                res.setCatindad_personas(rs.getInt("cantidad_personas"));
                 res.setCantidad_mesas(rs.getInt("cantidad_mesas"));
                 res.setOcasion(rs.getString("ocasion"));
                 res.setFecha_reservacion(rs.getDate("fecha_reservacion"));
+                res.setNombre_usuario(rs.getString("nombre_usuario"));
             }
             
         } catch (SQLException e) {
@@ -177,7 +196,7 @@ public class reservacionDao {
     // Método para ACTUALIZAR una reservación existente
     public boolean actualizar(reservacion res) {
         // SQL UPDATE: actualiza los campos donde el ID coincida
-        String sql = "UPDATE reservacion SET cantidad_de_personas = ?, cantidad_mesas = ?, ocasion = ?, fecha_reservacion = ? WHERE id_reservacion = ?";
+        String sql = "UPDATE reservacion SET cantidad_personas = ?, cantidad_mesas = ?, ocasion = ?, fecha_reservacion = ? WHERE id_reservacion = ?";
         
         try (Connection conn = ConnBD.conectar(); // Obtener conexión
              PreparedStatement ps = conn.prepareStatement(sql)) { // Preparar consulta

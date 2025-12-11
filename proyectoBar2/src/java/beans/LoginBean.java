@@ -67,7 +67,8 @@ public class LoginBean {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(rootPath + dir + "/index.xhtml");
                 FacesContext.getCurrentInstance().responseComplete();
             }else{
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/inicio_sesion/error.xhtml");
+                String rootPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+                FacesContext.getCurrentInstance().getExternalContext().redirect(rootPath + "/inicio_sesion/error.xhtml");
             }            
         } catch (SQLException | IOException e) {
         }        
@@ -77,7 +78,7 @@ public class LoginBean {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
         String rootPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(rootPath + "/faces/inicio_sesion/login.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(rootPath + "/inicio_sesion/login.xhtml");
         } catch (IOException e) {
         }
     }
