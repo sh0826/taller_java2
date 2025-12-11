@@ -61,6 +61,7 @@
         <h2 style="text-align: center; color: #C89B3C; margin-bottom: 20px; font-weight: bold;">Administrar Usuarios</h2>
         
         <h:form>
+            <p:messages id="messages" showDetail="true" closable="true" />
           <!-- Panel de Filtros -->
             <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
                 <h3 style="color: #C89B3C; margin-top: 0;">Filtros de Búsqueda</h3>
@@ -89,16 +90,18 @@
                     <h:panelGroup>
                         <p:commandButton value="Buscar" 
                                          action="#{usuarioBean.listarConFiltros()}"
-                                         update="dtProd"
+                                         update="dtProd messages"
                                          process="@form"
                                          styleClass="boton"
-                                         style="margin-right: 10px;" />
+                                         style="margin-right: 10px;"
+                                         ajax="true" />
                         
                         <p:commandButton value="Limpiar" 
                                          action="#{usuarioBean.limpiarFiltros()}"
-                                         update="dtProd filtroNombre filtroDocumento filtroTipo"
+                                         update="dtProd filtroNombre filtroDocumento filtroTipo messages"
                                          process="@this"
-                                         styleClass="boton" />
+                                         styleClass="boton"
+                                         ajax="true" />
                     </h:panelGroup>
                 </h:panelGrid>
             </div>
@@ -171,8 +174,8 @@
         <div style="padding:10px 8px; text-align:center;">
             <p:commandLink value="Editar"
                            styleClass="boton"
-                           actionListener="#{usuarioBean.buscar(usr.id_usuario)}"
-                           action="editar" />
+                           action="#{usuarioBean.buscar(usr.id_usuario)}"
+                           ajax="false" />
             <br/>
             <h:commandLink value="Eliminar"
                            styleClass="boton"
