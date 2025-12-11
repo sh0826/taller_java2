@@ -179,33 +179,38 @@
             <!-- Formulario para agregar detalles - Fuera del cuadro -->
             <div style="margin: 20px 0;">
                 <h3 style="color: #C89B3C; margin-top: 0; margin-bottom: 15px;">Agregar Detalle</h3>
-                <h:panelGrid columns="5" cellpadding="5" style="width: 100%;">
-                    <h:outputLabel value="Producto:" style="color: #C89B3C;"/>
-                    <h:selectOneMenu value="#{detalleVentaBean.detalle.id_producto}" styleClass="form-select">
-                        <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                        <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
-                    </h:selectOneMenu>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <h:outputLabel value="Producto:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
+                        <h:selectOneMenu value="#{detalleVentaBean.detalle.id_producto}" styleClass="form-select" style="width: 100%;">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                            <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
+                        </h:selectOneMenu>
+                    </div>
                     
-                    <h:outputLabel value="Descripción:" style="color: #C89B3C;"/>
-                    <h:inputText value="#{detalleVentaBean.detalle.descripcion}" styleClass="form-control"/>
+                    <div>
+                        <h:outputLabel value="Descripción:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
+                        <h:inputText value="#{detalleVentaBean.detalle.descripcion}" styleClass="form-control" style="width: 100%;"/>
+                    </div>
                     
-                    <h:panelGroup/>
+                    <div>
+                        <h:outputLabel value="Cantidad:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
+                        <h:inputText value="#{detalleVentaBean.detalle.cantidad_productos}" styleClass="form-control" style="width: 100%;"/>
+                    </div>
                     
-                    <h:outputLabel value="Cantidad:" style="color: #C89B3C;"/>
-                    <h:inputText value="#{detalleVentaBean.detalle.cantidad_productos}" styleClass="form-control"/>
-                    
-                    <h:outputLabel value="Precio Unitario:" style="color: #C89B3C;"/>
-                    <h:inputText value="#{detalleVentaBean.detalle.precio_unitario}" styleClass="form-control"/>
-                    
-                    <h:panelGroup/>
-                    <h:panelGroup/>
-                    <h:panelGroup/>
-                    <h:panelGroup/>
+                    <div>
+                        <h:outputLabel value="Precio Unitario:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
+                        <h:inputText value="#{detalleVentaBean.detalle.precio_unitario}" styleClass="form-control" style="width: 100%;"/>
+                    </div>
+                </div>
+                
+                <div style="text-align: left; margin-top: 10px;">
                     <h:commandButton value="Guardar" 
                                      action="#{detalleVentaBean.guardar()}" 
                                      styleClass="boton"
                                      rendered="#{detalleVentaBean.ventaSeleccionada == null}"/>
-                </h:panelGrid>
+                </div>
             </div>
             
             <div style="margin: 20px 0; text-align: center;">
