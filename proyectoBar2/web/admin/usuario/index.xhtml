@@ -12,73 +12,101 @@
 
     <ui:define name="contenido">
         <style>
-/* apuntamos a la clase personalizada: */
 .miAutoTabla .ui-datatable-tablewrapper {
     width: auto !important;
-    display: inline-block !important; /* hace que la tabla "encaje" al contenido */
+    display: inline-block !important;
 }
 
-/* tabla interna */
 .miAutoTabla table {
     width: auto !important;
     table-layout: auto !important;
 }
 
-/* celdas: evitar saltos si quieres ajustar al contenido */
 .miAutoTabla .ui-datatable-data td,
 .miAutoTabla .ui-datatable-data th {
     white-space: nowrap;
     padding: 8px 12px;
 }
 
-/* Si quieres centrar la tabla en su contenedor */
 .miAutoTabla .ui-datatable-tablewrapper {
     margin: 0 auto;
     display: table !important;
 }
 
-    .table th {
-        padding: 12px !important;
-        background: white;
-        color: #C89B3C;
-    }
-    .boton{
-            display: inline-block;
-            color: #eee;
-            padding: 6px 10px;
-            margin: 8px 0;
-            text-decoration: none;
-            border-radius: 5px;
-            background: #6D0823;
-            transition: 0.2s;
-        }
+.table th {
+    padding: 12px !important;
+    background: #1a1a1a;
+    color: #C89B3C;
+}
 
-        .boton:hover {
-            background: #C89B3C;
-            color: black;
-            font-weight: bold;
-        }
-       
+.boton{
+    display: inline-block;
+    color: #eee;
+    padding: 6px 10px;
+    margin: 5px 0;
+    text-decoration: none;
+    border-radius: 5px;
+    background: #6D0823;
+    border: none;
+}
+
+.boton:hover {
+    background: #C89B3C;
+    color: black;
+    font-weight: bold;
+}
 </style>
-        <f:event type="preRenderView" listener="#{usuarioBean.listar()}" />
+        <f:event type="preRenderView" listener="#{usuarioBean.inicializar()}" />
 
-        <h2 class="text-center text-primary mb-4">Administrar Usuarios</h2>
+        <h2 style="text-align: center; color: #C89B3C; margin-bottom: 20px; font-weight: bold;">Administrar Usuarios</h2>
         
         <h:form>
+          <!-- Panel de Filtros -->
+            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+                <h3 style="color: #C89B3C; margin-top: 0;">Filtros de Búsqueda</h3>
+                <h:panelGrid columns="2" cellpadding="5" style="width: 100%;">
+                    <h:outputLabel value="Nombre:" style="color: #C89B3C;" />
+                    <h:inputText id="filtroNombre" 
+                                 value="#{usuarioBean.filtroNombre}" 
+                                 style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
+                    
+                    <h:outputLabel value="Documento:" style="color: #C89B3C;" />
+                    <h:inputText id="filtroDocumento" 
+                                 value="#{usuarioBean.filtroDocumento}" 
+                                 style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
+                    
+                    <h:outputLabel value="Tipo de Usuario:" style="color: #C89B3C;" />
+                    <h:selectOneMenu id="filtroTipo" 
+                                     value="#{usuarioBean.filtroTipo}" 
+                                     style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="" />
+                        <f:selectItem itemLabel="Administrador" itemValue="Administrador" />
+                        <f:selectItem itemLabel="Cliente" itemValue="Cliente" />
+                        <f:selectItem itemLabel="Empleado" itemValue="Empleado" />
+                    </h:selectOneMenu>
+                    
+                    <h:outputLabel value="" />
+                    <h:panelGroup>
+                        <p:commandButton value="Buscar" 
+                                         action="#{usuarioBean.listarConFiltros()}"
+                                         update="dtProd"
+                                         process="@form"
+                                         styleClass="boton"
+                                         style="margin-right: 10px;" />
+                        
+                        <p:commandButton value="Limpiar" 
+                                         action="#{usuarioBean.limpiarFiltros()}"
+                                         update="dtProd filtroNombre filtroDocumento filtroTipo"
+                                         process="@this"
+                                         styleClass="boton" />
+                    </h:panelGroup>
+                </h:panelGrid>
+            </div>
             <div class="text-center mb-1">
                     <h:commandLink value="Nuevo Usuario"
                                    styleClass="boton"
                                    action="nuevo" />
                 </div>
-             <p:commandLink ajax="false">
-    <p:graphicImage value="/iconos/pdf.png" width="30" />
-    <p:dataExporter target="dtProd" type="pdf" fileName="Usuarios" />
-</p:commandLink>
-
-<p:commandLink ajax="false">
-    <p:graphicImage value="/iconos/xls.png" width="35" />
-    <p:dataExporter target="dtProd" type="xls" fileName="Usuarios" />
-</p:commandLink>
             
             <div class="container">
                 
@@ -146,13 +174,25 @@
                            actionListener="#{usuarioBean.buscar(usr.id_usuario)}"
                            action="editar" />
             <br/>
-            <p:commandLink value="Eliminar"
+            <h:commandLink value="Eliminar"
                            styleClass="boton"
                            actionListener="#{usuarioBean.eliminar(usr.id_usuario)}"
                            onclick="return confirm('¿Seguro de eliminar a #{usr.nombre_completo}?');" />
         </div>
     </p:column>
 </p:dataTable>
+                
+                </div>
+          <div style="margin-top: 10px; text-align: center;">
+                    <p:commandLink ajax="false" styleClass="boton" style="margin-right: 10px;">
+                        <h:outputText value="📄 Click para sacar el reporte de PDF" />
+                        <p:dataExporter target="dtProd" type="pdf" fileName="Usuarios" />
+                    </p:commandLink>
+
+                    <p:commandLink ajax="false" styleClass="boton">
+                        <h:outputText value="📊 Click para sacar el reporte de Excel" />
+                        <p:dataExporter target="dtProd" type="xls" fileName="Usuarios" />
+                    </p:commandLink>
             </div>
         </h:form>
     </ui:define>

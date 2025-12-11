@@ -9,119 +9,168 @@
                 template="/templates/adminLayout.xhtml">
 
     <ui:define name="contenido">
+
         <style>
-        .form-container {
-    width: 70%;
-    margin: 20px auto;
-    background: #ffffff;
-    padding: 25px 35px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-}
+            .form-container {
+                width: 60%;
+                margin: 30px auto;
+                background: #1a1a1a;
+                padding: 35px;
+                border-radius: 10px;
+                border: 1px solid #333;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-.form-container label {
-    font-weight: bold;
-}
+            .form-title {
+                text-align: center;
+                color: #C89B3C;
+                font-size: 28px;
+                font-weight: bold;
+                margin-bottom: 25px;
+            }
 
-.form-row {
-    padding: 10px 0;
-}
+            .form-group {
+                width: 80%;
+                margin-bottom: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-.boton {
-    text-align: center;
-    margin-top: 20px;
-}
+            .form-label {
+                color: #C89B3C;
+                font-weight: bold;
+                margin-bottom: 8px;
+                width: 100%;
+                text-align: left;
+            }
 
-.btn-custom-save {
-    background: #6D0823;
-    color: #fff;
-    padding: 10px 25px;
-    border-radius: 6px;
-    border: none;
-    transition: 0.2s;
-}
+            .form-control,
+            .form-select {
+                width: 100%;
+                padding: 10px 12px;
+                background: #262626;
+                color: #eee;
+                border: 1px solid #444;
+                border-radius: 5px;
+            }
 
-.btn-custom-save:hover {
-    background: #C89B3C;
-    color: #000;
-    font-weight: bold;
-}
+            .form-control:focus,
+            .form-select:focus {
+                outline: none;
+                border-color: #C89B3C;
+                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
+            }
 
-.btn-custom-cancel {
-    background: #999;
-    color: #fff;
-    padding: 10px 25px;
-    border-radius: 6px;
-    border: none;
-    margin-left: 15px;
-    transition: 0.2s;
-}
+            .text-danger {
+                color: #ff4b4b;
+                font-size: 12px;
+                margin-top: 4px;
+            }
 
-.btn-custom-cancel:hover {
-    background: #555;
-}
-</style>
-           <h:form>
-    <h:panelGrid columns="3" styleClass="form-container">
+            .button-group {
+                margin-top: 25px;
+                text-align: center;
+            }
 
-        <!-- Documento -->
-        <h:outputLabel value="Documento:" for="doc" />
-        <h:inputText id="doc" value="#{usuarioBean.usuario.documento}" 
-                     class="form-control" required="true" 
-                     requiredMessage="Debe especificar un Documento" />
-        <h:message for="doc" class="text-danger" />
+            .boton {
+                background: #6D0823;
+                color: #eee;
+                padding: 12px 25px;
+                margin: 5px 10px;
+                border-radius: 5px;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+                transition: 0.2s;
+            }
 
-        <!-- Nombre -->
-        <h:outputLabel for="nom" value="Nombre del Usuario:" />
-        <h:inputText id="nom" value="#{usuarioBean.usuario.nombre_completo}" 
-                     class="form-control" required="true" 
-                     requiredMessage="Debe especificar un Nombre" />
-        <h:message for="nom" class="text-danger" />
+            .boton:hover {
+                background: #C89B3C;
+                color: black;
+                font-weight: bold;
+            }
 
-        <!-- Correo -->
-        <h:outputLabel for="cor" value="Correo:" />
-        <h:inputText id="cor" value="#{usuarioBean.usuario.correo}" 
-                     class="form-control" />
-        <h:message for="cor" class="text-danger" />
+            .boton-cancelar {
+                background: #555;
+            }
 
-        <!-- Contraseña -->
-        <h:outputLabel for="pas" value="Contraseña:" />
-        <h:inputSecret id="pas" value="#{usuarioBean.usuario.pass}" 
-                       class="form-control" required="true" 
-                       requiredMessage="Debe especificar una Contraseña" />
-        <h:message for="pas" class="text-danger" />
+            .boton-cancelar:hover {
+                background: #777;
+            }
+        </style>
 
-        <!-- Tipo de Usuario -->
-        <h:outputLabel for="tipo" value="Tipo de Usuario:" />
-        <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}" 
-                         class="form-select">
-            <f:selectItem itemValue="A" itemLabel="Administrador" />
-            <f:selectItem itemValue="C" itemLabel="Cliente" />
-            <f:selectItem itemValue="V" itemLabel="Vendedor" />
-        </h:selectOneMenu>
-        <h:message for="tipo" class="text-danger" />
+        <h2 class="form-title">Nuevo Usuario</h2>
 
-        <!-- Espacio -->
-        <h:column /><h:column><br/></h:column><h:column />
+        <h:form>
+            <div class="form-container">
 
-        <!-- Botones centrados -->
-        <h:column />
-        
-        <h:column>
-            
-            <h:commandButton value="Guardar"
-                             styleClass="btn-custom-save"
-                             actionListener="#{usuarioBean.guardar()}"
-                             action="index" />
+                <!-- DOCUMENTO -->
+                <div class="form-group">
+                    <label class="form-label" for="doc">Documento:</label>
+                    <h:inputText id="doc" value="#{usuarioBean.usuario.documento}"
+                                 styleClass="form-control"
+                                 required="true"
+                                 requiredMessage="Debe especificar un Documento" />
+                    <h:message for="doc" styleClass="text-danger" />
+                </div>
 
-            <h:commandButton value="Cancelar"
-                             styleClass="btn-custom-cancel"
-                             action="index"
-                             immediate="true" />
+                <!-- NOMBRE -->
+                <div class="form-group">
+                    <label class="form-label" for="nom">Nombre del Usuario:</label>
+                    <h:inputText id="nom" value="#{usuarioBean.usuario.nombre_completo}"
+                                 styleClass="form-control"
+                                 required="true"
+                                 requiredMessage="Debe especificar un Nombre" />
+                    <h:message for="nom" styleClass="text-danger" />
+                </div>
 
-        </h:column>
+                <!-- CORREO -->
+                <div class="form-group">
+                    <label class="form-label" for="cor">Correo:</label>
+                    <h:inputText id="cor" value="#{usuarioBean.usuario.correo}"
+                                 styleClass="form-control" />
+                    <h:message for="cor" styleClass="text-danger" />
+                </div>
 
-    </h:panelGrid>
-</h:form>
+                <!-- CONTRASEÑA -->
+                <div class="form-group">
+                    <label class="form-label" for="pas">Contraseña:</label>
+                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.pass}"
+                                   styleClass="form-control"
+                                   required="true"
+                                   requiredMessage="Debe especificar una Contraseña" />
+                    <h:message for="pas" styleClass="text-danger" />
+                </div>
+
+                <!-- TIPO -->
+                <div class="form-group">
+                    <label class="form-label" for="tipo">Tipo de Usuario:</label>
+                    <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}"
+                                     styleClass="form-select">
+                        <f:selectItem itemValue="A" itemLabel="Administrador" />
+                        <f:selectItem itemValue="C" itemLabel="Cliente" />
+                        <f:selectItem itemValue="E" itemLabel="Empleado" />
+                    </h:selectOneMenu>
+                    <h:message for="tipo" styleClass="text-danger" />
+                </div>
+
+                <!-- BOTONES -->
+                <div class="button-group">
+                    <h:commandButton value="Guardar" styleClass="boton"
+                                     actionListener="#{usuarioBean.guardar()}"
+                                     action="index" />
+
+                    <h:commandButton value="Cancelar"
+                                     styleClass="boton boton-cancelar"
+                                     action="index"
+                                     immediate="true" />
+                </div>
+
+            </div>
+        </h:form>
+
     </ui:define>
 </ui:composition>

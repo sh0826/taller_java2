@@ -26,6 +26,7 @@ public class ProductoDAO {
             p.setTipo_producto(rs.getString("tipo_producto"));
             p.setStock(rs.getInt("stock"));
             p.setPrecio_unitario(rs.getDouble("precio_unitario"));
+            p.setImagen(rs.getString("imagen"));
             lista.add(p);
         }
         return lista;
@@ -33,27 +34,29 @@ public class ProductoDAO {
 
     public void insertar(Producto p) throws Exception {
         conn = ConnBD.conectar();
-        String sql = "INSERT INTO producto (nombre, tipo_producto, stock, precio_unitario) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO producto (nombre, tipo_producto, stock, precio_unitario, imagen) VALUES (?, ?, ?, ?, ?)";
         ps = conn.prepareStatement(sql);
 
         ps.setString(1, p.getNombre());
         ps.setString(2, p.getTipo_producto());
         ps.setInt(3, p.getStock());
         ps.setDouble(4, p.getPrecio_unitario());
+        ps.setString(5, p.getImagen());
 
         ps.executeUpdate();
     }
 
     public void modificar(Producto p) throws Exception {
         conn = ConnBD.conectar();
-        String sql = "UPDATE producto SET nombre=?, tipo_producto=?, stock=?, precio_unitario=? WHERE id_producto=?";
+        String sql = "UPDATE producto SET nombre=?, tipo_producto=?, stock=?, precio_unitario=?, imagen=? WHERE id_producto=?";
         ps = conn.prepareStatement(sql);
 
         ps.setString(1, p.getNombre());
         ps.setString(2, p.getTipo_producto());
         ps.setInt(3, p.getStock());
         ps.setDouble(4, p.getPrecio_unitario());
-        ps.setInt(5, p.getId_producto());
+        ps.setString(5, p.getImagen());
+        ps.setInt(6, p.getId_producto());
 
         ps.executeUpdate();
     }
