@@ -8,10 +8,13 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
     </h:head>
     <h:body>
-        <f:event type="preRenderView" listener="#{eventoBean.listar()}" />
-        <h2 class="text-center text-primary">Administrar Productos</h2>
+        <f:event type="preRenderView" listener="#{eventoBean.listar}" />
+        <h2 class="text-center text-primary">Administrar Eventos</h2>
+        <h:messages globalOnly="false" styleClass="alert" errorClass="alert-danger" infoClass="alert-info" warnClass="alert-warning" />
         <h:form>
             <h:commandLink value="Nuevo Evento" class="text-primary" action="nuevo" />
+            <h:commandLink value="Dashboard" class="text-success" action="/faces/admin/evento/dashboard"
+                               style="margin-left: 15px;" />
             <h:commandLink value="Menú Anterior" class="text-secondary" action="/faces/admin/index"
                                style="margin-left: 15px;" />
             <br/><br/>
