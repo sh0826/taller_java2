@@ -20,9 +20,7 @@
                     <h:outputLabel value="Documento: " for="doc" />
                     <h:inputText id="doc" value="#{usuarioBean.usuario.documento}" class="form-control"
                                  required="true" requiredMessage="Debe especificar un Documento" />
-                    <h:message for="doc" class="text-danger" />
-                    
-                    
+                    <h:message for="doc" class="text-danger" />                    
                     <h:outputLabel for="nom" value="Nombre del Usuario: " />
                     <h:inputText id="nom" value="#{usuarioBean.usuario.nombre_completo}" class="form-control"
                                  required="true" requiredMessage="Debe especificar un Nombre" />
@@ -43,7 +41,7 @@
                     <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}"  class="form-select">
                         <f:selectItem itemValue="A" itemLabel="Administrador" />
                         <f:selectItem itemValue="C" itemLabel="Cliente" />
-                        <f:selectItem itemValue="V" itemLabel="Vendedor" />
+                        <f:selectItem itemValue="E" itemLabel="Empleado" />
                     </h:selectOneMenu>
                     <h:message for="tipo" class="text-danger" />
                     
@@ -51,6 +49,7 @@
                     
                     <h:column />
                     <h:column>
+<<<<<<< HEAD
                         <p:commandButton value="Actualizar" 
                                          action="#{usuarioBean.actualizar()}"
                                          styleClass="btn btn-success"
@@ -61,6 +60,12 @@
                                          styleClass="btn btn-secondary"
                                          style="margin-left: 15px;"
                                          immediate="true" />
+=======
+                        <h:commandButton class="btn btn-success" value="Actualizar" action="#{usuarioBean.actualizar}" />
+
+                        <h:commandButton class="btn btn-secondary" value="Cancelar" action="index" 
+                                         style="margin-left: 15px;" immediate="true" />
+>>>>>>> 7f66ac28c222701263707bbf25e62e98c829c599
                     </h:column>
                     
                 </h:panelGrid>

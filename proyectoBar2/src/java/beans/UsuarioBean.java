@@ -227,6 +227,7 @@ public class UsuarioBean implements Serializable {
         
         return "editar";
     }
+
     public String actualizar(){
         try {
             // Validar campos requeridos
@@ -298,9 +299,11 @@ public class UsuarioBean implements Serializable {
             javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, mensaje);
             return null;
         }
-    }
-    private int idUsuarioEliminar;
+
+
     
+
+    }
     public String eliminar(int id_usuario){
         System.out.println("Intentando eliminar usuario con ID: " + id_usuario);
         try {

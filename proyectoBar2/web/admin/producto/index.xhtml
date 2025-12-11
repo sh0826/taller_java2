@@ -10,13 +10,10 @@
     <title>Administrar Productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
 </h:head>
-
 <h:body>
     <div class="container mt-5">
         <h:link value="Volver" outcome="/admin/index" styleClass="btn btn-danger"/><h2 class="text-center text-primary mb-4">Administrar Productos</h2>
         <br></br>
-   
-        
         <h:form enctype="multipart/form-data" class="mb-5">
             <div class="row g-3 mb-4">
 
@@ -152,8 +149,7 @@
                     <h:panelGroup rendered="#{p.imagen != null and !p.imagen.isEmpty()}">
                         <h:graphicImage value="#{fn:replace(p.imagen, '../ImgProductos/', '/ImgProductos/')}" width="60" height="60" 
                                        style="object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" 
-                                       alt="Imagen producto"
-                                       onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2760%27 height=%2760%27%3E%3Crect fill=%27%23ddd%27 width=%2760%27 height=%2760%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%23999%27 font-size=%2710%27%3ESin imagen%3C/text%3E%3C/svg%3E';"/>
+                                       alt="Imagen producto"    />
                     </h:panelGroup>
                     <h:panelGroup rendered="#{p.imagen == null or p.imagen.isEmpty()}">
                         <div style="width:60px; height:60px; background:#ddd; display:flex; align-items:center; justify-content:center; color:#999; font-size:10px; text-align:center; border-radius: 4px; border: 1px solid #ccc;">
@@ -164,10 +160,10 @@
                 
                 <p:column headerText="Acciones" exportable="false">
                     <p:commandButton value="Editar" action="#{productoBean.editar(p)}" 
-                                  styleClass="btn btn-dark" ajax="false"/>
+                                  styleClass="btn btn-primary btn-sm"/>
                     <p:commandButton value="Eliminar" action="#{productoBean.eliminar(p.id_producto)}"
                                      onclick="return confirm('¿Está seguro de eliminar #{p.nombre}?');"
-                                     styleClass="btn btn-danger sm-1" ajax="false"/>
+                                    styleClass="btn btn-danger btn-sm ms-2"/>
                 </p:column>
 
             </p:dataTable>
