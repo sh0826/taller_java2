@@ -132,7 +132,7 @@ public class reservacionDao {
         String sql = "SELECT r.*, u.nombre_completo AS nombre_usuario " +
                      "FROM reservacion r " +
                      "INNER JOIN usuario u ON r.id_usuario = u.id_usuario " +
-                     "ORDER BY r.fecha_reservacion DESC"; // SQL para obtener todos los registros con nombre de usuario
+                     "ORDER BY r.id_reservacion ASC"; // SQL para obtener todos los registros con nombre de usuario
         
         // try-with-resources: Cierra automáticamente los recursos al terminar
         try (Connection conn = ConnBD.conectar(); // Obtener conexión

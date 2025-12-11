@@ -146,6 +146,12 @@ public class ventaBean {
         }
     }
     
+    public void verDetalle(int id){
+        // Guardar el ID de la venta en la sesión para que detalleVentaBean lo use
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        facesContext.getExternalContext().getSessionMap().put("id_venta_filtro", id);
+    }
+    
     public String actualizar(){
         FacesContext facesContext = FacesContext.getCurrentInstance();
         

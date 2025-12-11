@@ -15,80 +15,91 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
         <style>
             body {
-                background: #f5f5f5;
+                background: #111 !important;
                 min-height: 100vh;
                 padding: 15px 0;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
             .card {
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                border: 1px solid #ddd;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                border: 1px solid #333;
                 border-radius: 8px;
-                background: white;
+                background: #1a1a1a;
             }
             .card-header {
                 background: #000 !important;
-                color: white !important;
+                color: #C89B3C !important;
                 border-radius: 8px 8px 0 0 !important;
                 padding: 12px 20px !important;
             }
             .card-body {
                 padding: 20px;
+                background: #1a1a1a;
             }
             .form-label {
-                font-size: 12px;
+                font-size: 14px;
                 font-weight: 600;
-                color: #333;
+                color: #C89B3C !important;
                 margin-bottom: 5px;
             }
             .form-control,
             .form-select {
                 font-size: 13px;
-                padding: 6px 10px;
-                border: 1px solid #ddd;
+                padding: 8px 12px;
+                border: 1px solid #444;
                 border-radius: 4px;
+                background: #262626;
+                color: #eee;
             }
             .form-control:focus,
             .form-select:focus {
-                border-color: #000;
-                box-shadow: 0 0 0 0.2rem rgba(0,0,0,0.25);
+                border-color: #C89B3C;
+                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
+                outline: none;
             }
             .btn-primary {
-                background: #000;
-                border: 1px solid #000;
+                background: #6D0823;
+                border: 1px solid #6D0823;
                 color: white;
                 padding: 8px 20px;
                 font-size: 13px;
                 font-weight: 600;
             }
             .btn-primary:hover {
-                background: #333;
-                border-color: #333;
+                background: #C89B3C;
+                border-color: #C89B3C;
+                color: black;
             }
             .btn-secondary {
-                background: white;
+                background: #262626;
                 border: 1px solid #333;
-                color: #000;
+                color: #C89B3C;
                 padding: 8px 20px;
                 font-size: 13px;
             }
             .btn-secondary:hover {
-                background: #f5f5f5;
+                background: #333;
+                color: #C89B3C;
             }
             .text-danger {
                 font-size: 11px;
+                color: #ff6b6b !important;
             }
             .form-text {
-                font-size: 11px;
-                color: #666;
+                font-size: 12px;
+                color: #C89B3C !important;
+                font-style: italic;
+            }
+            h2 {
+                color: #C89B3C !important;
             }
         </style>
     </h:head>
-    <h:body>
+    <h:body style="background-color: #111 !important;">
         <div class="container" style="max-width: 600px; margin-top: 20px;">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="h5 mb-0" style="font-weight: 600;">NUEVA RESERVACIÓN</h2>
+                    <h2 class="h5 mb-0" style="font-weight: 600; color: #C89B3C !important;">NUEVA RESERVACIÓN</h2>
                 </div>
                 <div class="card-body">
                     <h:form id="formReservacion">
@@ -115,15 +126,15 @@
                         </div>
                         
                         <div class="mb-3">
-                            <h:outputLabel for="cantidadMesas" value="Cantidad de Mesas (Máximo 20):" styleClass="form-label" />
+                            <h:outputLabel for="cantidadMesas" value="Cantidad de Mesas:" styleClass="form-label" />
                             <h:inputText id="cantidadMesas" value="#{reservacionBean.reservacion.cantidad_mesas}" 
                                         styleClass="form-control" required="true" 
                                         requiredMessage="La cantidad de mesas es requerida">
                                 <f:convertNumber integerOnly="true" />
-                                <f:validateLongRange minimum="1" maximum="20" />
+                                <f:validateLongRange minimum="1" maximum="4" />
                             </h:inputText>
                             <h:message for="cantidadMesas" styleClass="text-danger" />
-                            <small class="form-text">Máximo 20 mesas</small>
+                            <small class="form-text">📌 Recordatorio: Tiene 4 mesas disponibles</small>
                         </div>
                         
                         <div class="mb-3">

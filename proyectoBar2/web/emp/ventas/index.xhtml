@@ -184,10 +184,10 @@
                         <h:outputLabel value="Acciones" />
                     </f:facet>
         <div style="padding:10px 8px; text-align:center;">
-            <h:commandLink value="Ver"
+            <h:commandLink value="Ver Detalle"
                            styleClass="boton"
-                           actionListener="#{ventaBean.buscar(venta.id_venta)}"
-                           action="detalles" />
+                           actionListener="#{ventaBean.verDetalle(venta.id_venta)}"
+                           action="/faces/admin/detalleVenta/index?faces-redirect=true" />
             <br/>
             <h:commandLink value="Eliminar"
                            styleClass="boton"

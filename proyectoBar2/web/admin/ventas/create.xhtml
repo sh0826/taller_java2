@@ -12,57 +12,79 @@
     <ui:define name="contenido">
         <style>
             .form-container {
-                margin: 20px 0;
-                padding: 20px;
+                width: 60%;
+                margin: 30px auto;
                 background: #1a1a1a;
+                padding: 35px;
+                border-radius: 10px;
                 border: 1px solid #333;
-                border-radius: 5px;
-                max-width: 700px;
-                margin-left: auto;
-                margin-right: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
             }
-            
+
             .form-title {
                 text-align: center;
                 color: #C89B3C;
-                margin-bottom: 30px;
+                font-size: 28px;
                 font-weight: bold;
-                font-size: 24px;
+                margin-bottom: 25px;
             }
-            
+
+            .form-group {
+                width: 80%;
+                margin-bottom: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
             .form-label {
                 color: #C89B3C;
-                font-size: 14px;
-                margin-bottom: 5px;
-                display: block;
-            }
-            
-            .form-input {
+                font-weight: bold;
+                margin-bottom: 8px;
                 width: 100%;
-                padding: 8px;
+                text-align: left;
+            }
+
+            .form-control,
+            .form-select {
+                width: 100%;
+                padding: 10px 12px;
                 background: #262626;
                 color: #eee;
                 border: 1px solid #444;
-                border-radius: 4px;
-                font-size: 14px;
+                border-radius: 5px;
             }
-            
-            .form-input:focus {
+
+            .form-control:focus,
+            .form-select:focus {
                 outline: none;
                 border-color: #C89B3C;
+                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
             }
-            
-            .boton{
-                display: inline-block;
-                color: white;
-                padding: 8px 20px;
-                margin: 5px;
-                text-decoration: none;
-                border-radius: 5px;
+
+            .text-danger {
+                color: #ff4b4b;
+                font-size: 12px;
+                margin-top: 4px;
+            }
+
+            .button-group {
+                margin-top: 25px;
+                text-align: center;
+            }
+
+            .boton {
                 background: #6D0823;
+                color: #eee;
+                padding: 12px 25px;
+                margin: 5px 10px;
+                border-radius: 5px;
                 border: none;
                 cursor: pointer;
-                font-size: 14px;
+                font-size: 16px;
+                transition: 0.2s;
             }
 
             .boton:hover {
@@ -70,55 +92,55 @@
                 color: black;
                 font-weight: bold;
             }
-            
-            .error-message {
-                color: #ff6b6b;
-                font-size: 12px;
-                margin-top: 5px;
+
+            .boton-cancelar {
+                background: #555;
             }
-            
-            .button-group {
-                text-align: center;
-                margin-top: 30px;
+
+            .boton-cancelar:hover {
+                background: #777;
             }
         </style>
         
-        <div class="form-container">
-            <h2 class="form-title">Nueva Venta</h2>
-            
-            <h:form>
-                <p:messages id="messages" showDetail="true" closable="true" />
+        <h2 class="form-title">Nueva Venta</h2>
+        
+        <h:form>
+            <div class="form-container">
+                <p:messages id="messages" showDetail="true" closable="true" style="margin-bottom: 20px;" />
                 
-                <div style="margin-bottom: 20px;">
-                    <h:outputLabel for="total" value="Total:" styleClass="form-label" />
+                <div class="form-group">
+                    <label class="form-label" for="total">Total:</label>
                     <p:inputNumber id="total" value="#{ventaBean.venta.total}" 
                                   minValue="0.01" required="true" 
                                   requiredMessage="El total es requerido"
-                                  styleClass="form-input" 
+                                  styleClass="form-control" 
                                   decimalPlaces="2" />
-                    <h:message for="total" styleClass="error-message" />
+                    <h:message for="total" styleClass="text-danger" />
                 </div>
                 
-                <div style="margin-bottom: 20px;">
-                    <h:outputLabel for="metodoPago" value="Método de Pago:" styleClass="form-label" />
+                <div class="form-group">
+                    <label class="form-label" for="metodoPago">Método de Pago:</label>
                     <h:selectOneMenu id="metodoPago" value="#{ventaBean.venta.metodo_pago}" 
-                                   styleClass="form-input" required="true"
+                                   styleClass="form-select" required="true"
                                    requiredMessage="El método de pago es requerido">
                         <f:selectItem itemLabel="Seleccione..." itemValue="" />
                         <f:selectItem itemLabel="Efectivo" itemValue="efectivo" />
                         <f:selectItem itemLabel="Tarjeta" itemValue="tarjeta" />
                         <f:selectItem itemLabel="Transferencia" itemValue="transferencia" />
                     </h:selectOneMenu>
-                    <h:message for="metodoPago" styleClass="error-message" />
+                    <h:message for="metodoPago" styleClass="text-danger" />
                 </div>
                 
                 <div class="button-group">
-                    <h:commandButton value="Guardar" action="#{ventaBean.guardar}" 
-                                   styleClass="boton" />
-                    <h:commandButton value="Cancelar" action="/faces/admin/ventas/index?faces-redirect=true" 
-                                   styleClass="boton" immediate="true" />
+                    <h:commandButton value="Guardar" styleClass="boton"
+                                   action="#{ventaBean.guardar}" />
+
+                    <h:commandButton value="Cancelar"
+                                   styleClass="boton boton-cancelar"
+                                   action="/faces/admin/ventas/index?faces-redirect=true"
+                                   immediate="true" />
                 </div>
-            </h:form>
-        </div>
+            </div>
+        </h:form>
     </ui:define>
 </ui:composition>

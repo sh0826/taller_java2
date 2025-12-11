@@ -17,54 +17,121 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
               rel="stylesheet"/>
         <style>
-              .tabla-dark th, .tabla-dark td {
-        background-color: #111 !important;
-        color: white !important;
-        border: 1px solid #333 !important;
-        padding: 12px;
-        text-align: center;
-    }
+            body {
+                background: #111 !important;
+                color: #C89B3C !important;
+            }
+            
+            .dashboard-container {
+                margin: 20px 0;
+                padding: 20px;
+                background: #1a1a1a;
+                border: 1px solid #333;
+                border-radius: 5px;
+            }
+            
+            h2 {
+                color: #C89B3C !important;
+            }
+            
+            .nav-item {
+                color: #eee;
+                padding: 10px 18px;
+                text-decoration: none;
+                background: #262626;
+                border-radius: 5px;
+                transition: 0.2s;
+                display: inline-block;
+                border: none;
+            }
 
-    .tabla-dark th {
-        background-color: #000 !important;
-        font-weight: bold;
-        font-size: 16px;
-    }
+            .nav-item:hover {
+                background: #C89B3C;
+                color: black;
+                font-weight: bold;
+            }
+            
+            .btn-primary {
+                background: #6D0823 !important;
+                border-color: #6D0823 !important;
+                color: white !important;
+            }
+            
+            .btn-primary:hover {
+                background: #C89B3C !important;
+                border-color: #C89B3C !important;
+                color: black !important;
+            }
+            
+            .btn-secondary {
+                background: #262626 !important;
+                border-color: #333 !important;
+                color: #C89B3C !important;
+            }
+            
+            .btn-secondary:hover {
+                background: #333 !important;
+                color: #C89B3C !important;
+            }
+      
+            .tabla-dark th, .tabla-dark td {
+                background-color: #111 !important;
+                color: white !important;
+                border: 1px solid #333 !important;
+                padding: 12px;
+                text-align: center;
+            }
 
-    .tabla-dark tr:nth-child(even) td {
-        background-color: #1a1a1a !important;
-    }
+            .tabla-dark th {
+                background-color: #000 !important;
+                color: #C89B3C !important;
+                font-weight: bold;
+                font-size: 16px;
+            }
 
-   
-    body {
-        margin: 0;
-        padding: 0;
-    }
+            .tabla-dark tr:nth-child(even) td {
+                background-color: #1a1a1a !important;
+            }
+            
+            .tabla-dark tr:hover td {
+                background-color: #262626 !important;
+            }
+            
+            .text-info {
+                color: #C89B3C !important;
+            }
+            
+            .text-danger {
+                color: #ff6b6b !important;
+            }
         </style>
     </h:head>
 
-    <h:body style="background-color:#f7f7f7;">
+    <h:body style="background-color: #111 !important;">
 
-
+<div class="dashboard-container">
+        
 
         <f:event type="preRenderView"
                  listener="#{reservacionBean.listar()}" />
 
-        <h2 class="text-center text-primary mb-4">Administrar Reservaciones</h2>
-
         <h:form class="container">
-                <div class="mb-4 text-center">
-
-            <h:commandLink value="Crear una nueva Reservación"
-                           styleClass="btn btn-primary me-3"
-                           action="/faces/cliente/reservacion/create" />
-
-            <h:commandLink value="Menú Anterior"
-                           styleClass="btn btn-secondary"
-                           action="/faces/cliente/index" />
-                </div>
+            <!-- Botón Menú Anterior arriba -->
+            <div class="mb-3" style="margin-top: 20px;">
+                <h:commandLink value="Menú Anterior"
+                               styleClass="btn btn-secondary"
+                               action="/faces/cliente/index" />
+            </div>
             
+            <h2 class="text-center mb-4" style="color: #C89B3C !important;">Administrar Reservaciones</h2>
 
+            <div class="mb-4 text-center" style="display: flex; justify-content: center; gap: 0;">
+                <h:commandLink value="Crear una nueva Reservación"
+                               styleClass="nav-item"
+                               style="margin: 0; border-radius: 5px;"
+                               action="/faces/cliente/reservacion/create" />
+            </div>
+            
             <br/><br/>
 
            
@@ -119,37 +186,7 @@
 
         </h:form>
 
-
-        <!-- ========================================================= -->
-        <!-- FOOTER NEGRO CON CONTACTO Y REDES -->
-        <!-- ========================================================= -->
-
-        <footer class="bg-dark text-white text-center py-4 mt-5">
-
-            <h4 class="fw-bold">Contáctanos</h4>
-
-            <div class="mt-3">
-
-                <a href="/faces/contacto/index"
-                   class="text-white mx-3 text-decoration-none">📩 Contacto</a>
-
-                <a href="https://www.facebook.com"
-                   class="text-white mx-3 text-decoration-none" target="_blank">👍 Facebook</a>
-
-                <a href="https://www.instagram.com"
-                   class="text-white mx-3 text-decoration-none" target="_blank">📸 Instagram</a>
-
-                <a href="https://wa.me/573001234567"
-                   class="text-white mx-3 text-decoration-none" target="_blank">💬 WhatsApp</a>
-
-            </div>
-
-            <p class="mt-3 text-secondary small mb-0">
-                © 2025 Agora Vives Pub — Todos los derechos reservados
-            </p>
-
-        </footer>
-
+</div>
     </h:body>
 
 </ui:define>

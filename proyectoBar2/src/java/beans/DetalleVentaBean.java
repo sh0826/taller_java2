@@ -2,6 +2,7 @@ package beans;
 
 import dao.DetalleVentaDAO;
 import dao.ProductoDAO;
+import dao.ventaDao;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ import javax.faces.bean.ViewScoped;
 import javax.servlet.http.HttpServletResponse;
 import modelo.DetalleVenta;
 import modelo.Producto;
+import modelo.venta;
 
 @ManagedBean
 @ViewScoped
@@ -57,12 +59,46 @@ public class DetalleVentaBean {
     public List<DetalleVenta> getListaFiltrada() {
         if (listaFiltrada == null) {
             try {
-                listaFiltrada = dao.listar();
+                if (filtroIdVenta != null && filtroIdVenta > 0) {
+                    // Si hay un filtro de ID de venta, filtrar automáticamente
+                    Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
+                    listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
+                } else {
+                    listaFiltrada = dao.listar();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return listaFiltrada;
+    }
+    
+    private venta ventaSeleccionada;
+    private ventaDao ventaDAO = new ventaDao();
+    
+    public venta getVentaSeleccionada() {
+        return ventaSeleccionada;
+    }
+    
+    public void inicializarDesdeSesion() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext != null) {
+            Object idVentaObj = facesContext.getExternalContext().getSessionMap().get("id_venta_filtro");
+            if (idVentaObj != null) {
+                filtroIdVenta = ((Number) idVentaObj).intValue();
+                // Cargar la información de la venta
+                ventaSeleccionada = ventaDAO.buscarPorId(filtroIdVenta);
+                // Aplicar el filtro automáticamente
+                listaFiltrada = null; // Forzar recarga
+                try {
+                    Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
+                    listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                // NO limpiar el valor de la sesión aquí, para que se mantenga al recargar
+            }
+        }
     }
     
     public void setListaFiltrada(List<DetalleVenta> listaFiltrada) {
@@ -79,7 +115,12 @@ public class DetalleVentaBean {
         try {
             // Si filtroIdProducto es 0 (Todos), pasar null
             Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
+            listaFiltrada = null; // Forzar recarga
             listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
+            // Si hay un ID de venta, cargar la información de la venta
+            if (filtroIdVenta != null && filtroIdVenta > 0) {
+                ventaSeleccionada = ventaDAO.buscarPorId(filtroIdVenta);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -86,7 +86,7 @@ public class ventaDao {
         String sql = "SELECT v.*, u.nombre_completo AS nombre_usuario " +
                      "FROM venta v " +
                      "INNER JOIN usuario u ON v.id_usuario = u.id_usuario " +
-                     "ORDER BY v.fecha DESC";
+                     "ORDER BY v.id_venta ASC";
         
         try (Connection conn = ConnBD.conectar();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -159,7 +159,7 @@ public class ventaDao {
             params.add(totalMax);
         }
         
-        sql.append(" ORDER BY v.fecha DESC");
+        sql.append(" ORDER BY v.id_venta ASC");
         
         try (Connection conn = ConnBD.conectar();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
