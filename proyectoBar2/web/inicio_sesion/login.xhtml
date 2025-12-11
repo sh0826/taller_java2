@@ -1,42 +1,173 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Bar Agora Vibes</title>
+        <title>Inicio de Sesión - Ágora Vibes</title>
         <style>
-            *{
-                font-family: Arial;
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
             }
-            h1{
-                color: blue;
+            
+            body {
+                font-family: Arial, sans-serif;
+                background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #eee;
+            }
+            
+            .login-container {
+                background: #1a1a1a;
+                padding: 40px;
+                border-radius: 15px;
+                border: 1px solid #333;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .login-header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            
+            .login-header h1 {
+                color: #C89B3C;
+                font-size: 32px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                letter-spacing: 1px;
+            }
+            
+            .login-header p {
+                color: #999;
+                font-size: 14px;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-label {
+                display: block;
+                color: #C89B3C;
+                font-weight: bold;
+                margin-bottom: 8px;
+                font-size: 14px;
+            }
+            
+            .form-input {
+                width: 100%;
+                padding: 12px 15px;
+                background: #262626;
+                color: #eee;
+                border: 1px solid #444;
+                border-radius: 5px;
+                font-size: 14px;
+                transition: all 0.3s;
+            }
+            
+            .form-input:focus {
+                outline: none;
+                border-color: #C89B3C;
+                box-shadow: 0 0 8px rgba(200, 155, 60, 0.3);
+            }
+            
+            .error-message {
+                color: #ff6b6b;
+                font-size: 12px;
+                margin-top: 5px;
+                display: block;
+            }
+            
+            .btn-login {
+                width: 100%;
+                padding: 12px;
+                background: #6D0823;
+                color: #eee;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.3s;
+                margin-top: 10px;
+            }
+            
+            .btn-login:hover {
+                background: #C89B3C;
+                color: #000;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(200, 155, 60, 0.4);
+            }
+            
+            .register-link {
+                text-align: center;
+                margin-top: 20px;
+                padding-top: 20px;
+                border-top: 1px solid #333;
+            }
+            
+            .register-link a {
+                color: #C89B3C;
+                text-decoration: none;
+                font-size: 14px;
+                transition: 0.3s;
+            }
+            
+            .register-link a:hover {
+                color: #eee;
+                text-decoration: underline;
             }
         </style>
     </h:head>
     <h:body>
-        <center>
-            <h1>Inicio de Sesión</h1>
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Ágora Vibes</h1>
+                <p>Gastro BAR</p>
+                <p style="margin-top: 10px; color: #666;">Inicio de Sesión</p>
+            </div>
             
             <h:form>
-                <h:outputLabel for="documento" value="Documento " />
-                <h:inputText id="documento" value="#{loginBean.usuario.documento}"
-                             required="true" requiredMessage=" Debe especificar un Documento" />
-                <h:message for="documento" style="color: red;" />
+                <div class="form-group">
+                    <h:outputLabel for="documento" value="Documento:" styleClass="form-label" />
+                    <h:inputText id="documento" 
+                                 value="#{loginBean.usuario.documento}"
+                                 required="true" 
+                                 requiredMessage="Debe especificar un Documento"
+                                 styleClass="form-input" />
+                    <h:message for="documento" styleClass="error-message" />
+                </div>
                 
-                <br/><br/>
+                <div class="form-group">
+                    <h:outputLabel for="pas" value="Contraseña:" styleClass="form-label" />
+                    <h:inputSecret id="pas" 
+                                   value="#{loginBean.usuario.pass}"
+                                   required="true" 
+                                   requiredMessage="Debe especificar una Contraseña"
+                                   styleClass="form-input" />
+                    <h:message for="pas" styleClass="error-message" />
+                </div>
                 
-                <h:outputLabel for="pas" value="Contraseña " />
-                <h:inputSecret id="pas" value="#{loginBean.usuario.pass}"
-                             required="true" requiredMessage=" Debe especificar una Contraseña" />
-                <h:message for="pas" style="color: red;" />
-                
-                <br/><br/>
-                
-                <h:commandButton value="Aceptar" actionListener="#{loginBean.autenticar()}" />
+                <h:commandButton value="Iniciar Sesión" 
+                                 actionListener="#{loginBean.autenticar()}" 
+                                 styleClass="btn-login" />
             </h:form>
-            <h:form>
-            <h:commandLink value="Registrate aqui" action="/faces/inicio_sesion/crear_cliente"/>
-            </h:form>
-        </center>
+            
+            <div class="register-link">
+                <h:form>
+                    <h:commandLink value="¿No tienes cuenta? Regístrate aquí" 
+                                   action="/faces/inicio_sesion/crear_cliente"
+                                   style="color: #C89B3C; text-decoration: none; font-size: 14px;" />
+                </h:form>
+            </div>
+        </div>
     </h:body>
 </html>

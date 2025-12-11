@@ -255,6 +255,12 @@ public class ProductoBean implements Serializable {
             e.printStackTrace();    
         }
     }
+    
+    public void limpiarFiltros() {
+        filtroNombre = "";
+        filtroTipo = "";
+        actualizarLista();
+    }
 
     private void actualizarLista() {
         try {

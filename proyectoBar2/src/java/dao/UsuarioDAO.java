@@ -90,6 +90,7 @@ public class UsuarioDAO {
         Usuario usr = null;
         
         try {
+            System.out.println("DAO: Buscando usuario con ID: " + id_usuario);
             String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, id_usuario);
@@ -106,8 +107,14 @@ public class UsuarioDAO {
                 usr.setPass(rs.getString("pass"));
                 usr.setPass1(rs.getString("pass"));
                 usr.setTipo(rs.getString("tipo"));
+                
+                System.out.println("DAO: Usuario encontrado - Nombre: " + usr.getNombre_completo() + ", Tipo: " + usr.getTipo());
+            } else {
+                System.out.println("DAO: No se encontró usuario con ID: " + id_usuario);
             }                        
         } catch (SQLException e) {
+            System.err.println("DAO: Error al buscar usuario: " + e.getMessage());
+            e.printStackTrace();
         }
         
         return usr;
@@ -115,6 +122,9 @@ public class UsuarioDAO {
     
     public void actualizar(Usuario usr){
         try {
+            System.out.println("DAO: Actualizando usuario ID: " + usr.getId_usuario());
+            System.out.println("DAO: Datos - Documento: " + usr.getDocumento() + ", Nombre: " + usr.getNombre_completo() + ", Tipo: " + usr.getTipo());
+            
             String sql = "UPDATE usuario SET documento = ?, nombre_completo = ?, correo = ?, pass = ?, tipo = ? WHERE id_usuario = ?";
             ps = con.prepareStatement(sql);
             ps.setInt(1, usr.getDocumento());
@@ -124,8 +134,15 @@ public class UsuarioDAO {
             ps.setString(5, usr.getTipo());
             ps.setInt(6, usr.getId_usuario());
                         
-            ps.executeUpdate();
+            int resultado = ps.executeUpdate();
+            if (resultado > 0) {
+                System.out.println("DAO: Usuario actualizado correctamente");
+            } else {
+                System.out.println("DAO: No se pudo actualizar el usuario (ninguna fila afectada)");
+            }
         } catch (SQLException e) {
+            System.err.println("DAO: Error al actualizar usuario: " + e.getMessage());
+            e.printStackTrace();
         }        
     }
     

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import modelo.Usuario;
 
 @ManagedBean
@@ -57,6 +58,7 @@ public class UsuarioBean implements Serializable {
     public void inicializar(){
         // Solo cargar si no hay filtros aplicados
         // Si hay filtros, mantener la lista filtrada
+        // NO limpiar usuario si tiene ID (está siendo editado)
         boolean hayFiltros = (filtroNombre != null && !filtroNombre.trim().isEmpty()) ||
                              (filtroDocumento != null && !filtroDocumento.trim().isEmpty()) ||
                              (filtroTipo != null && !filtroTipo.trim().isEmpty());
@@ -67,7 +69,10 @@ public class UsuarioBean implements Serializable {
     }
     
     public void listar(){
-        usuario = new Usuario();
+        // Solo limpiar usuario si no está siendo editado (no tiene ID)
+        if (usuario == null || usuario.getId_usuario() == 0) {
+            usuario = new Usuario();
+        }
         listaU = getDAO().listarU();
     }
     
@@ -79,7 +84,10 @@ public class UsuarioBean implements Serializable {
         System.out.println("Filtro Tipo: '" + filtroTipo + "'");
         
         // Cargar todos los usuarios desde la base de datos
-        usuario = new Usuario();
+        // Solo limpiar usuario si no está siendo editado (no tiene ID)
+        if (usuario == null || usuario.getId_usuario() == 0) {
+            usuario = new Usuario();
+        }
         List<Usuario> todosUsuarios = getDAO().listarU();
         System.out.println("Total usuarios cargados: " + todosUsuarios.size());
         
@@ -192,40 +200,55 @@ public class UsuarioBean implements Serializable {
         usuario.setPass(Utils.encriptar(usuario.getPass()));
         getDAO().guardar(usuario);
     }
-    public String buscar(int id_usuario){
+    public void buscar(int id_usuario){
+        System.out.println("=== BUSCAR USUARIO ===");
+        System.out.println("ID recibido: " + id_usuario);
+        
+        if (id_usuario <= 0) {
+            System.err.println("ID de usuario inválido: " + id_usuario);
+            return;
+        }
+        
         usuario = getDAO().buscar(id_usuario);
         if (usuario == null) {
+            System.err.println("No se encontró el usuario con ID: " + id_usuario);
             javax.faces.application.FacesMessage mensaje = new javax.faces.application.FacesMessage(
                 javax.faces.application.FacesMessage.SEVERITY_ERROR, 
                 "Error", 
                 "No se encontró el usuario"
             );
             javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, mensaje);
-            return null;
+            return;
         }
+        
+        System.out.println("Usuario encontrado:");
+        System.out.println("  - ID: " + usuario.getId_usuario());
+        System.out.println("  - Documento: " + usuario.getDocumento());
+        System.out.println("  - Nombre: " + usuario.getNombre_completo());
+        System.out.println("  - Correo: " + usuario.getCorreo());
+        System.out.println("  - Tipo: " + usuario.getTipo());
         
         // Guardar la contraseña original en pass1 (ya está guardada por el DAO)
         // Limpiar el campo pass para que el usuario pueda dejarlo vacío o cambiarlo
         usuario.setPass("");
         
-        // Convertir el tipo de usuario de código a texto para el select
-        if (usuario.getTipo() != null) {
-            String tipoCodigo = usuario.getTipo();
-            switch(tipoCodigo) {
-                case "A":
-                    usuario.setTipo("Administrador");
-                    break;
-                case "C":
-                    usuario.setTipo("Cliente");
-                    break;
-                case "E":
-                    usuario.setTipo("Vendedor");
-                    break;
-                // Si ya está en formato texto, dejarlo así
+        System.out.println("Objeto usuario cargado correctamente en el bean");
+        System.out.println("=== FIN BUSCAR ===");
+    }
+    
+    public void verificarUsuarioCargado(){
+        System.out.println("=== VERIFICANDO USUARIO CARGADO ===");
+        if (usuario == null || usuario.getId_usuario() == 0) {
+            System.err.println("No hay usuario cargado para editar");
+            try {
+                javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+            } catch (java.io.IOException e) {
+                System.err.println("Error al redirigir: " + e.getMessage());
             }
+        } else {
+            System.out.println("Usuario cargado correctamente - ID: " + usuario.getId_usuario() + ", Nombre: " + usuario.getNombre_completo());
         }
-        
-        return "editar";
+        System.out.println("=== FIN VERIFICACIÓN ===");
     }
 
     public String actualizar(){
@@ -251,26 +274,32 @@ public class UsuarioBean implements Serializable {
                 return null;
             }
             
+            // Validar que el usuario tenga ID
+            if (usuario.getId_usuario() <= 0) {
+                javax.faces.application.FacesMessage mensaje = new javax.faces.application.FacesMessage(
+                    javax.faces.application.FacesMessage.SEVERITY_ERROR, 
+                    "Error", 
+                    "ID de usuario inválido"
+                );
+                javax.faces.context.FacesContext.getCurrentInstance().addMessage(null, mensaje);
+                return null;
+            }
+            
+            System.out.println("Actualizando usuario ID: " + usuario.getId_usuario());
+            System.out.println("Datos antes de actualizar - Documento: " + usuario.getDocumento() + ", Nombre: " + usuario.getNombre_completo() + ", Tipo: " + usuario.getTipo());
+            
             // Manejar la contraseña: si está vacía, usar la anterior
             if(usuario.getPass() == null || usuario.getPass().trim().equals("")){
+                System.out.println("Contraseña vacía, usando la anterior");
                 usuario.setPass(usuario.getPass1());
             } else {
                 // Solo encriptar si se cambió la contraseña
+                System.out.println("Nueva contraseña proporcionada, encriptando...");
                 usuario.setPass(Utils.encriptar(usuario.getPass()));
             }
             
-            // Convertir el tipo de usuario si es necesario (de "Administrador" a "A", etc.)
-            String tipoOriginal = usuario.getTipo();
-            if (tipoOriginal != null) {
-                if (tipoOriginal.equals("Administrador")) {
-                    usuario.setTipo("A");
-                } else if (tipoOriginal.equals("Cliente")) {
-                    usuario.setTipo("C");
-                } else if (tipoOriginal.equals("Vendedor") || tipoOriginal.equals("Empleado")) {
-                    usuario.setTipo("E");
-                }
-                // Si ya es un código (A, C, E), dejarlo así
-            }
+            // El tipo ya viene como código ("A", "C", "E") del select, así que no necesita conversión
+            System.out.println("Tipo de usuario: " + usuario.getTipo());
             
             // Actualizar en la base de datos
             getDAO().actualizar(usuario);
@@ -287,7 +316,7 @@ public class UsuarioBean implements Serializable {
             listar();
             
             // Redirigir a la lista de usuarios
-            return "/faces/admin/usuario/index?faces-redirect=true";
+            return "index";
         } catch (Exception e) {
             System.err.println("Error al actualizar usuario: " + e.getMessage());
             e.printStackTrace();

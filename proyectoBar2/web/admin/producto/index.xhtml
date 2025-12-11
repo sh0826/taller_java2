@@ -1,173 +1,307 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
->
-    
-<h:head>
-    <title>Administrar Productos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
-</h:head>
-<h:body>
-    <div class="container mt-5">
-        <h:link value="Volver" outcome="/admin/index" styleClass="btn btn-danger"/><h2 class="text-center text-primary mb-4">Administrar Productos</h2>
-        <br></br>
-        <h:form enctype="multipart/form-data" class="mb-5">
-            <div class="row g-3 mb-4">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-                <div class="col-md-4">
-                    <h:outputLabel value="Buscar por nombre:"/>
-                    <h:inputText value="#{productoBean.filtroNombre}" styleClass="form-control"/>
-                </div>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/templates/adminLayout.xhtml"
+                xmlns:p="http://primefaces.org/ui">
 
-                <div class="col-md-3">
-                    <h:outputLabel value="Tipo:"/>
-                    <h:selectOneMenu value="#{productoBean.filtroTipo}" styleClass="form-select">
-                        <f:selectItem itemLabel="Todos" itemValue=""/>
-                        <f:selectItem itemLabel="Licores" itemValue="Licores"/>
-                        <f:selectItem itemLabel="Cervezas" itemValue="Cervezas"/>
-                        <f:selectItem itemLabel="Cigarrillos" itemValue="Cigarrillos"/>
+    <ui:define name="contenido">
+        <style>
+            .miAutoTabla a.boton {
+                color: white !important;
+            }
+
+            .miAutoTabla a.boton:hover {
+                color: black !important;
+            }
+
+            .miAutoTabla .ui-datatable-tablewrapper {
+                width: auto !important;
+                display: inline-block !important;
+            }
+
+            .miAutoTabla table {
+                width: auto !important;
+                table-layout: auto !important;
+            }
+
+            .miAutoTabla .ui-datatable-data td,
+            .miAutoTabla .ui-datatable-data th {
+                white-space: nowrap;
+                padding: 8px 12px;
+            }
+
+            .miAutoTabla .ui-datatable-tablewrapper {
+                margin: 0 auto;
+                display: table !important;
+            }
+
+            .table th {
+                padding: 12px !important;
+                background: #1a1a1a;
+                color: #C89B3C;
+            }
+
+            .boton{
+                display: inline-block;
+                color: white;
+                padding: 6px 10px;
+                margin: 5px 0;
+                text-decoration: none;
+                border-radius: 5px;
+                background: #6D0823;
+                border: none;
+                cursor: pointer;
+            }
+
+            .boton:hover {
+                background: #C89B3C;
+                color: black;
+                font-weight: bold;
+            }
+
+            .form-filter {
+                width: 100%;
+                padding: 5px;
+                background: #262626;
+                color: #eee;
+                border: 1px solid #444;
+                border-radius: 5px;
+            }
+
+            .form-filter:focus {
+                outline: none;
+                border-color: #C89B3C;
+                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
+            }
+
+            .form-producto {
+                width: 100%;
+                padding: 5px;
+                background: #262626;
+                color: #eee;
+                border: 1px solid #444;
+                border-radius: 5px;
+            }
+
+            .form-producto:focus {
+                outline: none;
+                border-color: #C89B3C;
+                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
+            }
+        </style>
+
+        <h2 style="text-align: center; color: #C89B3C; margin-bottom: 20px; font-weight: bold;">Administrar Productos</h2>
+        
+        <h:form enctype="multipart/form-data">
+            <p:messages id="messages" showDetail="true" closable="true" />
+            
+            <!-- Panel de Filtros -->
+            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+                <h3 style="color: #C89B3C; margin-top: 0;">Filtros de Búsqueda</h3>
+                <h:panelGrid columns="2" cellpadding="5" style="width: 100%;">
+                    <h:outputLabel value="Nombre:" style="color: #C89B3C;" />
+                    <h:inputText id="filtroNombre" 
+                                 value="#{productoBean.filtroNombre}" 
+                                 styleClass="form-filter" />
+                    
+                    <h:outputLabel value="Tipo:" style="color: #C89B3C;" />
+                    <h:selectOneMenu id="filtroTipo" 
+                                     value="#{productoBean.filtroTipo}" 
+                                     styleClass="form-filter">
+                        <f:selectItem itemLabel="-- Todos --" itemValue="" />
+                        <f:selectItem itemLabel="Licores" itemValue="Licores" />
+                        <f:selectItem itemLabel="Cervezas" itemValue="Cervezas" />
+                        <f:selectItem itemLabel="Cigarrillos" itemValue="Cigarrillos" />
                     </h:selectOneMenu>
-                </div>
-
-                <div class="col-md-2 d-flex align-items-end">
-                    <h:commandButton value="Filtrar" action="#{productoBean.filtrar}" styleClass="btn btn-dark w-100"/>
-                </div>
-
+                    
+                    <h:outputLabel value="" />
+                    <h:panelGroup>
+                        <p:commandButton value="Filtrar" 
+                                         action="#{productoBean.filtrar}"
+                                         update="formTabla:dtProductos messages"
+                                         process="@form"
+                                         styleClass="boton"
+                                         style="margin-right: 10px;"
+                                         ajax="true" />
+                        
+                        <p:commandButton value="Limpiar" 
+                                         action="#{productoBean.limpiarFiltros}"
+                                         update="formTabla:dtProductos filtroNombre filtroTipo messages"
+                                         process="@this"
+                                         styleClass="boton"
+                                         ajax="true" />
+                    </h:panelGroup>
+                </h:panelGrid>
             </div>
         </h:form>
-        <h:form id="formProducto" enctype="multipart/form-data" class="mb-5">
-            <div class="row g-3">
 
-                <div class="col-md-3">
-                    <h:outputLabel value="Nombre:" for="nombre" class="form-label"/>
-                    <h:inputText id="nombre" value="#{productoBean.producto.nombre}" styleClass="form-control" required="true" requiredMessage="El nombre es requerido"/>
-                    <h:message for="nombre" styleClass="text-danger"/>
-                </div>
-
-                <div class="col-md-3">
-                    <h:outputLabel value="Tipo:" for="tipo" class="form-label"/>
-                    <h:selectOneMenu id="tipo" value="#{productoBean.producto.tipo_producto}" styleClass="form-select" required="true" requiredMessage="El tipo es requerido">
-                        <f:selectItem itemLabel="Seleccione" itemValue=""/>
-                        <f:selectItem itemLabel="Licores" itemValue="Licores"/>
-                        <f:selectItem itemLabel="Cervezas" itemValue="Cervezas"/>
-                        <f:selectItem itemLabel="Cigarrillos" itemValue="Cigarrillos"/>
+        <!-- Formulario de Crear Producto -->
+        <h:form id="formProducto" enctype="multipart/form-data">
+            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+                <h3 style="color: #C89B3C; margin-top: 0;">Nuevo Producto</h3>
+                <h:panelGrid columns="3" cellpadding="5" style="width: 100%;">
+                    <h:outputLabel value="Nombre:" style="color: #C89B3C;" />
+                    <h:inputText id="nombre" 
+                                 value="#{productoBean.producto.nombre}" 
+                                 styleClass="form-producto" 
+                                 required="true" 
+                                 requiredMessage="El nombre es requerido" />
+                    <h:message for="nombre" style="color: #ff4b4b; font-size: 12px;" />
+                    
+                    <h:outputLabel value="Tipo:" style="color: #C89B3C;" />
+                    <h:selectOneMenu id="tipo" 
+                                     value="#{productoBean.producto.tipo_producto}" 
+                                     styleClass="form-producto" 
+                                     required="true" 
+                                     requiredMessage="El tipo es requerido">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItem itemLabel="Licores" itemValue="Licores" />
+                        <f:selectItem itemLabel="Cervezas" itemValue="Cervezas" />
+                        <f:selectItem itemLabel="Cigarrillos" itemValue="Cigarrillos" />
                     </h:selectOneMenu>
-                    <h:message for="tipo" styleClass="text-danger"/>
-                </div>
-
-                <div class="col-md-2">
-                    <h:outputLabel value="Stock:" for="stock" class="form-label"/>
-                    <h:inputText id="stock" value="#{productoBean.producto.stock}" styleClass="form-control" required="true" requiredMessage="El stock es requerido">
+                    <h:message for="tipo" style="color: #ff4b4b; font-size: 12px;" />
+                    
+                    <h:outputLabel value="Stock:" style="color: #C89B3C;" />
+                    <h:inputText id="stock" 
+                                 value="#{productoBean.producto.stock}" 
+                                 styleClass="form-producto" 
+                                 required="true" 
+                                 requiredMessage="El stock es requerido">
                         <f:convertNumber integerOnly="true"/>
                     </h:inputText>
-                    <h:message for="stock" styleClass="text-danger"/>
-                </div>
-
-                <div class="col-md-2">
-                    <h:outputLabel value="Precio:" for="precio" class="form-label"/>
-                    <h:inputText id="precio" value="#{productoBean.producto.precio_unitario}" styleClass="form-control" required="true" requiredMessage="El precio es requerido">
+                    <h:message for="stock" style="color: #ff4b4b; font-size: 12px;" />
+                    
+                    <h:outputLabel value="Precio:" style="color: #C89B3C;" />
+                    <h:inputText id="precio" 
+                                 value="#{productoBean.producto.precio_unitario}" 
+                                 styleClass="form-producto" 
+                                 required="true" 
+                                 requiredMessage="El precio es requerido">
                         <f:convertNumber/>
                     </h:inputText>
-                    <h:message for="precio" styleClass="text-danger"/>
-                </div>
-
-                <div class="col-md-4">
-                    <h:outputLabel value="Imagen del Producto:" for="imagen" class="form-label"/>
-                    <h:inputFile id="imagen" value="#{productoBean.archivoImagen}" styleClass="form-control"/>
-                    <h:message for="imagen" styleClass="text-danger"/>
-                </div>
-                
-                <div class="col-md-2 d-flex align-items-end">
-                    <h:commandButton value="Guardar" action="#{productoBean.guardar}" 
-                                   styleClass="btn btn-dark w-100"/>
-                </div>
+                    <h:message for="precio" style="color: #ff4b4b; font-size: 12px;" />
                     
+                    <h:outputLabel value="Imagen:" style="color: #C89B3C;" />
+                    <h:inputFile id="imagen" 
+                                 value="#{productoBean.archivoImagen}" 
+                                 styleClass="form-producto" />
+                    <h:message for="imagen" style="color: #ff4b4b; font-size: 12px;" />
+                    
+                    <h:outputLabel value="" />
+                    <h:commandButton value="Guardar" 
+                                     action="#{productoBean.guardar}" 
+                                     styleClass="boton" />
+                    <h:outputLabel value="" />
+                </h:panelGrid>
             </div>
-            <h:messages globalOnly="true" styleClass="text-danger" />
         </h:form>
-
         
         <h:form id="formTabla">
-            <div class="mb-3">
-                <p:commandLink ajax="false" styleClass="me-2" title="Exportar a PDF" 
-                              action="#{productoBean.exportarPDF}">
-                    <p:graphicImage value="/iconos/pdf.png" width="30" />
-                </p:commandLink>
-                <p:commandLink ajax="false" title="Exportar a Excel" 
-                              action="#{productoBean.exportarExcel}">
-                    <p:graphicImage value="/iconos/xls.png" width="35" />
-                </p:commandLink>
+            <div class="container">
+                <p:dataTable id="dtProductos" 
+                             value="#{productoBean.listaFiltrada}" 
+                             var="p" 
+                             styleClass="table table-bordered shadow-sm miAutoTabla"
+                             style="font-size:15px;"
+                             emptyMessage="No hay productos registrados"
+                             paginator="true" 
+                             paginatorPosition="bottom" 
+                             rows="15"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
+                             rowsPerPageTemplate="15,30,50">
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{p.id_producto}" 
+                                     style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{p.id_producto}" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{p.nombre}" 
+                                     style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{p.nombre}" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="Tipo">
+                        <h:outputText value="#{p.tipo_producto}" 
+                                     style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{p.tipo_producto}" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="Stock">
+                        <h:outputText value="#{p.stock}" 
+                                     style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{p.stock}" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="Precio">
+                        <h:outputText value="#{p.precio_unitario}" 
+                                     style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{p.precio_unitario}" />
+                        </f:facet>
+                    </p:column>
+                    
+                    <p:column headerText="Imagen" exportable="false">
+                        <h:panelGroup rendered="#{p.imagen != null and !p.imagen.isEmpty()}">
+                            <h:graphicImage value="#{fn:replace(p.imagen, '../ImgProductos/', '/ImgProductos/')}" 
+                                           width="60" 
+                                           height="60" 
+                                           style="object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" 
+                                           alt="Imagen producto" />
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{p.imagen == null or p.imagen.isEmpty()}">
+                            <div style="width:60px; height:60px; background:#ddd; display:flex; align-items:center; justify-content:center; color:#999; font-size:10px; text-align:center; border-radius: 4px; border: 1px solid #ccc;">
+                                Sin imagen
+                            </div>
+                        </h:panelGroup>
+                    </p:column>
+                    
+                    <p:column exportable="false">
+                        <f:facet name="header">
+                            <h:outputLabel value="Opciones" />
+                        </f:facet>
+                        <div style="padding:10px 8px; text-align:center;">
+                            <h:commandLink value="Editar"
+                                           styleClass="boton"
+                                           action="#{productoBean.editar(p)}" />
+                            <br/>
+                            <h:commandLink value="Eliminar"
+                                           styleClass="boton"
+                                           action="#{productoBean.eliminar(p.id_producto)}"
+                                           onclick="return confirm('¿Seguro de eliminar #{p.nombre}?');" />
+                        </div>
+                    </p:column>
+
+                </p:dataTable>
             </div>
             
-            <p:dataTable id="dtProductos" value="#{productoBean.listaFiltrada}" var="p" 
-                        styleClass="table table-striped table-bordered"
-                        emptyMessage="No hay productos registrados"
-                        paginator="true" paginatorPosition="bottom" rows="15"
-                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                        currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
-                        rowsPerPageTemplate="15,30,50">
+            <div style="margin-top: 10px; text-align: center;">
+                <p:commandLink ajax="false" styleClass="boton" style="margin-right: 10px;">
+                    <h:outputText value="📄 Click para sacar el reporte de PDF" />
+                    <p:dataExporter target="dtProductos" type="pdf" fileName="Productos" />
+                </p:commandLink>
 
-                <p:column headerText="ID">
-                    <h:outputText value="#{p.id_producto}" />
-                    <f:facet name="exportar">
-                        <h:outputText value="#{p.id_producto}" />
-                    </f:facet>
-                </p:column>
-
-                <p:column headerText="Nombre">
-                    <h:outputText value="#{p.nombre}" />
-                    <f:facet name="exportar">
-                        <h:outputText value="#{p.nombre}" />
-                    </f:facet>
-                </p:column>
-
-                <p:column headerText="Tipo">
-                    <h:outputText value="#{p.tipo_producto}" />
-                    <f:facet name="exportar">
-                        <h:outputText value="#{p.tipo_producto}" />
-                    </f:facet>
-                </p:column>
-
-                <p:column headerText="Stock">
-                    <h:outputText value="#{p.stock}" />
-                    <f:facet name="exportar">
-                        <h:outputText value="#{p.stock}" />
-                    </f:facet>
-                </p:column>
-
-                <p:column headerText="Precio">
-                    <h:outputText value="#{p.precio_unitario}" />
-                    <f:facet name="exportar">
-                        <h:outputText value="#{p.precio_unitario}" />
-                    </f:facet>
-                </p:column>
-                
-                <p:column headerText="Imagen" exportable="false">
-                    <h:panelGroup rendered="#{p.imagen != null and !p.imagen.isEmpty()}">
-                        <h:graphicImage value="#{fn:replace(p.imagen, '../ImgProductos/', '/ImgProductos/')}" width="60" height="60" 
-                                       style="object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" 
-                                       alt="Imagen producto"    />
-                    </h:panelGroup>
-                    <h:panelGroup rendered="#{p.imagen == null or p.imagen.isEmpty()}">
-                        <div style="width:60px; height:60px; background:#ddd; display:flex; align-items:center; justify-content:center; color:#999; font-size:10px; text-align:center; border-radius: 4px; border: 1px solid #ccc;">
-                            Sin imagen
-                        </div>
-                    </h:panelGroup>
-                </p:column>
-                
-                <p:column headerText="Acciones" exportable="false">
-                    <p:commandButton value="Editar" action="#{productoBean.editar(p)}" 
-                                  styleClass="btn btn-primary btn-sm"/>
-                    <p:commandButton value="Eliminar" action="#{productoBean.eliminar(p.id_producto)}"
-                                     onclick="return confirm('¿Está seguro de eliminar #{p.nombre}?');"
-                                    styleClass="btn btn-danger btn-sm ms-2"/>
-                </p:column>
-
-            </p:dataTable>
+                <p:commandLink ajax="false" styleClass="boton">
+                    <h:outputText value="📊 Click para sacar el reporte de Excel" />
+                    <p:dataExporter target="dtProductos" type="xls" fileName="Productos" />
+                </p:commandLink>
+            </div>
         </h:form>
-    </div>
-</h:body>
-</html>
+    </ui:define>
+</ui:composition>
