@@ -3,16 +3,21 @@ package beans;
 import dao.UsuarioDAO;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import modelo.Usuario;
 
 @ManagedBean
-@ApplicationScoped
+@SessionScoped
 public class UsuarioBean {
     Usuario usuario = new Usuario();
     List<Usuario> listaU = new ArrayList<>();
     UsuarioDAO uDAO = new UsuarioDAO();
+    
+    // Filtros para búsqueda
+    private String filtroNombre;
+    private String filtroDocumento;
+    private String filtroTipo;
     
     public void registrarCliente(){
         usuario.setPass(Utils.encriptar(usuario.getPass()));
@@ -38,9 +43,88 @@ public class UsuarioBean {
         this.listaU = listaU;
     }
     
+    public void inicializar(){
+        if (listaU == null || listaU.isEmpty()) {
+            listar();
+        }
+    }
+    
     public void listar(){
         usuario = new Usuario();
         listaU = uDAO.listarU();
+    }
+    
+    // Método para filtrar usuarios según los criterios de búsqueda
+    public void listarConFiltros() {
+        // Cargar todos los usuarios desde la base de datos
+        usuario = new Usuario();
+        List<Usuario> todosUsuarios = uDAO.listarU();
+        List<Usuario> listaFiltrada = new ArrayList<>();
+        
+        // Si no hay filtros, mostrar todos
+        boolean hayFiltros = false;
+        if (filtroNombre != null && !filtroNombre.trim().isEmpty()) {
+            hayFiltros = true;
+        }
+        if (filtroDocumento != null && !filtroDocumento.trim().isEmpty()) {
+            hayFiltros = true;
+        }
+        if (filtroTipo != null && !filtroTipo.trim().isEmpty()) {
+            hayFiltros = true;
+        }
+        
+        if (!hayFiltros) {
+            listaU = todosUsuarios;
+            return;
+        }
+        
+        // Recorrer todos los usuarios y aplicar filtros
+        for (Usuario usr : todosUsuarios) {
+            boolean match = true;
+            
+            // Filtrar por nombre
+            if (filtroNombre != null && !filtroNombre.trim().isEmpty()) {
+                String nombreFiltro = filtroNombre.trim().toLowerCase();
+                String nombreUsuario = usr.getNombre_completo() != null ? 
+                    usr.getNombre_completo().toLowerCase() : "";
+                if (!nombreUsuario.contains(nombreFiltro)) {
+                    match = false;
+                }
+            }
+            
+            // Filtrar por documento
+            if (filtroDocumento != null && !filtroDocumento.trim().isEmpty()) {
+                try {
+                    int docFiltro = Integer.parseInt(filtroDocumento.trim());
+                    if (usr.getDocumento() != docFiltro) {
+                        match = false;
+                    }
+                } catch (NumberFormatException e) {
+                    match = false;
+                }
+            }
+            
+            // Filtrar por tipo
+            if (filtroTipo != null && !filtroTipo.trim().isEmpty()) {
+                if (usr.getTipo() == null || !usr.getTipo().equals(filtroTipo)) {
+                    match = false;
+                }
+            }
+            
+            if (match) {
+                listaFiltrada.add(usr);
+            }
+        }
+        
+        listaU = listaFiltrada;
+    }
+    
+    // Método para limpiar los filtros y mostrar todos los usuarios
+    public void limpiarFiltros() {
+        filtroNombre = null;
+        filtroDocumento = null;
+        filtroTipo = null;
+        listar(); // Recargar todos los usuarios
     }
     
     public void guardar(){
@@ -60,5 +144,30 @@ public class UsuarioBean {
     }
     public void eliminar(int id_usuario){
         uDAO.eliminar(id_usuario);
+    }
+    
+    // Getters y Setters para los filtros
+    public String getFiltroNombre() {
+        return filtroNombre;
+    }
+
+    public void setFiltroNombre(String filtroNombre) {
+        this.filtroNombre = filtroNombre;
+    }
+
+    public String getFiltroDocumento() {
+        return filtroDocumento;
+    }
+
+    public void setFiltroDocumento(String filtroDocumento) {
+        this.filtroDocumento = filtroDocumento;
+    }
+
+    public String getFiltroTipo() {
+        return filtroTipo;
+    }
+
+    public void setFiltroTipo(String filtroTipo) {
+        this.filtroTipo = filtroTipo;
     }
 }
