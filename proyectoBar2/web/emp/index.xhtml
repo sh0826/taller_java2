@@ -2,13 +2,45 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
     template="/templates/empLayout.xhtml">
 
     <ui:define name="contenido">
-        <h1>Bienvenido Empleado</h1>
-        <h3>#{loginBean.nombreUsuario}</h3>
+        <style>
+            .dashboard-container {
+                margin: 20px 0;
+                padding: 20px;
+                background: #1a1a1a;
+                border: 1px solid #333;
+                border-radius: 5px;
+            }
+            
+            h1 {
+                color: #C89B3C;
+                text-align: center;
+                margin-bottom: 20px;
+                font-weight: bold;
+            }
+            
+            h3 {
+                color: #eee;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            
+            p {
+                color: #eee;
+                text-align: center;
+                font-size: 16px;
+            }
+        </style>
+        
+        <div class="dashboard-container">
+            <h1>Bienvenido Empleado</h1>
+            <h3>#{loginBean.nombreUsuario}</h3>
 
-        <p>Selecciona una opción del menú lateral para administrar el sistema.</p>
+            <p>Selecciona una opción del menú lateral para administrar el sistema.</p>
+        </div>
     </ui:define>
 
 </ui:composition>

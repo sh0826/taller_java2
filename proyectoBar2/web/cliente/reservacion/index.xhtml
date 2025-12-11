@@ -46,33 +46,6 @@
     <h:body style="background-color:#f7f7f7;">
 
 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4">
-            
-
-            <div style="width: 100%; background-color: #000; padding: 15px 20px; 
-            display: flex; align-items: center; gap: 30px;">
-
-   
-    <span style="color: white; font-size: 22px; font-weight: bold;">
-        Agora Vives Pub
-    </span>
-
-    
-    <a href="#" style="color: white; text-decoration: none; font-size: 16px;">
-        Inicio
-    </a>
-
-    <a href="/faces/cliente/reservacion/index" 
-       style="color: white; text-decoration: none; font-size: 16px;">
-        Reservaciones
-    </a>
-
-    <a href="#" style="color: white; text-decoration: none; font-size: 16px;">
-        Contactos
-    </a>
-
-</div>
-        </nav>
 
         <f:event type="preRenderView"
                  listener="#{reservacionBean.listar()}" />
@@ -82,13 +55,13 @@
         <h:form class="container">
                 <div class="mb-4 text-center">
 
-            <h:commandLink value="Reservación"
+            <h:commandLink value="Crear una nueva Reservación"
                            styleClass="btn btn-primary me-3"
                            action="/faces/cliente/reservacion/create" />
 
             <h:commandLink value="Menú Anterior"
                            styleClass="btn btn-secondary"
-                           action="/faces/index" />
+                           action="/faces/cliente/index" />
                 </div>
             
 

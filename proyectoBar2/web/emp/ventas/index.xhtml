@@ -1,277 +1,214 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Ventas - Empleado</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
-        <style>
-            body {
-                background: #f5f5f5;
-                min-height: 100vh;
-                padding: 15px 0;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            }
-            .card {
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                background: white;
-            }
-            .card-header {
-                background: #000 !important;
-                color: white !important;
-                border-radius: 8px 8px 0 0 !important;
-                padding: 12px 20px !important;
-                font-size: 14px;
-            }
-            .card-body {
-                padding: 15px;
-            }
-            /* Filtros compactos */
-            .filtros-compactos {
-                background: white !important;
-                border: 1px solid #ddd !important;
-            }
-            .filtros-compactos .card-header {
-                background: #000 !important;
-                color: white !important;
-                padding: 6px 12px !important;
-                font-size: 11px !important;
-            }
-            .filtros-compactos .form-label {
-                font-size: 11px;
-                font-weight: 600;
-                margin-bottom: 3px;
-                color: #333;
-            }
-            .filtros-compactos .form-control,
-            .filtros-compactos .form-select,
-            .filtros-compactos .ui-inputfield {
-                font-size: 12px;
-                padding: 4px 8px;
-                height: 28px;
-                border: 1px solid #ddd;
-                background: white;
-                color: #000;
-            }
-            .filtros-compactos .form-control:focus,
-            .filtros-compactos .form-select:focus,
-            .filtros-compactos .ui-inputfield:focus {
-                border-color: #000;
-                box-shadow: 0 0 0 0.15rem rgba(0,0,0,0.25);
-            }
-            .filtros-compactos .btn {
-                font-size: 11px;
-                padding: 4px 12px;
-                height: 28px;
-                border: 1px solid #333;
-            }
-            .filtros-compactos .btn-dark {
-                background: #000;
-                color: white;
-            }
-            .filtros-compactos .btn-outline-dark {
-                background: white;
-                color: #000;
-            }
-            .filtros-compactos .btn-outline-dark:hover {
-                background: #f5f5f5;
-            }
-            .filtros-compactos .row {
-                margin-bottom: 8px;
-            }
-            /* Tabla compacta blanco y negro */
-            .table-compact {
-                font-size: 12px;
-            }
-            .table-compact thead th {
-                background-color: #000 !important;
-                color: white !important;
-                border: 1px solid #333 !important;
-                padding: 8px 10px !important;
-                font-size: 11px;
-                font-weight: 600;
-                text-align: center;
-            }
-            .table-compact tbody td {
-                background-color: white !important;
-                color: #000 !important;
-                border: 1px solid #ddd !important;
-                padding: 6px 10px !important;
-                font-size: 11px;
-            }
-            .table-compact tbody tr:nth-child(even) td {
-                background-color: #f8f8f8 !important;
-            }
-            .table-compact tbody tr:hover td {
-                background-color: #e8e8e8 !important;
-            }
-            .table-compact .btn-sm {
-                font-size: 10px;
-                padding: 2px 8px;
-            }
-            /* Dashboard style */
-            .dashboard-header {
-                background: #000;
-                color: white;
-                padding: 10px 15px;
-                margin-bottom: 10px;
-                border-radius: 4px;
-            }
-            .btn-dashboard {
-                font-size: 11px;
-                padding: 5px 12px;
-                border: 1px solid #333;
-            }
-            .btn-dashboard:hover {
-                background: #333;
-                color: white;
-            }
-            /* Override PrimeFaces table styles */
-            .ui-datatable .ui-datatable-thead > tr > th {
-                background-color: #000 !important;
-                color: white !important;
-                border: 1px solid #333 !important;
-                padding: 8px 10px !important;
-                font-size: 11px !important;
-            }
-            .ui-datatable .ui-datatable-data > tr > td {
-                background-color: white !important;
-                color: #000 !important;
-                border: 1px solid #ddd !important;
-                padding: 6px 10px !important;
-                font-size: 11px !important;
-            }
-            .ui-datatable .ui-datatable-data > tr.ui-state-highlight > td,
-            .ui-datatable .ui-datatable-data > tr:nth-child(even) > td {
-                background-color: #f8f8f8 !important;
-            }
-            .ui-datatable .ui-datatable-data > tr:hover > td {
-                background-color: #e8e8e8 !important;
-            }
-        </style>
-    </h:head>
-    <h:body>
-        <f:event type="preRenderView" listener="#{ventaBean.listar()}" />
-        <div class="container-fluid mt-4">
-            <div class="card">
-                <div class="dashboard-header">
-                    <h1 class="h5 mb-0" style="font-weight: 600;">VENTAS - EMPLEADO</h1>
-                </div>
-                <div class="card-body">
-                    <h:form id="formVentas">
-                        <p:messages id="messages" showDetail="true" closable="true" />
-                        
-                        <div class="mb-2">
-                            <h:commandLink value="Menú" class="btn btn-dashboard btn-outline-dark me-1" action="/faces/index" />
-                            <h:commandLink value="Reservaciones" class="btn btn-dashboard btn-outline-dark me-1" action="/faces/reservacion/empleado/index" />
-                            <h:commandLink value="Nueva Venta" class="btn btn-dashboard btn-dark me-1" action="/faces/ventas/empleado/create" />
-                            <span class="ms-2">
-                                <p:commandLink ajax="false" styleClass="btn btn-sm btn-danger me-1" title="Exportar PDF">
-                                    PDF
-                                    <p:dataExporter target="dtVentas" type="pdf" fileName="Ventas_Empleado" />
-                                </p:commandLink>
-                                <p:commandLink ajax="false" styleClass="btn btn-sm btn-success" title="Exportar Excel">
-                                    Excel
-                                    <p:dataExporter target="dtVentas" type="xls" fileName="Ventas_Empleado" />
-                                </p:commandLink>
-                            </span>
-                        </div>
-                
-                        <!-- Filtros de búsqueda compactos -->
-                        <div class="card mb-3 filtros-compactos">
-                            <div class="card-header">
-                                <h6 class="mb-0">FILTROS</h6>
-                            </div>
-                            <div class="card-body" style="padding: 10px;">
-                                <div class="row g-2">
-                                    <div class="col-md-4">
-                                        <h:outputLabel for="search" value="Buscar por Nombre de Usuario:" styleClass="form-label" />
-                                        <p:inputText id="search" value="#{ventaBean.search}" 
-                                                    styleClass="form-control" 
-                                                    placeholder="Nombre del usuario..." />
-                                    </div>
-                                    
-                                    <div class="col-md-4">
-                                        <h:outputLabel for="metodoPago" value="Método de Pago:" styleClass="form-label" />
-                                        <h:selectOneMenu id="metodoPago" value="#{ventaBean.metodoPago}" 
-                                                       styleClass="form-select">
-                                            <f:selectItem itemLabel="Todos" itemValue="" />
-                                            <f:selectItem itemLabel="Efectivo" itemValue="efectivo" />
-                                            <f:selectItem itemLabel="Tarjeta" itemValue="tarjeta" />
-                                            <f:selectItem itemLabel="Transferencia" itemValue="transferencia" />
-                                        </h:selectOneMenu>
-                                    </div>
-                                    
-                                    <div class="col-md-4 d-flex align-items-end">
-                                        <p:commandButton value="Filtrar" action="#{ventaBean.listarConFiltros()}" 
-                                                       styleClass="btn btn-dark me-1" 
-                                                       process="@form"
-                                                       update="dtVentas messages"
-                                                       ajax="true" />
-                                        <p:commandButton value="Limpiar" action="#{ventaBean.limpiarFiltros()}" 
-                                                       styleClass="btn btn-outline-dark"
-                                                       process="@form"
-                                                       update="search metodoPago dtVentas messages"
-                                                       ajax="true" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Tabla de ventas compacta -->
-                        <p:dataTable id="dtVentas" value="#{ventaBean.lstVentas}" var="venta" 
-                                    styleClass="table-compact"
-                            emptyMessage="No hay registros en la Base de Datos" 
-                            paginator="true" paginatorPosition="bottom" rows="15"
-                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                            currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
-                            rowsPerPageTemplate="15,30,50"
-                            >
-                    
-            
-                    <p:column headerText="ID" exportable="true">
-                        <h:outputText value="#{venta.id_venta}" />
-                    </p:column>
-                    
-                    <p:column headerText="Fecha y Hora" exportable="true">
-                        <h:outputText value="#{venta.fechaFormateada}" />
-                    </p:column>
-                    
-                    <p:column headerText="Total" style="text-align: center;" exportable="true">
-                        <h:outputText value="#{venta.total}">
-                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
-                        </h:outputText>
-                    </p:column>
-                    
-                    <p:column headerText="Método de Pago" exportable="true">
-                        <h:outputText value="#{venta.metodo_pago}" />
-                    </p:column>
-                    
-                    <p:column headerText="Usuario" exportable="true">
-                        <h:outputText value="#{venta.nombre_usuario}" />
-                    </p:column>
-                    
-                    <p:column headerText="Acciones" exportable="false">
-                        <f:facet name="header">
-                            <h:outputLabel value="Acciones" />
-                        </f:facet>
-                        <h:commandLink value="Ver" class="btn btn-sm btn-outline-dark me-1" 
-                                      actionListener="#{ventaBean.buscar(venta.id_venta)}" 
-                                      action="detalles" />
-                        <h:commandLink value="Eliminar" class="btn btn-sm btn-dark" 
-                                      actionListener="#{ventaBean.eliminar(venta.id_venta)}" 
-                                      onclick="return confirm('¿Está seguro de ELIMINAR la Venta ID: #{venta.id_venta}?');" />
-                    </p:column>
-                    
-                </p:dataTable>
-                    </h:form>
-                </div>
-            </div>
-        </div>
-    </h:body>
-</html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/empLayout.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="contenido">
+        <style>
+            .miAutoTabla a.boton {
+    color: white !important;
+}
+
+.miAutoTabla a.boton:hover {
+    color: black !important;
+}
+
+.miAutoTabla .ui-datatable-tablewrapper {
+    width: auto !important;
+    display: inline-block !important;
+}
+
+.miAutoTabla table {
+    width: auto !important;
+    table-layout: auto !important;
+}
+
+.miAutoTabla .ui-datatable-data td,
+.miAutoTabla .ui-datatable-data th {
+    white-space: nowrap;
+    padding: 8px 12px;
+}
+
+.miAutoTabla .ui-datatable-tablewrapper {
+    margin: 0 auto;
+    display: table !important;
+}
+
+.table th {
+    padding: 12px !important;
+    background: #1a1a1a;
+    color: #C89B3C;
+}
+
+.boton{
+    display: inline-block;
+    color: white;
+    padding: 6px 10px;
+    margin: 5px 0;
+    text-decoration: none;
+    border-radius: 5px;
+    background: #6D0823;
+    border: none;
+}
+
+.boton:hover {
+    background: #C89B3C;
+    color: black;
+    font-weight: bold;
+}
+        </style>
+        <f:event type="preRenderView" listener="#{ventaBean.listarInicial()}" />
+
+        <h2 style="text-align: center; color: #C89B3C; margin-bottom: 20px; font-weight: bold;">Administrar Ventas</h2>
+        
+        <h:form>
+            <p:messages id="messages" showDetail="true" closable="true" />
+          <!-- Panel de Filtros -->
+            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+                <h3 style="color: #C89B3C; margin-top: 0;">Filtros de Búsqueda</h3>
+                <h:panelGrid columns="2" cellpadding="5" style="width: 100%;">
+                    <h:outputLabel value="Buscar por Nombre:" style="color: #C89B3C;" />
+                    <p:inputText id="search" 
+                                 value="#{ventaBean.search}" 
+                                 style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;"
+                                 placeholder="Nombre del usuario..." />
+                    
+                    <h:outputLabel value="Método de Pago:" style="color: #C89B3C;" />
+                    <h:selectOneMenu id="metodoPago" 
+                                     value="#{ventaBean.metodoPago}" 
+                                     style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;">
+                        <f:selectItem itemLabel="-- Todos --" itemValue="" />
+                        <f:selectItem itemLabel="Efectivo" itemValue="efectivo" />
+                        <f:selectItem itemLabel="Tarjeta" itemValue="tarjeta" />
+                        <f:selectItem itemLabel="Transferencia" itemValue="transferencia" />
+                    </h:selectOneMenu>
+                    
+                    <h:outputLabel value="" />
+                    <h:panelGroup>
+                        <p:commandButton value="Filtrar" 
+                                         action="#{ventaBean.listarConFiltros()}"
+                                         update="dtVentas messages"
+                                         process="@form"
+                                         styleClass="boton"
+                                         style="margin-right: 10px;"
+                                         ajax="true" />
+                        
+                        <p:commandButton value="Limpiar" 
+                                         action="#{ventaBean.limpiarFiltros()}"
+                                         update="dtVentas search metodoPago messages"
+                                         process="@this"
+                                         styleClass="boton"
+                                         ajax="true" />
+                    </h:panelGroup>
+                </h:panelGrid>
+            </div>
+            <div class="text-center mb-1">
+                    <h:commandLink value="Nueva Venta"
+                                   styleClass="boton"
+                                   action="/faces/emp/ventas/create" />
+                </div>
+            
+            <div class="container">
+                
+<p:dataTable id="dtVentas"
+             value="#{ventaBean.lstVentas}"
+             var="venta"
+             styleClass="table table-bordered shadow-sm miAutoTabla"
+             style="font-size:15px;"
+             emptyMessage="No hay registros en la Base de Datos" 
+             paginator="true" paginatorPosition="bottom" rows="15"
+             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
+             rowsPerPageTemplate="15,30,50">
+
+    <p:column headerText="ID" exportable="true">
+    <h:outputText 
+        value="#{venta.id_venta}" 
+        style="display:block; padding:10px 5px; color:black;" />
+
+    <f:facet name="exportar">
+        <h:outputText value="#{venta.id_venta}" />
+    </f:facet>
+</p:column>
+
+    <p:column headerText="Fecha y Hora" exportable="true">
+    <h:outputText 
+        value="#{venta.fechaFormateada}" 
+        style="display:block; padding:10px 5px; color:black;" />
+
+    <f:facet name="exportar">
+        <h:outputText value="#{venta.fechaFormateada}" />
+    </f:facet>
+</p:column>
+
+    <p:column headerText="Total" exportable="true">
+        <h:outputText 
+            value="#{venta.total}"
+            style="display:block; padding:10px 5px; color: black;">
+            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+        </h:outputText>
+        
+        <f:facet name="exportar">
+        <h:outputText value="#{venta.total}">
+            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+        </h:outputText>
+    </f:facet>
+    </p:column>
+
+    <p:column headerText="Método de Pago" exportable="true">
+        <h:outputText 
+            value="#{venta.metodo_pago}"
+            style="display:block; padding:10px 5px; color: black;"/>
+        <f:facet name="exportar">
+        <h:outputText value="#{venta.metodo_pago}" />
+    </f:facet>
+    </p:column>
+
+    <p:column headerText="Usuario" exportable="true">
+        <h:outputText 
+            value="#{venta.nombre_usuario}"
+            style="display:block; padding:10px 5px; color: black;"/>
+        <f:facet name="exportar">
+        <h:outputText value="#{venta.nombre_usuario}" />
+    </f:facet>
+    </p:column>
+    
+    <p:column exportable="false">
+                    <f:facet name="header">
+                        <h:outputLabel value="Acciones" />
+                    </f:facet>
+        <div style="padding:10px 8px; text-align:center;">
+            <h:commandLink value="Ver"
+                           styleClass="boton"
+                           actionListener="#{ventaBean.buscar(venta.id_venta)}"
+                           action="detalles" />
+            <br/>
+            <h:commandLink value="Eliminar"
+                           styleClass="boton"
+                           actionListener="#{ventaBean.eliminar(venta.id_venta)}"
+                           onclick="return confirm('¿Está seguro de ELIMINAR la Venta ID: #{venta.id_venta}?');" />
+        </div>
+    </p:column>
+</p:dataTable>
+                
+                </div>
+          <div style="margin-top: 10px; text-align: center;">
+                    <p:commandLink ajax="false" styleClass="boton" style="margin-right: 10px;">
+                        <h:outputText value="📄 Click para sacar el reporte de PDF" />
+                        <p:dataExporter target="dtVentas" type="pdf" fileName="Ventas" />
+                    </p:commandLink>
+
+                    <p:commandLink ajax="false" styleClass="boton">
+                        <h:outputText value="📊 Click para sacar el reporte de Excel" />
+                        <p:dataExporter target="dtVentas" type="xls" fileName="Ventas" />
+                    </p:commandLink>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
