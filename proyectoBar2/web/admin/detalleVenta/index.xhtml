@@ -104,35 +104,35 @@
                     Información de la Venta
                 </h3>
                 <div style="padding: 20px; color: #eee;">
-                    <h:panelGrid columns="4" cellpadding="10" style="width: 100%;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                         <div>
-                            <strong style="color: #C89B3C;">ID Venta:</strong>
-                            <p style="color: #eee; margin: 5px 0;">#{detalleVentaBean.ventaSeleccionada.id_venta}</p>
+                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">ID Venta:</strong>
+                            <span style="color: #eee;">#{detalleVentaBean.ventaSeleccionada.id_venta}</span>
                         </div>
                         <div>
-                            <strong style="color: #C89B3C;">Fecha:</strong>
-                            <p style="color: #eee; margin: 5px 0;">
+                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Fecha:</strong>
+                            <span style="color: #eee;">
                                 <h:outputText value="#{detalleVentaBean.ventaSeleccionada.fecha}">
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText>
-                            </p>
+                            </span>
                         </div>
                         <div>
-                            <strong style="color: #C89B3C;">Total:</strong>
-                            <p style="color: #eee; margin: 5px 0;">
+                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Total:</strong>
+                            <span style="color: #eee;">
                                 <h:outputText value="#{detalleVentaBean.ventaSeleccionada.total}">
                                     <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
                                 </h:outputText>
-                            </p>
+                            </span>
                         </div>
                         <div>
-                            <strong style="color: #C89B3C;">Método de Pago:</strong>
-                            <p style="color: #eee; margin: 5px 0;">#{detalleVentaBean.ventaSeleccionada.metodo_pago}</p>
+                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Método de Pago:</strong>
+                            <span style="color: #eee;">#{detalleVentaBean.ventaSeleccionada.metodo_pago}</span>
                         </div>
-                    </h:panelGrid>
-                    <div style="margin-top: 15px;">
-                        <strong style="color: #C89B3C;">Cliente:</strong>
-                        <p style="color: #eee; margin: 5px 0;">#{detalleVentaBean.ventaSeleccionada.nombre_usuario}</p>
+                        <div style="grid-column: 1 / -1;">
+                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Cliente:</strong>
+                            <span style="color: #eee;">#{detalleVentaBean.ventaSeleccionada.nombre_usuario}</span>
+                        </div>
                     </div>
                 </div>
             </div>
