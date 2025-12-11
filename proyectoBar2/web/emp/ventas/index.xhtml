@@ -12,56 +12,56 @@
     <ui:define name="contenido">
         <style>
             .miAutoTabla a.boton {
-    color: white !important;
-}
+                color: white !important;
+            }
 
-.miAutoTabla a.boton:hover {
-    color: black !important;
-}
+            .miAutoTabla a.boton:hover {
+                color: black !important;
+            }
 
-.miAutoTabla .ui-datatable-tablewrapper {
-    width: auto !important;
-    display: inline-block !important;
-}
+            .miAutoTabla .ui-datatable-tablewrapper {
+                width: auto !important;
+                display: inline-block !important;
+            }
 
-.miAutoTabla table {
-    width: auto !important;
-    table-layout: auto !important;
-}
+            .miAutoTabla table {
+                width: auto !important;
+                table-layout: auto !important;
+            }
 
-.miAutoTabla .ui-datatable-data td,
-.miAutoTabla .ui-datatable-data th {
-    white-space: nowrap;
-    padding: 8px 12px;
-}
+            .miAutoTabla .ui-datatable-data td,
+            .miAutoTabla .ui-datatable-data th {
+                white-space: nowrap;
+                padding: 8px 12px;
+            }
 
-.miAutoTabla .ui-datatable-tablewrapper {
-    margin: 0 auto;
-    display: table !important;
-}
+            .miAutoTabla .ui-datatable-tablewrapper {
+                margin: 0 auto;
+                display: table !important;
+            }
 
-.table th {
-    padding: 12px !important;
-    background: #1a1a1a;
-    color: #C89B3C;
-}
+            .table th {
+                padding: 12px !important;
+                background: #1a1a1a;
+                color: #C89B3C;
+            }
 
-.boton{
-    display: inline-block;
-    color: white;
-    padding: 6px 10px;
-    margin: 5px 0;
-    text-decoration: none;
-    border-radius: 5px;
-    background: #6D0823;
-    border: none;
-}
+            .boton {
+                display: inline-block;
+                color: white;
+                padding: 6px 10px;
+                margin: 5px 0;
+                text-decoration: none;
+                border-radius: 5px;
+                background: #6D0823;
+                border: none;
+            }
 
-.boton:hover {
-    background: #C89B3C;
-    color: black;
-    font-weight: bold;
-}
+            .boton:hover {
+                background: #C89B3C;
+                color: black;
+                font-weight: bold;
+            }
         </style>
         <f:event type="preRenderView" listener="#{ventaBean.listarInicial()}" />
 

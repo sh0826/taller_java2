@@ -167,7 +167,19 @@ public class DetalleVentaBean {
         System.out.println("Esto es guardar");
 
         try {
-            detalle.setId_venta(1);  // ← TEMPORAL (prueba)
+            // Si hay una venta seleccionada, usar su ID
+            if (ventaSeleccionada != null && ventaSeleccionada.getId_venta() > 0) {
+                detalle.setId_venta(ventaSeleccionada.getId_venta());
+            } else if (filtroIdVenta != null && filtroIdVenta > 0) {
+                // Si no hay venta seleccionada pero hay un filtro, usar el filtro
+                detalle.setId_venta(filtroIdVenta);
+            } else {
+                // Mostrar error si no hay ID de venta
+                FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                        "Error", "Debe seleccionar una venta o filtrar por ID de venta"));
+                return;
+            }
 
             if(detalle.getId_detalleV() > 0) {
                 dao.modificar(detalle);
@@ -175,9 +187,14 @@ public class DetalleVentaBean {
                 dao.insertar(detalle);
             }
             detalle = new DetalleVenta();
+            // Limpiar la lista filtrada para que se recargue
+            listaFiltrada = null;
             actualizarLista();
         } catch(Exception e){
             e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                    "Error", "Error al guardar el detalle: " + e.getMessage()));
         }
     }
 
