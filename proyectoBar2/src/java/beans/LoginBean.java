@@ -92,7 +92,7 @@ public class LoginBean {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
         String rootPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(rootPath + "/faces/catalogo.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(rootPath + "/faces/conocenos.xhtml");
         } catch (IOException e) {
         }
     }
