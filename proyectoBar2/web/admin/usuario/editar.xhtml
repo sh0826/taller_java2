@@ -38,7 +38,7 @@
                     <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}"  class="form-select">
                         <f:selectItem itemValue="A" itemLabel="Administrador" />
                         <f:selectItem itemValue="C" itemLabel="Cliente" />
-                        <f:selectItem itemValue="V" itemLabel="Vendedor" />
+                        <f:selectItem itemValue="E" itemLabel="Empleado" />
                     </h:selectOneMenu>
                     <h:message for="tipo" class="text-danger" />
                     
@@ -46,8 +46,9 @@
                     
                     <h:column />
                     <h:column>
-                        <h:commandButton class="btn btn-success" value="Actualizar" 
-                                         actionListener="#{usuarioBean.actualizar()}" action="index" />
+                        <h:commandButton class="btn btn-success" value="Actualizar"
+     action="#{usuarioBean.actualizar}" />
+
                         <h:commandButton class="btn btn-secondary" value="Cancelar" action="index" 
                                          style="margin-left: 15px;" immediate="true" />
                     </h:column>
