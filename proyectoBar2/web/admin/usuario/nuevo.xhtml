@@ -1,12 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="/templates/adminLayout.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/templates/adminLayout.xhtml">
 
     <ui:define name="contenido">
 
@@ -110,46 +108,38 @@
                 <!-- DOCUMENTO -->
                 <div class="form-group">
                     <label class="form-label" for="doc">Documento:</label>
-                    <h:inputText id="doc" value="#{usuarioBean.usuario.documento}"
-                                 styleClass="form-control"
-                                 required="true"
-                                 requiredMessage="Debe especificar un Documento" />
+                    <h:inputText id="doc" value="#{usuarioBean.usuario.documento}" styleClass="form-control"
+                        required="true" requiredMessage="Debe especificar un Documento" />
                     <h:message for="doc" styleClass="text-danger" />
                 </div>
 
                 <!-- NOMBRE -->
                 <div class="form-group">
                     <label class="form-label" for="nom">Nombre del Usuario:</label>
-                    <h:inputText id="nom" value="#{usuarioBean.usuario.nombre_completo}"
-                                 styleClass="form-control"
-                                 required="true"
-                                 requiredMessage="Debe especificar un Nombre" />
+                    <h:inputText id="nom" value="#{usuarioBean.usuario.nombre_completo}" styleClass="form-control"
+                        required="true" requiredMessage="Debe especificar un Nombre" />
                     <h:message for="nom" styleClass="text-danger" />
                 </div>
 
                 <!-- CORREO -->
                 <div class="form-group">
                     <label class="form-label" for="cor">Correo:</label>
-                    <h:inputText id="cor" value="#{usuarioBean.usuario.correo}"
-                                 styleClass="form-control" />
+                    <h:inputText id="cor" value="#{usuarioBean.usuario.correo}" styleClass="form-control" />
                     <h:message for="cor" styleClass="text-danger" />
                 </div>
 
                 <!-- CONTRASEÑA -->
                 <div class="form-group">
                     <label class="form-label" for="pas">Contraseña:</label>
-                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.pass}"
-                                   styleClass="form-control"
-                                   required="true"
-                                   requiredMessage="Debe especificar una Contraseña" />
+                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.pass}" styleClass="form-control"
+                        required="true" requiredMessage="Debe especificar una Contraseña" />
                     <h:message for="pas" styleClass="text-danger" />
                 </div>
 
                 <!-- TIPO -->
                 <div class="form-group">
                     <label class="form-label" for="tipo">Tipo de Usuario:</label>
-                    <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}"
-                                     styleClass="form-select">
+                    <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}" styleClass="form-select">
                         <f:selectItem itemValue="A" itemLabel="Administrador" />
                         <f:selectItem itemValue="C" itemLabel="Cliente" />
                         <f:selectItem itemValue="E" itemLabel="Empleado" />
@@ -159,14 +149,11 @@
 
                 <!-- BOTONES -->
                 <div class="button-group">
-                    <h:commandButton value="Guardar" styleClass="boton"
-                                     actionListener="#{usuarioBean.guardar()}"
-                                     action="index" />
+                    <h:commandButton value="Guardar" styleClass="boton" actionListener="#{usuarioBean.guardar()}"
+                        action="index" />
 
-                    <h:commandButton value="Cancelar"
-                                     styleClass="boton boton-cancelar"
-                                     action="index"
-                                     immediate="true" />
+                    <h:commandButton value="Cancelar" styleClass="boton boton-cancelar" action="index"
+                        immediate="true" />
                 </div>
 
             </div>

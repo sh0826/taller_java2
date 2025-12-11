@@ -1,208 +1,180 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="/templates/adminLayout.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/templates/adminLayout.xhtml" xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="contenido">
         <style>
             .miAutoTabla a.boton {
-    color: white !important;
-}
+                color: white !important;
+            }
 
-.miAutoTabla a.boton:hover {
-    color: black !important;
-}
+            .miAutoTabla a.boton:hover {
+                color: black !important;
+            }
 
-.miAutoTabla .ui-datatable-tablewrapper {
-    width: auto !important;
-    display: inline-block !important;
-}
+            .miAutoTabla .ui-datatable-tablewrapper {
+                width: auto !important;
+                display: inline-block !important;
+            }
 
-.miAutoTabla table {
-    width: auto !important;
-    table-layout: auto !important;
-}
+            .miAutoTabla table {
+                width: auto !important;
+                table-layout: auto !important;
+            }
 
-.miAutoTabla .ui-datatable-data td,
-.miAutoTabla .ui-datatable-data th {
-    white-space: nowrap;
-    padding: 8px 12px;
-}
+            .miAutoTabla .ui-datatable-data td,
+            .miAutoTabla .ui-datatable-data th {
+                white-space: nowrap;
+                padding: 8px 12px;
+            }
 
-.miAutoTabla .ui-datatable-tablewrapper {
-    margin: 0 auto;
-    display: table !important;
-}
+            .miAutoTabla .ui-datatable-tablewrapper {
+                margin: 0 auto;
+                display: table !important;
+            }
 
-.table th {
-    padding: 12px !important;
-    background: #1a1a1a;
-    color: #C89B3C;
-}
+            .table th {
+                padding: 12px !important;
+                background: #1a1a1a;
+                color: #C89B3C;
+            }
 
-.boton{
-    display: inline-block;
-    color: white;
-    padding: 6px 10px;
-    margin: 5px 0;
-    text-decoration: none;
-    border-radius: 5px;
-    background: #6D0823;
-    border: none;
-}
+            .boton {
+                display: inline-block;
+                color: white;
+                padding: 6px 10px;
+                margin: 5px 0;
+                text-decoration: none;
+                border-radius: 5px;
+                background: #6D0823;
+                border: none;
+            }
 
-.boton:hover {
-    background: #C89B3C;
-    color: black;
-    font-weight: bold;
-}
-</style>
+            .boton:hover {
+                background: #C89B3C;
+                color: black;
+                font-weight: bold;
+            }
+        </style>
         <f:event type="preRenderView" listener="#{usuarioBean.inicializar()}" />
 
-        <h2 style="text-align: center; color: #C89B3C; margin-bottom: 20px; font-weight: bold;">Administrar Usuarios</h2>
-        
+        <h2 style="text-align: center; color: #C89B3C; margin-bottom: 20px; font-weight: bold;">Administrar Usuarios
+        </h2>
+
         <h:form>
             <p:messages id="messages" showDetail="true" closable="true" />
-          <!-- Panel de Filtros -->
-            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+            <!-- Panel de Filtros -->
+            <div
+                style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
                 <h3 style="color: #C89B3C; margin-top: 0;">Filtros de Búsqueda</h3>
                 <h:panelGrid columns="2" cellpadding="5" style="width: 100%;">
                     <h:outputLabel value="Nombre:" style="color: #C89B3C;" />
-                    <h:inputText id="filtroNombre" 
-                                 value="#{usuarioBean.filtroNombre}" 
-                                 style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
-                    
+                    <h:inputText id="filtroNombre" value="#{usuarioBean.filtroNombre}"
+                        style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
+
                     <h:outputLabel value="Documento:" style="color: #C89B3C;" />
-                    <h:inputText id="filtroDocumento" 
-                                 value="#{usuarioBean.filtroDocumento}" 
-                                 style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
-                    
+                    <h:inputText id="filtroDocumento" value="#{usuarioBean.filtroDocumento}"
+                        style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
+
                     <h:outputLabel value="Tipo de Usuario:" style="color: #C89B3C;" />
-                    <h:selectOneMenu id="filtroTipo" 
-                                     value="#{usuarioBean.filtroTipo}" 
-                                     style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;">
+                    <h:selectOneMenu id="filtroTipo" value="#{usuarioBean.filtroTipo}"
+                        style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;">
                         <f:selectItem itemLabel="-- Seleccione --" itemValue="" />
                         <f:selectItem itemLabel="Administrador" itemValue="Administrador" />
                         <f:selectItem itemLabel="Cliente" itemValue="Cliente" />
                         <f:selectItem itemLabel="Empleado" itemValue="Empleado" />
                     </h:selectOneMenu>
-                    
+
                     <h:outputLabel value="" />
                     <h:panelGroup>
-                        <p:commandButton value="Buscar" 
-                                         action="#{usuarioBean.listarConFiltros()}"
-                                         update="dtProd messages"
-                                         process="@form"
-                                         styleClass="boton"
-                                         style="margin-right: 10px;"
-                                         ajax="true" />
-                        
-                        <p:commandButton value="Limpiar" 
-                                         action="#{usuarioBean.limpiarFiltros()}"
-                                         update="dtProd filtroNombre filtroDocumento filtroTipo messages"
-                                         process="@this"
-                                         styleClass="boton"
-                                         ajax="true" />
+                        <p:commandButton value="Buscar" action="#{usuarioBean.listarConFiltros()}"
+                            update="dtProd messages" process="@form" styleClass="boton" style="margin-right: 10px;"
+                            ajax="true" />
+
+                        <p:commandButton value="Limpiar" action="#{usuarioBean.limpiarFiltros()}"
+                            update="dtProd filtroNombre filtroDocumento filtroTipo messages" process="@this"
+                            styleClass="boton" ajax="true" />
                     </h:panelGroup>
                 </h:panelGrid>
             </div>
             <div class="text-center mb-1">
-                    <h:commandLink value="Nuevo Usuario"
-                                   styleClass="boton"
-                                   action="nuevo" />
-                </div>
-            
+                <h:commandLink value="Nuevo Usuario" styleClass="boton" action="nuevo" />
+            </div>
+
             <div class="container">
-                
-<p:dataTable id="dtProd"
-             value="#{usuarioBean.listaU}"
-             var="usr"
-             styleClass="table table-bordered shadow-sm miAutoTabla"
-             style="font-size:15px;">
 
-    <p:column headerText="ID">
-    <h:outputText 
-        value="#{usr.id_usuario}" 
-        style="display:block; padding:10px 5px; color:black;" />
+                <p:dataTable id="dtProd" value="#{usuarioBean.listaU}" var="usr"
+                    styleClass="table table-bordered shadow-sm miAutoTabla" style="font-size:15px;">
 
-    <f:facet name="exportar">
-        <h:outputText value="#{usr.id_usuario}" />
-    </f:facet>
-</p:column>
+                    <p:column headerText="ID">
+                        <h:outputText value="#{usr.id_usuario}" style="display:block; padding:10px 5px; color:black;" />
 
-    <p:column headerText="Documento">
-    <h:outputText 
-        value="#{usr.documento}" 
-        style="display:block; padding:10px 5px; color:black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{usr.id_usuario}" />
+                        </f:facet>
+                    </p:column>
 
-    <f:facet name="exportar">
-        <h:outputText value="#{usr.documento}" />
-    </f:facet>
-</p:column>
+                    <p:column headerText="Documento">
+                        <h:outputText value="#{usr.documento}" style="display:block; padding:10px 5px; color:black;" />
 
-    <p:column headerText="Nombre Completo">
-        <h:outputText 
-            value="#{usr.nombre_completo}"
-            style="display:block; padding:10px 5px; color: black;"/>
-        
-        <f:facet name="exportar">
-        <h:outputText value="#{usr.nombre_completo}" />
-    </f:facet>
-    </p:column>
+                        <f:facet name="exportar">
+                            <h:outputText value="#{usr.documento}" />
+                        </f:facet>
+                    </p:column>
 
-    <p:column headerText="Correo">
-        <h:outputText 
-            value="#{usr.correo}"
-            style="display:block; padding:10px 5px; color: black;"/>
-        <f:facet name="exportar">
-        <h:outputText value="#{usr.correo}" />
-    </f:facet>
-    </p:column>
+                    <p:column headerText="Nombre Completo">
+                        <h:outputText value="#{usr.nombre_completo}"
+                            style="display:block; padding:10px 5px; color: black;" />
 
-    <p:column headerText="Tipo">
-        <p:outputLabel 
-            value="#{usr.tipo}"
-            style="display:block; padding:10px 5px; color: black;"/>
-        <f:facet name="exportar">
-        <h:outputText value="#{usr.tipo}" />
-    </f:facet>
-    </p:column>
-    
-    <p:column exportable="false">
-                    <f:facet name="header">
-                        <h:outputLabel value="Opciones" />
-                    </f:facet>
-        <div style="padding:10px 8px; text-align:center;">
-            <h:commandLink value="Editar"
-                           styleClass="boton"
-                           actionListener="#{usuarioBean.buscar(usr.id_usuario)}"
-                           action="editar" />
-            <br/>
-            <h:commandLink value="Eliminar"
-                           styleClass="boton"
-                           actionListener="#{usuarioBean.eliminar(usr.id_usuario)}"
-                           onclick="return confirm('¿Seguro de eliminar a #{usr.nombre_completo}?');" />
-        </div>
-    </p:column>
-</p:dataTable>
-                
-                </div>
-          <div style="margin-top: 10px; text-align: center;">
-                    <p:commandLink ajax="false" styleClass="boton" style="margin-right: 10px;">
-                        <h:outputText value="📄 Click para sacar el reporte de PDF" />
-                        <p:dataExporter target="dtProd" type="pdf" fileName="Usuarios" />
-                    </p:commandLink>
+                        <f:facet name="exportar">
+                            <h:outputText value="#{usr.nombre_completo}" />
+                        </f:facet>
+                    </p:column>
 
-                    <p:commandLink ajax="false" styleClass="boton">
-                        <h:outputText value="📊 Click para sacar el reporte de Excel" />
-                        <p:dataExporter target="dtProd" type="xls" fileName="Usuarios" />
-                    </p:commandLink>
+                    <p:column headerText="Correo">
+                        <h:outputText value="#{usr.correo}" style="display:block; padding:10px 5px; color: black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{usr.correo}" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="Tipo">
+                        <p:outputLabel value="#{usr.tipo}" style="display:block; padding:10px 5px; color: black;" />
+                        <f:facet name="exportar">
+                            <h:outputText value="#{usr.tipo}" />
+                        </f:facet>
+                    </p:column>
+
+                    <p:column exportable="false">
+                        <f:facet name="header">
+                            <h:outputLabel value="Opciones" />
+                        </f:facet>
+                        <div style="padding:10px 8px; text-align:center;">
+                            <h:commandLink value="Editar" styleClass="boton"
+                                actionListener="#{usuarioBean.buscar(usr.id_usuario)}" action="editar" />
+                            <br />
+                            <h:commandLink value="Eliminar" styleClass="boton"
+                                actionListener="#{usuarioBean.eliminar(usr.id_usuario)}"
+                                onclick="return confirm('¿Seguro de eliminar a #{usr.nombre_completo}?');" />
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+            </div>
+            <div style="margin-top: 10px; text-align: center;">
+                <p:commandLink ajax="false" styleClass="boton" style="margin-right: 10px;">
+                    <h:outputText value="📄 Click para sacar el reporte de PDF" />
+                    <p:dataExporter target="dtProd" type="pdf" fileName="Usuarios" />
+                </p:commandLink>
+
+                <p:commandLink ajax="false" styleClass="boton">
+                    <h:outputText value="📊 Click para sacar el reporte de Excel" />
+                    <p:dataExporter target="dtProd" type="xls" fileName="Usuarios" />
+                </p:commandLink>
             </div>
         </h:form>
     </ui:define>
