@@ -105,22 +105,22 @@
                 </h:panelGrid>
             </div>
                 <p:dataTable id="dtProd" value="#{usuarioBean.listaU}" var="usr" 
-             styleClass="table table-bordered shadow-sm"
+             styleClass="table table-bordered shadow-sm miAutoTabla"
               style="font-size:15px;">
     <p:column headerText="ID">
-        <h:outputText value="#{usr.id_usuario}" />
+        <h:outputText value="#{usr.id_usuario}" style="display:block; padding:10px 5px; color:black;" />
     </p:column>
     <p:column headerText="Documento">
-        <h:outputText value="#{usr.documento}" />
+        <h:outputText value="#{usr.documento}" style="display:block; padding:10px 5px; color:black;" />
     </p:column>
     <p:column headerText="Nombre Completo">
-        <h:outputText value="#{usr.nombre_completo}" />
+        <h:outputText value="#{usr.nombre_completo}" style="display:block; padding:10px 5px; color:black;" />
     </p:column>
     <p:column headerText="Correo">
-        <h:outputText value="#{usr.correo}" />
+        <h:outputText value="#{usr.correo}" style="display:block; padding:10px 5px; color:black;" />
     </p:column>
     <p:column headerText="Tipo">
-        <h:outputText value="#{usr.tipo}" />
+        <h:outputText value="#{usr.tipo}" style="display:block; padding:10px 5px; color:black;" />
     </p:column>
 </p:dataTable>
               <div style="margin-top: 10px; text-align: center;">

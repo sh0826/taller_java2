@@ -12,7 +12,7 @@
     <ui:define name="contenido">
     <h:head>
         <title>Administrar Boletas</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
         <style>
             body {
                 background: #111 !important;
@@ -147,74 +147,55 @@
             }
         </style>
     </h:head>
+
     <h:body style="background-color: #111 !important;">
-        <f:metadata>
-            <f:event type="preRenderView" listener="#{boletaBean.listar}"/>
-        </f:metadata>
-
-        
         <div class="dashboard-container">
-            <!-- Botón Menú Anterior arriba -->
-            <div class="mb-3">
-                <h:commandLink value="Menú Anterior"
-                               styleClass="btn btn-secondary"
-                               action="/faces/cliente/index" />
-
-        <h2 class="text-center text-primary">Administrar Boletas</h2>
-        <h:form>
-            <div class="card mb-3">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Filtros de Búsqueda</h5>
-                </div>
-                <div class="card-body">
-                    <h:panelGrid columns="4" columnClasses="col-md-3,col-md-3,col-md-3,col-md-3">
-                        <h:outputLabel value="Nombre del Evento:" />
-                        <h:inputText value="#{boletaBean.filtroEvento}" class="form-control"/>
-
-                        <h:outputLabel value="Precio:" />
-                        <h:inputText value="#{boletaBean.filtroPrecio}" class="form-control"/>
-
-                        <h:outputLabel value="Cantidad de Boletos:" />
-                        <h:inputText value="#{boletaBean.filtroCantidad}" class="form-control"/>
-                    </h:panelGrid>
-                    <br/>
-                    <h:commandButton value="Buscar" action="#{boletaBean.buscarPorEvento}" class="btn btn-primary" />
-                    <h:commandButton value="Limpiar Filtros" action="#{boletaBean.limpiarFiltros}" class="btn btn-secondary" style="margin-left: 10px;" />
-                </div>
-
-            </div>
+            <f:event type="preRenderView" listener="#{boletaBean.listar}"/>
             
-            <h2 class="text-center mb-4">Administrar Boletas</h2>
-            
-            <h:form>
+            <h:form class="container">
+                <h2 class="text-center mb-4" style="color: #C89B3C !important;">Administrar Boletas</h2>
+
+                <div class="mb-4 text-center" style="display: flex; justify-content: center; gap: 0;">
+                    <h:commandLink value="Nueva Boleta" 
+                                   styleClass="nav-item" 
+                                   style="margin: 0; border-radius: 5px;"
+                                   action="nuevo" />
+                </div>
+                
+                <br/><br/>
+                
+                <!-- Filtros -->
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h5 class="mb-0">Filtros de Búsqueda</h5>
+                        <h5 class="mb-0" style="color: #C89B3C;">Filtros de Búsqueda</h5>
                     </div>
                     <div class="card-body">
                         <h:panelGrid columns="4" columnClasses="col-md-3,col-md-3,col-md-3,col-md-3">
                             <h:outputLabel value="Nombre del Evento:" style="color: #C89B3C;" />
-                            <h:inputText value="#{boletaBean.filtroEvento}" class="form-control" placeholder="Buscar por evento..." />
+                            <p:inputText value="#{boletaBean.filtroEvento}" 
+                                        styleClass="form-control" 
+                                        placeholder="Buscar por evento..." />
 
                             <h:outputLabel value="Precio:" style="color: #C89B3C;" />
-                            <h:inputText value="#{boletaBean.filtroPrecio}" class="form-control" placeholder="Ej: 100.00" />
+                            <p:inputText value="#{boletaBean.filtroPrecio}" 
+                                        styleClass="form-control" 
+                                        placeholder="Ej: 100.00" />
 
                             <h:outputLabel value="Cantidad de Boletos:" style="color: #C89B3C;" />
-                            <h:inputText value="#{boletaBean.filtroCantidad}" class="form-control" placeholder="Ej: 2" />
+                            <p:inputText value="#{boletaBean.filtroCantidad}" 
+                                        styleClass="form-control" 
+                                        placeholder="Ej: 2" />
                         </h:panelGrid>
                         <br/>
-                        <h:commandButton value="Buscar" action="#{boletaBean.buscarPorEvento}" class="btn btn-primary" />
-                        <h:commandButton value="Limpiar Filtros" action="#{boletaBean.limpiarFiltros}" class="btn btn-secondary" style="margin-left: 10px;" />
+                        <h:commandButton value="Buscar" 
+                                        action="#{boletaBean.buscarPorEvento}" 
+                                        class="btn btn-primary" />
+                        <h:commandButton value="Limpiar Filtros" 
+                                        action="#{boletaBean.limpiarFiltros}" 
+                                        class="btn btn-secondary" 
+                                        style="margin-left: 10px;" />
                     </div>
                 </div>
-                
-                <div class="mb-3 text-center" style="display: flex; justify-content: center; gap: 0;">
-                    <h:commandLink value="Nueva Boleta" 
-                                   class="nav-item" 
-                                   style="margin: 0; border-radius: 5px;"
-                                   action="nuevo" />
-                </div>
-                <br/><br/>
                 
                 <h:dataTable value="#{boletaBean.listaFiltrada}" var="boleta" 
                             styleClass="tabla-dark w-100"
@@ -278,3 +259,4 @@
 </ui:define>
 
 </ui:composition>
+
