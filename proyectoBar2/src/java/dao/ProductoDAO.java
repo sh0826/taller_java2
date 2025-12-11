@@ -68,4 +68,24 @@ public class ProductoDAO {
         ps.setInt(1, id);
         ps.executeUpdate();
     }
+    
+    public Producto buscarPorId(int id) throws Exception {
+        conn = ConnBD.conectar();
+        String sql = "SELECT * FROM producto WHERE id_producto=?";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+        rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            Producto p = new Producto();
+            p.setId_producto(rs.getInt("id_producto"));
+            p.setNombre(rs.getString("nombre"));
+            p.setTipo_producto(rs.getString("tipo_producto"));
+            p.setStock(rs.getInt("stock"));
+            p.setPrecio_unitario(rs.getDouble("precio_unitario"));
+            p.setImagen(rs.getString("imagen"));
+            return p;
+        }
+        return null;
+    }
 }

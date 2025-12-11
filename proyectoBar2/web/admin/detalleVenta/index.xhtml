@@ -183,9 +183,13 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                     <div>
                         <h:outputLabel value="Producto:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
-                        <h:selectOneMenu value="#{detalleVentaBean.detalle.id_producto}" styleClass="form-select" style="width: 100%;">
+                        <h:selectOneMenu id="productoSelect" value="#{detalleVentaBean.detalle.id_producto}" styleClass="form-select" style="width: 100%;">
                             <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
                             <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
+                            <f:ajax event="change" 
+                                    listener="#{detalleVentaBean.cargarPrecioProducto()}" 
+                                    render="precioUnitario" 
+                                    execute="@this"/>
                         </h:selectOneMenu>
                     </div>
                     
@@ -201,7 +205,7 @@
                     
                     <div>
                         <h:outputLabel value="Precio Unitario:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
-                        <h:inputText value="#{detalleVentaBean.detalle.precio_unitario}" styleClass="form-control" style="width: 100%;"/>
+                        <h:inputText id="precioUnitario" value="#{detalleVentaBean.detalle.precio_unitario}" styleClass="form-control" style="width: 100%;"/>
                     </div>
                 </div>
                 

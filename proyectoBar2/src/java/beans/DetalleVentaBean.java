@@ -162,6 +162,19 @@ public class DetalleVentaBean {
             e.printStackTrace();
         }
     }
+    
+    public void cargarPrecioProducto() {
+        try {
+            if (detalle != null && detalle.getId_producto() > 0) {
+                Producto producto = productoDAO.buscarPorId(detalle.getId_producto());
+                if (producto != null) {
+                    detalle.setPrecio_unitario(producto.getPrecio_unitario());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void guardar() {
         System.out.println("Esto es guardar");
