@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Administrar Productos - Tienda 7815</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</h:head>
+
+<h:body>
+    <div class="container mt-5">
+        <h2 class="text-center text-primary mb-4">Administrar Productos</h2>
+
+        <!-- Formulario Guardar Producto -->
+        <h:form class="mb-5">
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <h:outputLabel value="Nombre:" for="nombre" class="form-label"/>
+                    <h:inputText id="nombre" value="#{productoBean.producto.nombre}" styleClass="form-control"/>
+                </div>
+
+                <div class="col-md-3">
+                    <h:outputLabel value="Tipo:" for="tipo" class="form-label"/>
+                    <h:selectOneMenu id="tipo" value="#{productoBean.producto.tipo_producto}" styleClass="form-select">
+                        <f:selectItem itemLabel="Seleccione..." itemValue=""/>
+                        <f:selectItem itemLabel="Licores" itemValue="Licores"/>
+                        <f:selectItem itemLabel="Cervezas" itemValue="Cervezas"/>
+                        <f:selectItem itemLabel="Cigarrillos" itemValue="Cigarrillos"/>
+                    </h:selectOneMenu>
+                </div>
+
+                <div class="col-md-2">
+                    <h:outputLabel value="Stock:" for="stock" class="form-label"/>
+                    <h:inputText id="stock" value="#{productoBean.producto.stock}" styleClass="form-control"/>
+                </div>
+
+                <div class="col-md-2">
+                    <h:outputLabel value="Precio:" for="precio" class="form-label"/>
+                    <h:inputText id="precio" value="#{productoBean.producto.precio_unitario}" styleClass="form-control"/>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <h:commandButton value="Guardar" action="#{productoBean.guardar}" styleClass="btn btn-dark w-100"/>
+                </div>
+
+            </div>
+        </h:form>
+
+
+        <!-- Formulario Filtros -->
+        <h:form>
+            <div class="row g-3 mb-4">
+
+                <div class="col-md-4">
+                    <h:outputLabel value="Buscar por nombre:"/>
+                    <h:inputText value="#{productoBean.filtroNombre}" styleClass="form-control"/>
+                </div>
+
+                <div class="col-md-3">
+                    <h:outputLabel value="Tipo:"/>
+                    <h:selectOneMenu value="#{productoBean.filtroTipo}" styleClass="form-select">
+                        <f:selectItem itemLabel="Todos" itemValue=""/>
+                        <f:selectItem itemLabel="Licores" itemValue="Licores"/>
+                        <f:selectItem itemLabel="Cervezas" itemValue="Cervezas"/>
+                        <f:selectItem itemLabel="Cigarrillos" itemValue="Cigarrillos"/>
+                    </h:selectOneMenu>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <h:commandButton value="Filtrar"
+                                     action="#{productoBean.filtrar}"
+                                     styleClass="btn btn-primary w-100"/>
+                </div>
+
+            </div>
+        </h:form>
+
+
+        <!-- Tabla productos -->
+        <h:form>
+            <h:dataTable value="#{productoBean.listaFiltrada}" var="p" styleClass="table table-striped table-bordered">
+
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                    #{p.id_producto}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Nombre</f:facet>
+                    #{p.nombre}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Tipo</f:facet>
+                    #{p.tipo_producto}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Stock</f:facet>
+                    #{p.stock}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Precio</f:facet>
+                    #{p.precio_unitario}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Acciones</f:facet>
+                    <h:commandButton value="Editar" action="#{productoBean.editar(p)}" styleClass="btn btn-dark btn-sm"/>
+                    <h:commandButton value="Eliminar" action="#{productoBean.eliminar(p.id_producto)}"
+                                     onclick="return confirm('¿Está seguro de eliminar #{p.nombre}?');"
+                                     styleClass="btn btn-danger btn-sm ms-2"/>
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
+
+        <h:link value="Volver" outcome="/admin/index" styleClass="btn btn-primary"/>
+
+    </div>
+</h:body>
+</html>

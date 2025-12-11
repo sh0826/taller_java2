@@ -8,7 +8,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
     </h:head>
     <h:body>
-        <h2 class="text-center text-success">Nuevo Usuario</h2>
+        <h2 class="text-center text-success">Ingresa tus datos</h2>
         <br/>
         <center>
             <h:form>
@@ -19,7 +19,7 @@
                     <h:message for="documento" class="text-danger" />
                     
                     
-                    <h:outputLabel for="nombre_completo" value="Nombre del Usuario: " />
+                    <h:outputLabel for="nombre_completo" value="Nombre Completo " />
                     <h:inputText id="nombre_completo" value="#{usuarioBean.usuario.nombre_completo}" class="form-control"
                                  required="true" requiredMessage="Debe especificar un Nombre" />
                     <h:message for="nombre_completo" class="text-danger" />
@@ -37,7 +37,7 @@
                     <h:column />
                     <h:column>
                         <h:commandButton class="btn btn-success" value="Guardar" 
-                                         actionListener="#{usuarioBean.registrarCliente()}" action="/inicio_sesion/login" />
+                                         actionListener="#{usuarioBean.registrarCliente}" action="/inicio_sesion/login" />
                         
                         <h:commandButton class="btn btn-secondary" value="Cancelar" action="/inicio_sesion/login" 
                                          style="margin-left: 15px;" immediate="true" />

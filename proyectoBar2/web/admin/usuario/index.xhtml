@@ -1,67 +1,159 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>Administrar Usuarios</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
-    </h:head>
-    <h:body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/adminLayout.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <ui:define name="contenido">
+        <style>
+/* apuntamos a la clase personalizada: */
+.miAutoTabla .ui-datatable-tablewrapper {
+    width: auto !important;
+    display: inline-block !important; /* hace que la tabla "encaje" al contenido */
+}
+
+/* tabla interna */
+.miAutoTabla table {
+    width: auto !important;
+    table-layout: auto !important;
+}
+
+/* celdas: evitar saltos si quieres ajustar al contenido */
+.miAutoTabla .ui-datatable-data td,
+.miAutoTabla .ui-datatable-data th {
+    white-space: nowrap;
+    padding: 8px 12px;
+}
+
+/* Si quieres centrar la tabla en su contenedor */
+.miAutoTabla .ui-datatable-tablewrapper {
+    margin: 0 auto;
+    display: table !important;
+}
+
+    .table th {
+        padding: 12px !important;
+        background: white;
+        color: #C89B3C;
+    }
+    .boton{
+            display: inline-block;
+            color: #eee;
+            padding: 6px 10px;
+            margin: 8px 0;
+            text-decoration: none;
+            border-radius: 5px;
+            background: #6D0823;
+            transition: 0.2s;
+        }
+
+        .boton:hover {
+            background: #C89B3C;
+            color: black;
+            font-weight: bold;
+        }
+       
+</style>
         <f:event type="preRenderView" listener="#{usuarioBean.listar()}" />
-        <h2 class="text-center text-primary">Administrar Usuarios</h2>
+
+        <h2 class="text-center text-primary mb-4">Administrar Usuarios</h2>
+        
         <h:form>
+            <div class="text-center mb-1">
+                    <h:commandLink value="Nuevo Usuario"
+                                   styleClass="boton"
+                                   action="nuevo" />
+                </div>
+             <p:commandLink ajax="false">
+    <p:graphicImage value="/iconos/pdf.png" width="30" />
+    <p:dataExporter target="dtProd" type="pdf" fileName="Usuarios" />
+</p:commandLink>
+
+<p:commandLink ajax="false">
+    <p:graphicImage value="/iconos/xls.png" width="35" />
+    <p:dataExporter target="dtProd" type="xls" fileName="Usuarios" />
+</p:commandLink>
+            
             <div class="container">
-                <h:commandLink value="Nuevo Usuario" class="text-primary" action="nuevo" />
-                <h:commandLink value="Menú Anterior" class="text-secondary" action="/faces/admin/index"
-                               style="margin-left: 15px;" />
-                <br/><br/>
-                <h:dataTable value="#{usuarioBean.listaU}" var="usr" class="table table-bordered table-striped">
-                    <h:column headerClass="text-center">
-                        <f:facet name="header">
-                            <h:outputLabel value="ID" />
-                        </f:facet>
-                        <h:outputText value="#{usr.id_usuario}" />
-                    </h:column>
-                    <h:column headerClass="text-center">
-                        <f:facet name="header">
-                            <h:outputLabel value="Documento" />
-                        </f:facet>
-                        <h:outputText value="#{usr.documento}" />
-                    </h:column>
-                    <h:column headerClass="text-center">
-                        <f:facet name="header">
-                            <h:outputLabel value="Nombre" />
-                        </f:facet>
-                        <h:outputText value="#{usr.nombre_completo}" />
-                    </h:column>
-                    <h:column headerClass="text-center">
-                        <f:facet name="header">
-                            <h:outputLabel value="Correo" />
-                        </f:facet>
-                        <h:outputText value="#{usr.correo}" />
-                    </h:column>
-                    <h:column headerClass="text-center">
-                        <f:facet name="header">
-                            <h:outputLabel value="Tipo" />
-                        </f:facet>
-                        <h:outputText value="#{usr.tipo}" />
-                    </h:column>
-                    <h:column headerClass="text-center">
-                        <f:facet name="header">
-                            <h:outputLabel value="Opciones" />                        
-                        </f:facet>
-                        <div align="center">
-                            <h:commandLink value="Editar" class="text-success" 
-                                           actionListener="#{usuarioBean.buscar(usr.id_usuario)}" action="editar" />
-                            <h:commandLink value="Eliminar" class="text-danger" style="margin-left: 15px;"
-                                           actionListener="#{usuarioBean.eliminar(usr.id_usuario)}"
-                                           onclick="return confirm('Está completamente seguro de ELIMINAR el Usuario #{usr.nombre_completo} ??!!!');" />                        
-                        </div>
-                    </h:column>
-                </h:dataTable>
+                
+<p:dataTable id="dtProd"
+             value="#{usuarioBean.listaU}"
+             var="usr"
+             styleClass="table table-bordered shadow-sm miAutoTabla"
+             style="font-size:15px;">
+
+    <p:column headerText="ID">
+    <h:outputText 
+        value="#{usr.id_usuario}" 
+        style="display:block; padding:10px 5px; color:black;" />
+
+    <f:facet name="exportar">
+        <h:outputText value="#{usr.id_usuario}" />
+    </f:facet>
+</p:column>
+
+    <p:column headerText="Documento">
+    <h:outputText 
+        value="#{usr.documento}" 
+        style="display:block; padding:10px 5px; color:black;" />
+
+    <f:facet name="exportar">
+        <h:outputText value="#{usr.documento}" />
+    </f:facet>
+</p:column>
+
+    <p:column headerText="Nombre Completo">
+        <h:outputText 
+            value="#{usr.nombre_completo}"
+            style="display:block; padding:10px 5px; color: black;"/>
+        
+        <f:facet name="exportar">
+        <h:outputText value="#{usr.nombre_completo}" />
+    </f:facet>
+    </p:column>
+
+    <p:column headerText="Correo">
+        <h:outputText 
+            value="#{usr.correo}"
+            style="display:block; padding:10px 5px; color: black;"/>
+        <f:facet name="exportar">
+        <h:outputText value="#{usr.correo}" />
+    </f:facet>
+    </p:column>
+
+    <p:column headerText="Tipo">
+        <p:outputLabel 
+            value="#{usr.tipo}"
+            style="display:block; padding:10px 5px; color: black;"/>
+        <f:facet name="exportar">
+        <h:outputText value="#{usr.tipo}" />
+    </f:facet>
+    </p:column>
+    
+    <p:column exportable="false">
+                    <f:facet name="header">
+                        <h:outputLabel value="Opciones" />
+                    </f:facet>
+        <div style="padding:10px 8px; text-align:center;">
+            <p:commandLink value="Editar"
+                           styleClass="boton"
+                           actionListener="#{usuarioBean.buscar(usr.id_usuario)}"
+                           action="editar" />
+            <br/>
+            <p:commandLink value="Eliminar"
+                           styleClass="boton"
+                           actionListener="#{usuarioBean.eliminar(usr.id_usuario)}"
+                           onclick="return confirm('¿Seguro de eliminar a #{usr.nombre_completo}?');" />
+        </div>
+    </p:column>
+</p:dataTable>
             </div>
         </h:form>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    </h:body>
-</html>
+    </ui:define>
+</ui:composition>

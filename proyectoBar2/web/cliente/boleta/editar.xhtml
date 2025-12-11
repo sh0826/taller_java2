@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Editar Boleta</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+    </h:head>
+    <h:body>
+        <f:event type="preRenderView" listener="#{boletaBean.listarEven()}" />
+        <h2 class="text-center text-success">Editar Boleta</h2>
+        <center>
+            <h:form>
+                <h:inputHidden value="#{boletaBean.boleta.id_boleta}" />
+                <h:panelGrid columns="3">
+                    
+                    <h:outputLabel value="Precio: " for="precio" />
+                    <h:inputText id="precio" value="#{boletaBean.boleta.precio_boleta}" class="form-control"
+                                 required="true" requiredMessage="Debe especificar un Precio">
+                        <f:convertNumber pattern="#,##0.00" />
+                    </h:inputText>
+                    <h:message for="precio" class="text-danger" />
+                    
+                    <h:outputLabel value="Cantidad de Boletos: " for="cantidad" />
+                    <h:inputText id="cantidad" value="#{boletaBean.boleta.cantidad_boletos}" class="form-control"
+                                 required="true" requiredMessage="Debe especificar la Cantidad de Boletos" />
+                    <h:message for="cantidad" class="text-danger" />
+                    
+                    <h:outputLabel value="ID Usuario: " for="idUsuario" />
+                    <h:inputText id="idUsuario" value="#{boletaBean.boleta.id}" class="form-control"
+                                 required="true" requiredMessage="Debe especificar el ID del Usuario" />
+                    <h:message for="idUsuario" class="text-danger" />
+                    
+                    <h:outputLabel value="Evento: " for="evento" />
+                    <h:selectOneMenu id="evento" value="#{boletaBean.boleta.id_evento}" class="form-control"
+                                     required="true" requiredMessage="Debe seleccionar un Evento">
+                        <f:selectItem itemLabel="Seleccione un evento..." itemValue="" />
+                        <f:selectItems value="#{boletaBean.lstEven}" var="evento" 
+                                      itemLabel="#{evento.nombre_evento}" itemValue="#{evento.id_evento}" />
+                    </h:selectOneMenu>
+                    <h:message for="evento" class="text-danger" />
+                    
+                    <h:column /><h:column><br/></h:column><h:column />
+                    
+                    <h:column />
+                    <h:column>
+                        <h:commandButton class="btn btn-primary" value="Actualizar" 
+                                         action="#{boletaBean.actualizar()}" />
+                        <h:commandButton class="btn btn-secondary" value="Cancelar" action="index" 
+                                         style="margin-left: 15px;" immediate="true" />
+                    </h:column>
+                </h:panelGrid>
+            </h:form>
+        </center>
+    </h:body>
+</html>
+

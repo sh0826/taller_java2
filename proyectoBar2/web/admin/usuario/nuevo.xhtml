@@ -1,58 +1,127 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>Nuevo Usuario</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
-    </h:head>
-    <h:body>
-        <h2 class="text-center text-success">Nuevo Usuario</h2>
-        <br/>
-        <center>
-            <h:form>
-                <h:panelGrid columns="3">
-                    <h:outputLabel value="Documento: " for="doc" />
-                    <h:inputText id="doc" value="#{usuarioBean.usuario.documento}" class="form-control"
-                                 required="true" requiredMessage="Debe especificar un Documento" />
-                    <h:message for="doc" class="text-danger" />
-                    
-                    
-                    <h:outputLabel for="nom" value="Nombre del Usuario: " />
-                    <h:inputText id="nom" value="#{usuarioBean.usuario.nombre_completo}" class="form-control"
-                                 required="true" requiredMessage="Debe especificar un Nombre" />
-                    <h:message for="nom" class="text-danger" />
-                    
-                    <h:outputLabel for="cor" value="Correo: " />
-                    <h:inputText id="cor" value="#{usuarioBean.usuario.correo}" class="form-control"  />
-                    <h:message for="cor" class="text-danger" />
-                    
-                    <h:outputLabel for="pas" value="Contraseña: " />
-                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.pass}"  class="form-control"                                
-                                 required="true" requiredMessage="Debe especificar una Contraseña" />
-                    <h:message for="pas" class="text-danger" />
-                    
-                    <h:outputLabel for="tipo" value="Tipo de Usuario: " />
-                    <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}"  class="form-select">
-                        <f:selectItem itemValue="A" itemLabel="Administrador" />
-                        <f:selectItem itemValue="C" itemLabel="Cliente" />
-                        <f:selectItem itemValue="V" itemLabel="Vendedor" />
-                    </h:selectOneMenu>
-                    <h:message for="tipo" class="text-danger" />
-                    
-                    <h:column /><h:column><br/></h:column><h:column />
-                    
-                    <h:column />
-                    <h:column>
-                        <h:commandButton class="btn btn-success" value="Guardar" 
-                                         actionListener="#{usuarioBean.guardar()}" action="index" />
-                        <h:commandButton class="btn btn-secondary" value="Cancelar" action="index" 
-                                         style="margin-left: 15px;" immediate="true" />
-                    </h:column>
-                    
-                </h:panelGrid>
-            </h:form>
-        </center>
-    </h:body>
-</html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/adminLayout.xhtml">
+
+    <ui:define name="contenido">
+        <style>
+        .form-container {
+    width: 70%;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 25px 35px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.form-container label {
+    font-weight: bold;
+}
+
+.form-row {
+    padding: 10px 0;
+}
+
+.boton {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-custom-save {
+    background: #6D0823;
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 6px;
+    border: none;
+    transition: 0.2s;
+}
+
+.btn-custom-save:hover {
+    background: #C89B3C;
+    color: #000;
+    font-weight: bold;
+}
+
+.btn-custom-cancel {
+    background: #999;
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 6px;
+    border: none;
+    margin-left: 15px;
+    transition: 0.2s;
+}
+
+.btn-custom-cancel:hover {
+    background: #555;
+}
+</style>
+           <h:form>
+    <h:panelGrid columns="3" styleClass="form-container">
+
+        <!-- Documento -->
+        <h:outputLabel value="Documento:" for="doc" />
+        <h:inputText id="doc" value="#{usuarioBean.usuario.documento}" 
+                     class="form-control" required="true" 
+                     requiredMessage="Debe especificar un Documento" />
+        <h:message for="doc" class="text-danger" />
+
+        <!-- Nombre -->
+        <h:outputLabel for="nom" value="Nombre del Usuario:" />
+        <h:inputText id="nom" value="#{usuarioBean.usuario.nombre_completo}" 
+                     class="form-control" required="true" 
+                     requiredMessage="Debe especificar un Nombre" />
+        <h:message for="nom" class="text-danger" />
+
+        <!-- Correo -->
+        <h:outputLabel for="cor" value="Correo:" />
+        <h:inputText id="cor" value="#{usuarioBean.usuario.correo}" 
+                     class="form-control" />
+        <h:message for="cor" class="text-danger" />
+
+        <!-- Contraseña -->
+        <h:outputLabel for="pas" value="Contraseña:" />
+        <h:inputSecret id="pas" value="#{usuarioBean.usuario.pass}" 
+                       class="form-control" required="true" 
+                       requiredMessage="Debe especificar una Contraseña" />
+        <h:message for="pas" class="text-danger" />
+
+        <!-- Tipo de Usuario -->
+        <h:outputLabel for="tipo" value="Tipo de Usuario:" />
+        <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}" 
+                         class="form-select">
+            <f:selectItem itemValue="A" itemLabel="Administrador" />
+            <f:selectItem itemValue="C" itemLabel="Cliente" />
+            <f:selectItem itemValue="V" itemLabel="Vendedor" />
+        </h:selectOneMenu>
+        <h:message for="tipo" class="text-danger" />
+
+        <!-- Espacio -->
+        <h:column /><h:column><br/></h:column><h:column />
+
+        <!-- Botones centrados -->
+        <h:column />
+        
+        <h:column>
+            
+            <h:commandButton value="Guardar"
+                             styleClass="btn-custom-save"
+                             actionListener="#{usuarioBean.guardar()}"
+                             action="index" />
+
+            <h:commandButton value="Cancelar"
+                             styleClass="btn-custom-cancel"
+                             action="index"
+                             immediate="true" />
+
+        </h:column>
+
+    </h:panelGrid>
+</h:form>
+    </ui:define>
+</ui:composition>
