@@ -15,6 +15,16 @@ public class UsuarioDAO {
 
     public UsuarioDAO() {
         con = ConnBD.conectar();
+        try {
+            if (con != null && con.getAutoCommit()) {
+                // Si autocommit está activado, está bien
+                System.out.println("Conexión establecida con autocommit activado");
+            } else if (con != null) {
+                System.out.println("Conexión establecida sin autocommit");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al verificar conexión: " + e.getMessage());
+        }
     }
     
     public List<Usuario> listarU(){
@@ -120,13 +130,40 @@ public class UsuarioDAO {
     }
     
     public void eliminar(int id_usuario){
+        PreparedStatement psEliminar = null;
         try {
             String sql = "DELETE FROM usuario WHERE id_usuario = ?";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, id_usuario);
+            psEliminar = con.prepareStatement(sql);
+            psEliminar.setInt(1, id_usuario);
             
-            ps.executeUpdate();
+            System.out.println("Ejecutando DELETE para usuario ID: " + id_usuario);
+            int resultado = psEliminar.executeUpdate();
+            
+            if (resultado > 0) {
+                System.out.println("Usuario eliminado correctamente de la BD: " + id_usuario);
+                // Si autocommit está desactivado, hacer commit manual
+                if (con != null && !con.getAutoCommit()) {
+                    con.commit();
+                    System.out.println("Commit realizado");
+                }
+            } else {
+                System.out.println("No se encontró el usuario con ID: " + id_usuario);
+            }
+            
+            if (psEliminar != null) {
+                psEliminar.close();
+            }
         } catch (SQLException e) {
+            System.err.println("Error al eliminar usuario: " + e.getMessage());
+            e.printStackTrace();
+            try {
+                if (con != null && !con.getAutoCommit()) {
+                    con.rollback();
+                    System.out.println("Rollback realizado");
+                }
+            } catch (SQLException ex) {
+                System.err.println("Error al hacer rollback: " + ex.getMessage());
+            }
         }
     }
 }

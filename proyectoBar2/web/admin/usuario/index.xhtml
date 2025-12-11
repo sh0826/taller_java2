@@ -174,7 +174,7 @@
                            actionListener="#{usuarioBean.buscar(usr.id_usuario)}"
                            action="editar" />
             <br/>
-            <p:commandLink value="Eliminar"
+            <h:commandLink value="Eliminar"
                            styleClass="boton"
                            actionListener="#{usuarioBean.eliminar(usr.id_usuario)}"
                            onclick="return confirm('¿Seguro de eliminar a #{usr.nombre_completo}?');" />

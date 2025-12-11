@@ -44,9 +44,7 @@ public class UsuarioBean {
     }
     
     public void inicializar(){
-        if (listaU == null || listaU.isEmpty()) {
-            listar();
-        }
+        listar(); // Siempre recargar para tener datos actualizados
     }
     
     public void listar(){
@@ -142,8 +140,22 @@ public class UsuarioBean {
         }        
         uDAO.actualizar(usuario);
     }
-    public void eliminar(int id_usuario){
-        uDAO.eliminar(id_usuario);
+    private int idUsuarioEliminar;
+    
+    public String eliminar(int id_usuario){
+        System.out.println("Intentando eliminar usuario con ID: " + id_usuario);
+        try {
+            uDAO.eliminar(id_usuario);
+            System.out.println("Usuario eliminado, recargando lista...");
+            // Recargar la lista después de eliminar
+            listar();
+            System.out.println("Lista recargada. Total usuarios: " + listaU.size());
+        } catch (Exception e) {
+            System.err.println("Error al eliminar usuario: " + e.getMessage());
+            e.printStackTrace();
+        }
+        // Retornar null para permanecer en la misma página pero recargada
+        return null;
     }
     
     // Getters y Setters para los filtros
