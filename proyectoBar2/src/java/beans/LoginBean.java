@@ -7,9 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import modelo.Usuario;
 
+@SessionScoped
 @ManagedBean
 public class LoginBean {
     Usuario usuario = new Usuario();
@@ -96,24 +98,25 @@ public class LoginBean {
     }
     
     public void verif_sesion(String t){
-        String nom = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
-        String tipo = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("tipo");
-        
-        if(nom == null){
+    String nom = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+    String tipo = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("tipo");
+
+    if(nom == null){
+        try {
+            FacesContext.getCurrentInstance().getExternalContext()
+                .redirect("/proyectoBar2/faces/inicio_sesion/sinacceso.xhtml");
+        } catch (IOException e) {}
+    } else {
+        if(!tipo.equals(t)){
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("inicio_sesion/sinacceso.xhtml");
-            } catch (IOException e) {
-            }
-        }else{
-            if(!tipo.equals(t)){
-                try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("inicio_sesion/sinacceso.xhtml");
-                } catch (IOException e) {
-                }
-            }else{
-                nombreUsuario = nom;
-            }
+                FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect("/proyectoBar2/faces/inicio_sesion/sinacceso.xhtml");
+            } catch (IOException e) {}
+        } else {
+            nombreUsuario = nom;
         }
-    }   
+    }
+}
+
     
 }
