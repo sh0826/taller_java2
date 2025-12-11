@@ -16,6 +16,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import modelo.Boleta;
 import modelo.Evento;
+import modelo.Producto;
 import modelo.Usuario;
 
 /**
@@ -31,13 +32,27 @@ public class BoletaBean implements Serializable {
     List<Boleta> lstBoleFiltered = new ArrayList<>();
     List<Evento> lstEven = new ArrayList<>();
     BoletaDAO boleDAO = new BoletaDAO();
+    
+    // Campos de filtro
+    private String filtroEvento = "";
+    private String filtroUsuario = "";
+    private String filtroPrecio = "";
+    private String filtroCantidad = "";
     private String usuarioNombre;
     
     @PostConstruct
     public void init() {
-        listarEven();
-        listar();
+        // listarEven();
+        // listar();
+        // preRender logic moves to view event
         nuevaBoleta(); // preparar formulario
+    }
+    
+    public void preRender() {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            listarEven();
+            listar();
+        }
     }
 
     
@@ -71,6 +86,14 @@ public class BoletaBean implements Serializable {
     public void setLstBoleFiltered(List<Boleta> lstBoleFiltered) {
         this.lstBoleFiltered = lstBoleFiltered;
     }
+    
+    public String getFiltroEvento() {
+        return filtroEvento;
+    }
+
+    public void setFiltroEvento(String filtroEvento) {
+        this.filtroEvento = filtroEvento;
+    }
 
     public List<Evento> getLstEven() {
         return lstEven;
@@ -94,6 +117,8 @@ public class BoletaBean implements Serializable {
         }else {
             lstBole = new ArrayList<>();
         }
+        // Inicializar la lista filtrada con todas las boletas
+        lstBoleFiltered = lstBole;
     }
     
     public void listarEven(){
@@ -231,7 +256,7 @@ public class BoletaBean implements Serializable {
                 "Error", "No se pudo guardar la boleta. Por favor, intente nuevamente."));
             return null;
         }
-        }
+    }
 
 
     
@@ -245,7 +270,52 @@ public class BoletaBean implements Serializable {
         boleta = boleDAO.buscar(id_boleta);
     }
     
+    public List<Boleta> getListaFiltrada(){
+        return lstBoleFiltered;
+    }
     
+    public void setListaFiltrada(List<Boleta> lista) {
+        this.lstBoleFiltered = lista;
+    }
+    
+    public void buscarPorEvento(){
+        Usuario usuario = obtenerUsuarioSesion();
+        
+        // Verificar si hay algún filtro activo
+        boolean hayFiltros = (filtroEvento != null && !filtroEvento.trim().isEmpty()) ||
+                             (filtroUsuario != null && !filtroUsuario.trim().isEmpty()) ||
+                             (filtroPrecio != null && !filtroPrecio.trim().isEmpty()) ||
+                             (filtroCantidad != null && !filtroCantidad.trim().isEmpty());
+        
+        if (!hayFiltros) {
+            // Si no hay filtros, mostrar todas las boletas
+            lstBoleFiltered = lstBole;
+            return;
+        }
+        
+        if (usuario != null && "A".equals(usuario.getTipo())){
+            // Si es administrador, buscar en todas las boletas
+            lstBoleFiltered = boleDAO.buscarConFiltros(
+                filtroEvento, filtroUsuario, filtroPrecio, filtroCantidad
+            );
+        } else if (usuario != null) {
+            // Si no es admin, buscar solo en las boletas del usuario
+            lstBoleFiltered = boleDAO.buscarConFiltrosPorUsuario(
+                usuario.getId_usuario(), filtroEvento, filtroPrecio, filtroCantidad
+            );
+        } else {
+            lstBoleFiltered = new ArrayList<>();
+        }
+    }
+    
+    public void limpiarFiltros(){
+        filtroEvento = "";
+        filtroUsuario = "";
+        filtroPrecio = "";
+        filtroCantidad = "";
+        listar();
+        lstBoleFiltered = lstBole;
+    }
     
     public String actualizar() {
         int idEventoNuevo = boleta.getId_evento();
@@ -332,6 +402,31 @@ public class BoletaBean implements Serializable {
             return u.getNombre_completo();
         }
         return "";
+    }
+    
+    // Getters y setters para filtros adicionales
+    public String getFiltroUsuario() {
+        return filtroUsuario;
+    }
+
+    public void setFiltroUsuario(String filtroUsuario) {
+        this.filtroUsuario = filtroUsuario;
+    }
+
+    public String getFiltroPrecio() {
+        return filtroPrecio;
+    }
+
+    public void setFiltroPrecio(String filtroPrecio) {
+        this.filtroPrecio = filtroPrecio;
+    }
+
+    public String getFiltroCantidad() {
+        return filtroCantidad;
+    }
+
+    public void setFiltroCantidad(String filtroCantidad) {
+        this.filtroCantidad = filtroCantidad;
     }
 }
 
