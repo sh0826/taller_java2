@@ -13,7 +13,9 @@ import java.util.Date;
  */
 public class reservacion {
     private int id_reservacion,catindad_personas,cantidad_mesas;
+    private int id_usuario; // ID del usuario que hace la reservación
     private String ocasion;
+    private String nombre_usuario; // Nombre del usuario que hace la reservación
     private Date fecha_reservacion;
 
     public int getId_reservacion() {
@@ -55,6 +57,20 @@ public class reservacion {
     public void setFecha_reservacion(Date fecha_reservacion) {
         this.fecha_reservacion = fecha_reservacion;
     }
-    
-    
+
+    public int getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(int id_usuario) {
+        this.id_usuario = id_usuario;
+    }
+
+    public String getNombre_usuario() {
+        return nombre_usuario;
+    }
+
+    public void setNombre_usuario(String nombre_usuario) {
+        this.nombre_usuario = nombre_usuario;
+    }
 }

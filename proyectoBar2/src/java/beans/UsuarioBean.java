@@ -132,15 +132,21 @@ public class UsuarioBean {
     public void buscar(int id_usuario){
         usuario = uDAO.buscar(id_usuario);
     }
-    public void actualizar(){
-        if(usuario.getPass().equals("")){
-            usuario.setPass(usuario.getPass1());
-        }else{
-            usuario.setPass(Utils.encriptar(usuario.getPass()));
-        }        
-        uDAO.actualizar(usuario);
+    
+    public String actualizar() {
+    if (usuario.getPass().equals("")) {
+        usuario.setPass(usuario.getPass1());
+    } else {
+        usuario.setPass(Utils.encriptar(usuario.getPass()));
     }
-    private int idUsuarioEliminar;
+
+    uDAO.actualizar(usuario);
+
+    return "index?faces-redirect=true";  // ⬅ Navega correctamente
+}
+
+    
+
     
     public String eliminar(int id_usuario){
         System.out.println("Intentando eliminar usuario con ID: " + id_usuario);

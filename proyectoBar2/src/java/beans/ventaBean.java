@@ -5,6 +5,7 @@
 package beans;
 
 import dao.ventaDao;
+import dao.UsuarioDAO;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import modelo.venta;
+import modelo.Usuario;
 
 @ManagedBean
 @ApplicationScoped
@@ -24,6 +26,7 @@ public class ventaBean {
     List<venta> lstVentas = new ArrayList<>();
     List<venta> lstVentasFiltered = new ArrayList<>();
     ventaDao ventaDAO = new ventaDao();
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
     
     // Filtros
     private String search;
@@ -36,36 +39,61 @@ public class ventaBean {
     private String fechaDesdeStr;
     private String fechaHastaStr;
     
+    private boolean filtrosAplicados = false;
+    
+    public void listarInicial(){
+        // Solo listar si no hay filtros aplicados
+        if (!filtrosAplicados && (search == null || search.trim().isEmpty()) && 
+            (metodoPago == null || metodoPago.trim().isEmpty())) {
+            listar();
+        }
+    }
+    
     public void listar(){
         venta = new venta();
         lstVentas = ventaDAO.listar();
+        lstVentasFiltered = null; // Limpiar filtros de la tabla para mostrar todos los resultados
+        filtrosAplicados = false;
     }
     
-    public void listarConFiltros(){
+    public String listarConFiltros(){
         venta = new venta();
         
-        // Convertir fechas Date a String para el SQL
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        fechaDesdeStr = null;
-        fechaHastaStr = null;
+        // Normalizar valores vacíos - manejar strings vacíos como null
+        String searchValue = null;
+        if (search != null && !search.trim().isEmpty()) {
+            searchValue = search.trim();
+        }
         
-        if (fechaDesde != null) {
-            fechaDesdeStr = sdf.format(fechaDesde);
+        String metodoPagoValue = null;
+        if (metodoPago != null && !metodoPago.trim().isEmpty()) {
+            metodoPagoValue = metodoPago.trim();
         }
-        if (fechaHasta != null) {
-            fechaHastaStr = sdf.format(fechaHasta);
-        }
+        
+        // Limpiar lista filtrada para que muestre todos los resultados
+        lstVentasFiltered = null;
+        
+        // Debug
+        System.out.println("Filtros aplicados - Search: '" + searchValue + "', MetodoPago: '" + metodoPagoValue + "'");
         
         // Si no hay filtros, listar todo
-        if ((search == null || search.trim().isEmpty()) && 
-            (metodoPago == null || metodoPago.trim().isEmpty()) &&
-            fechaDesdeStr == null &&
-            fechaHastaStr == null &&
-            totalMin == null && totalMax == null) {
+        if (searchValue == null && metodoPagoValue == null) {
+            System.out.println("No hay filtros, listando todas las ventas");
+            filtrosAplicados = false;
             listar();
         } else {
-            lstVentas = ventaDAO.listarConFiltros(search, metodoPago, fechaDesdeStr, fechaHastaStr, totalMin, totalMax);
+            // Solo pasar búsqueda y método de pago, sin fechas ni totales
+            System.out.println("Aplicando filtros...");
+            filtrosAplicados = true;
+            lstVentas = ventaDAO.listarConFiltros(searchValue, metodoPagoValue, null, null, null, null);
+            if (lstVentas == null) {
+                lstVentas = new ArrayList<>();
+            }
+            System.out.println("Ventas encontradas: " + lstVentas.size());
+            System.out.println("Lista actualizada, tamaño: " + lstVentas.size());
         }
+        
+        return null; // Mantener en la misma página
     }
     
     public String guardar(){
@@ -118,9 +146,37 @@ public class ventaBean {
         }
     }
     
-    public void actualizar(){
-        ventaDAO.actualizar(venta);
-        listar();
+    public String actualizar(){
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        
+        if (venta.getTotal() == null || venta.getTotal().compareTo(BigDecimal.ZERO) <= 0) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El total debe ser mayor a 0"));
+            return null;
+        }
+        
+        if (venta.getMetodo_pago() == null || venta.getMetodo_pago().trim().isEmpty()) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El método de pago es requerido"));
+            return null;
+        }
+        
+        if (venta.getId() == 0) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar un usuario"));
+            return null;
+        }
+        
+        boolean exito = ventaDAO.actualizar(venta);
+        if (exito) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Venta actualizada correctamente"));
+            listar();
+            return "/faces/admin/ventas/index?faces-redirect=true";
+        } else {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo actualizar la venta"));
+            return null;
+        }
+    }
+    
+    public List<Usuario> getLstUsuarios() {
+        return usuarioDAO.listarU();
     }
     
     public void eliminar(int id){
@@ -128,16 +184,13 @@ public class ventaBean {
         listar();
     }
     
-    public void limpiarFiltros(){
+    public String limpiarFiltros(){
         search = null;
         metodoPago = null;
-        fechaDesde = null;
-        fechaHasta = null;
-        fechaDesdeStr = null;
-        fechaHastaStr = null;
-        totalMin = null;
-        totalMax = null;
+        lstVentasFiltered = null;
+        filtrosAplicados = false;
         listar();
+        return null; // Mantener en la misma página
     }
     
     // Getters y Setters
@@ -150,6 +203,10 @@ public class ventaBean {
     }
 
     public List<venta> getLstVentas() {
+        // Debug para verificar que se está llamando el getter
+        if (lstVentas != null) {
+            System.out.println("getLstVentas() llamado - Tamaño de lista: " + lstVentas.size());
+        }
         return lstVentas;
     }
 
