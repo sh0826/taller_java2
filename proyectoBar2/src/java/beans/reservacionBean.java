@@ -27,12 +27,24 @@ public class reservacionBean {
     // Filtros para búsqueda
     private Integer searchId; // Filtro por ID de reservación
     private String searchOcasion; // Filtro por ocasión (texto)
+    private String searchUsuario; // Filtro por nombre de usuario
+    
+    private boolean filtrosAplicados = false;
+    
+    // Método para cargar inicialmente (solo si no hay filtros)
+    public void listarInicial(){
+        if (!filtrosAplicados && (searchId == null || searchId == 0) && 
+            (searchOcasion == null || searchOcasion.trim().isEmpty())) {
+            listar();
+        }
+    }
     
     // Método para cargar todas las reservaciones desde la base de datos
     public void listar(){
         reservacion = new reservacion(); // Limpiar el objeto del formulario
         lstReserv = reservDAO.listar(); // Llamar al DAO para obtener todas las reservaciones
         lstReservFiltered = new ArrayList<>(); // Limpiar la lista filtrada
+        filtrosAplicados = false;
     }
     
     // Método para GUARDAR una nueva reservación (retorna String para navegación JSF)
@@ -83,6 +95,17 @@ public class reservacionBean {
             return null;
         }
         
+        // Obtener automáticamente el ID del usuario desde la sesión (foreign key)
+        Object idUsuarioObj = facesContext.getExternalContext().getSessionMap().get("id_usuario");
+        if (idUsuarioObj != null) {
+            int idUsuario = ((Number) idUsuarioObj).intValue();
+            reservacion.setId_usuario(idUsuario);
+            System.out.println("ID de usuario asignado automáticamente: " + idUsuario);
+        } else {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se encontró el usuario en la sesión. Por favor, inicie sesión nuevamente."));
+            return null;
+        }
+        
         System.out.println("Validaciones pasadas, intentando insertar en BD...");
         boolean exito = reservDAO.insertar(reservacion); // Llamar al DAO para insertar en la base de datos
         
@@ -90,7 +113,7 @@ public class reservacionBean {
             System.out.println("Reservación guardada exitosamente");
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Reservación guardada correctamente")); // Mensaje de éxito
             reservacion = new reservacion(); // Limpiar el formulario
-            return "/index?faces-redirect=true"; // Redirigir al menú principal (faces-redirect=true hace redirect HTTP)
+            return "/faces/cliente/reservacion/index?faces-redirect=true"; // Redirigir a la lista de reservaciones del cliente
         } else { // Si hubo error al guardar
             System.err.println("Error al guardar la reservación en la base de datos");
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo guardar la reservación. Verifique la consola del servidor para más detalles."));
@@ -104,9 +127,38 @@ public class reservacionBean {
     }
     
     // Método para ACTUALIZAR una reservación existente
-    public void actualizar(){
-        reservDAO.actualizar(reservacion); // Actualizar en la base de datos
-        listar(); // Recargar la lista para ver los cambios
+    public String actualizar(){
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        
+        if (reservacion.getOcasion() == null || reservacion.getOcasion().trim().isEmpty()) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La ocasión es requerida"));
+            return null;
+        }
+        
+        if (reservacion.getCatindad_personas() <= 0 || reservacion.getCatindad_personas() > 80) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad de personas debe estar entre 1 y 80"));
+            return null;
+        }
+        
+        if (reservacion.getCantidad_mesas() <= 0 || reservacion.getCantidad_mesas() > 20) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad de mesas debe estar entre 1 y 20"));
+            return null;
+        }
+        
+        if (reservacion.getFecha_reservacion() == null) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La fecha de reservación es requerida"));
+            return null;
+        }
+        
+        boolean exito = reservDAO.actualizar(reservacion); // Actualizar en la base de datos
+        if (exito) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Reservación actualizada correctamente"));
+            listar(); // Recargar la lista para ver los cambios
+            return "/faces/cliente/reservacion/index?faces-redirect=true";
+        } else {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo actualizar la reservación"));
+            return null;
+        }
     }
     
     // Método para ELIMINAR una reservación por ID
@@ -149,39 +201,88 @@ public class reservacionBean {
     }
     
     // Método para FILTRAR las reservaciones según los criterios de búsqueda
-    public void listarConFiltros() {
+    public String listarConFiltros() {
         listar(); // Primero cargar todas las reservaciones
         lstReservFiltered = new ArrayList<>(); // Inicializar lista filtrada vacía
         
-        // Recorrer todas las reservaciones
-        for (reservacion res : lstReserv) {
-            boolean match = true; // Bandera para indicar si cumple con los filtros
-            
-            // Filtrar por ID: si se ingresó un ID, debe coincidir exactamente
-            if (searchId != null && searchId > 0) {
-                if (res.getId_reservacion() != searchId) {
-                    match = false; // No coincide, excluir de resultados
+        // Normalizar valores
+        Integer idValue = null;
+        if (searchId != null) {
+            try {
+                // Asegurar que sea un entero válido
+                if (searchId > 0) {
+                    idValue = searchId.intValue();
+                    System.out.println("ID capturado correctamente: " + idValue + " (tipo original: " + searchId.getClass().getName() + ")");
+                } else {
+                    System.out.println("ID debe ser mayor a 0. Valor recibido: " + searchId);
                 }
+            } catch (Exception e) {
+                System.err.println("Error al convertir searchId a Integer: " + e.getMessage());
+                idValue = null;
             }
-            
-            // Filtrar por ocasión: si se ingresó texto, debe contenerlo (búsqueda parcial, sin distinguir mayúsculas)
-            if (searchOcasion != null && !searchOcasion.trim().isEmpty()) {
-                if (res.getOcasion() == null || !res.getOcasion().toLowerCase().contains(searchOcasion.toLowerCase())) {
-                    match = false; // No contiene el texto, excluir de resultados
-                }
-            }
-            
-            if (match) { // Si cumple con todos los filtros
-                lstReservFiltered.add(res); // Agregar a la lista filtrada
-            }
+        } else {
+            System.out.println("ID no proporcionado (searchId es null)");
         }
+        
+        String ocasionValue = (searchOcasion != null && !searchOcasion.trim().isEmpty()) ? searchOcasion.trim() : null;
+        String usuarioValue = (searchUsuario != null && !searchUsuario.trim().isEmpty()) ? searchUsuario.trim() : null;
+        
+        // Debug
+        System.out.println("Filtros aplicados - ID: '" + idValue + "', Ocasión: '" + ocasionValue + "', Usuario: '" + usuarioValue + "'");
+        System.out.println("Total reservaciones cargadas: " + lstReserv.size());
+        
+        // Si no hay filtros, mostrar todas
+        if (idValue == null && ocasionValue == null && usuarioValue == null) {
+            System.out.println("No hay filtros, mostrando todas las reservaciones");
+            filtrosAplicados = false;
+            lstReservFiltered = new ArrayList<>(); // Lista vacía para que muestre todas
+        } else {
+            filtrosAplicados = true;
+            // Recorrer todas las reservaciones
+            for (reservacion res : lstReserv) {
+                boolean match = true; // Bandera para indicar si cumple con los filtros
+                
+                // Filtrar por ID: si se ingresó un ID, debe coincidir exactamente
+                if (idValue != null) {
+                    System.out.println("Comparando ID: buscado=" + idValue + ", encontrado=" + res.getId_reservacion());
+                    if (res.getId_reservacion() != idValue) {
+                        match = false; // No coincide, excluir de resultados
+                    }
+                }
+                
+                // Filtrar por ocasión: si se ingresó texto, debe contenerlo (búsqueda parcial, sin distinguir mayúsculas)
+                if (ocasionValue != null && match) {
+                    if (res.getOcasion() == null || !res.getOcasion().toLowerCase().contains(ocasionValue.toLowerCase())) {
+                        match = false; // No contiene el texto, excluir de resultados
+                    }
+                }
+                
+                // Filtrar por nombre de usuario: si se ingresó texto, debe contenerlo (búsqueda parcial, sin distinguir mayúsculas)
+                if (usuarioValue != null && match) {
+                    if (res.getNombre_usuario() == null || !res.getNombre_usuario().toLowerCase().contains(usuarioValue.toLowerCase())) {
+                        match = false; // No contiene el texto, excluir de resultados
+                    }
+                }
+                
+                if (match) { // Si cumple con todos los filtros
+                    lstReservFiltered.add(res); // Agregar a la lista filtrada
+                }
+            }
+            System.out.println("Reservaciones encontradas: " + lstReservFiltered.size());
+        }
+        
+        return null; // Mantener en la misma página
     }
     
     // Método para LIMPIAR los filtros y mostrar todas las reservaciones
-    public void limpiarFiltros() {
+    public String limpiarFiltros() {
         searchId = null; // Limpiar filtro de ID
         searchOcasion = null; // Limpiar filtro de ocasión
+        searchUsuario = null; // Limpiar filtro de usuario
+        lstReservFiltered = new ArrayList<>(); // Limpiar lista filtrada
+        filtrosAplicados = false;
         listar(); // Recargar todas las reservaciones
+        return null; // Mantener en la misma página
     }
 
     public Integer getSearchId() {
@@ -198,5 +299,13 @@ public class reservacionBean {
 
     public void setSearchOcasion(String searchOcasion) {
         this.searchOcasion = searchOcasion;
+    }
+
+    public String getSearchUsuario() {
+        return searchUsuario;
+    }
+
+    public void setSearchUsuario(String searchUsuario) {
+        this.searchUsuario = searchUsuario;
     }
 }

@@ -6,6 +6,7 @@ package modelo;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -65,6 +66,14 @@ public class venta {
 
     public void setNombre_usuario(String nombre_usuario) {
         this.nombre_usuario = nombre_usuario;
+    }
+    
+    public String getFechaFormateada() {
+        if (fecha == null) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(fecha);
     }
 }
 

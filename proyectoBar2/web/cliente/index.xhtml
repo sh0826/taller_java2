@@ -21,6 +21,8 @@
         <h2>#{loginBean.nombreUsuario}</h2>
         <center>
             <h:form>
+                <h:commandButton value="Reservciones" action="/faces/cliente/reservacion/index"/>
+                <br/><br/>
                  <h:commandButton value="Administrar Boleta" action="/faces/cliente/boleta/index"/>
                 <br/><br/>
                 <h:commandButton value="Cerrar Sesión" actionListener="#{loginBean.cerrar_sesion()}" />

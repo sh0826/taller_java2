@@ -95,7 +95,14 @@ public class ventaDao {
             while (rs.next()) {
                 venta v = new venta();
                 v.setId_venta(rs.getInt("id_venta"));
-                v.setFecha(rs.getTimestamp("fecha"));
+                // Obtener el Timestamp directamente
+                Timestamp fecha = rs.getTimestamp("fecha");
+                v.setFecha(fecha);
+                if (fecha != null) {
+                    System.out.println("Fecha obtenida: " + fecha.toString());
+                } else {
+                    System.out.println("ADVERTENCIA: Fecha es null para venta ID: " + rs.getInt("id_venta"));
+                }
                 v.setTotal(rs.getBigDecimal("total"));
                 v.setMetodo_pago(rs.getString("metodo_pago"));
                 v.setId(rs.getInt("id_usuario")); // ID del usuario (foreign key)
@@ -166,7 +173,14 @@ public class ventaDao {
             while (rs.next()) {
                 venta v = new venta();
                 v.setId_venta(rs.getInt("id_venta"));
-                v.setFecha(rs.getTimestamp("fecha"));
+                // Obtener el Timestamp directamente
+                Timestamp fecha = rs.getTimestamp("fecha");
+                v.setFecha(fecha);
+                if (fecha != null) {
+                    System.out.println("Fecha obtenida: " + fecha.toString());
+                } else {
+                    System.out.println("ADVERTENCIA: Fecha es null para venta ID: " + rs.getInt("id_venta"));
+                }
                 v.setTotal(rs.getBigDecimal("total"));
                 v.setMetodo_pago(rs.getString("metodo_pago"));
                 v.setId(rs.getInt("id_usuario")); // ID del usuario (foreign key)
@@ -176,6 +190,11 @@ public class ventaDao {
             
         } catch (SQLException e) {
             System.err.println("Error al listar ventas con filtros: " + e.getMessage());
+            e.printStackTrace();
+            // Retornar lista vacía en caso de error en lugar de null
+            if (lista == null) {
+                lista = new ArrayList<>();
+            }
         }
         
         return lista;

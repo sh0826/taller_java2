@@ -169,6 +169,16 @@
                             <h:commandLink value="Menú" class="btn btn-dashboard btn-outline-dark me-1" action="/faces/index" />
                             <h:commandLink value="Reservaciones" class="btn btn-dashboard btn-outline-dark me-1" action="/faces/reservacion/empleado/index" />
                             <h:commandLink value="Nueva Venta" class="btn btn-dashboard btn-dark me-1" action="/faces/ventas/empleado/create" />
+                            <span class="ms-2">
+                                <p:commandLink ajax="false" styleClass="btn btn-sm btn-danger me-1" title="Exportar PDF">
+                                    PDF
+                                    <p:dataExporter target="dtVentas" type="pdf" fileName="Ventas_Empleado" />
+                                </p:commandLink>
+                                <p:commandLink ajax="false" styleClass="btn btn-sm btn-success" title="Exportar Excel">
+                                    Excel
+                                    <p:dataExporter target="dtVentas" type="xls" fileName="Ventas_Empleado" />
+                                </p:commandLink>
+                            </span>
                         </div>
                 
                         <!-- Filtros de búsqueda compactos -->
@@ -178,25 +188,35 @@
                             </div>
                             <div class="card-body" style="padding: 10px;">
                                 <div class="row g-2">
-                                    <div class="col-md-3">
-                                        <h:outputLabel for="fechaDesde" value="Desde:" styleClass="form-label" />
-                                        <p:calendar id="fechaDesde" value="#{ventaBean.fechaDesde}" 
-                                                  pattern="yyyy-MM-dd" showOn="button" 
-                                                  styleClass="form-control" />
+                                    <div class="col-md-4">
+                                        <h:outputLabel for="search" value="Buscar por Nombre de Usuario:" styleClass="form-label" />
+                                        <p:inputText id="search" value="#{ventaBean.search}" 
+                                                    styleClass="form-control" 
+                                                    placeholder="Nombre del usuario..." />
                                     </div>
                                     
-                                    <div class="col-md-3">
-                                        <h:outputLabel for="fechaHasta" value="Hasta:" styleClass="form-label" />
-                                        <p:calendar id="fechaHasta" value="#{ventaBean.fechaHasta}" 
-                                                  pattern="yyyy-MM-dd" showOn="button" 
-                                                  styleClass="form-control" />
+                                    <div class="col-md-4">
+                                        <h:outputLabel for="metodoPago" value="Método de Pago:" styleClass="form-label" />
+                                        <h:selectOneMenu id="metodoPago" value="#{ventaBean.metodoPago}" 
+                                                       styleClass="form-select">
+                                            <f:selectItem itemLabel="Todos" itemValue="" />
+                                            <f:selectItem itemLabel="Efectivo" itemValue="efectivo" />
+                                            <f:selectItem itemLabel="Tarjeta" itemValue="tarjeta" />
+                                            <f:selectItem itemLabel="Transferencia" itemValue="transferencia" />
+                                        </h:selectOneMenu>
                                     </div>
                                     
-                                    <div class="col-md-6 d-flex align-items-end">
-                                        <h:commandButton value="Filtrar" action="#{ventaBean.listarConFiltros()}" 
-                                                       styleClass="btn btn-dark me-1" />
-                                        <h:commandButton value="Limpiar" action="#{ventaBean.limpiarFiltros()}" 
-                                                       styleClass="btn btn-outline-dark" />
+                                    <div class="col-md-4 d-flex align-items-end">
+                                        <p:commandButton value="Filtrar" action="#{ventaBean.listarConFiltros()}" 
+                                                       styleClass="btn btn-dark me-1" 
+                                                       process="@form"
+                                                       update="dtVentas messages"
+                                                       ajax="true" />
+                                        <p:commandButton value="Limpiar" action="#{ventaBean.limpiarFiltros()}" 
+                                                       styleClass="btn btn-outline-dark"
+                                                       process="@form"
+                                                       update="search metodoPago dtVentas messages"
+                                                       ajax="true" />
                                     </div>
                                 </div>
                             </div>
@@ -210,46 +230,32 @@
                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
                             rowsPerPageTemplate="15,30,50"
-                            filteredValue="#{ventaBean.lstVentasFiltered}">
+                            >
                     
             
-                    <p:column headerText="ID">
+                    <p:column headerText="ID" exportable="true">
                         <h:outputText value="#{venta.id_venta}" />
                     </p:column>
                     
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputLabel value="Fecha" />
-                        </f:facet>
-                        <h:outputText value="#{venta.fecha}">
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                        </h:outputText>
+                    <p:column headerText="Fecha y Hora" exportable="true">
+                        <h:outputText value="#{venta.fechaFormateada}" />
                     </p:column>
                     
-                    <p:column style="text-align: center;">
-                        <f:facet name="header">
-                            <h:outputLabel value="Total" />
-                        </f:facet>
+                    <p:column headerText="Total" style="text-align: center;" exportable="true">
                         <h:outputText value="#{venta.total}">
                             <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
                         </h:outputText>
                     </p:column>
                     
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputLabel value="Método de Pago" />
-                        </f:facet>
+                    <p:column headerText="Método de Pago" exportable="true">
                         <h:outputText value="#{venta.metodo_pago}" />
                     </p:column>
                     
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputLabel value="Usuario" />
-                        </f:facet>
+                    <p:column headerText="Usuario" exportable="true">
                         <h:outputText value="#{venta.nombre_usuario}" />
                     </p:column>
                     
-                    <p:column exportable="false">
+                    <p:column headerText="Acciones" exportable="false">
                         <f:facet name="header">
                             <h:outputLabel value="Acciones" />
                         </f:facet>

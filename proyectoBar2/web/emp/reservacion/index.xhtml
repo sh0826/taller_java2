@@ -122,7 +122,7 @@
         </style>
     </h:head>
     <h:body>
-        <f:event type="preRenderView" listener="#{reservacionBean.listar()}" />
+        <f:event type="preRenderView" listener="#{reservacionBean.listarInicial()}" />
         <div class="container-fluid mt-4">
             <div class="card">
                 <div class="card-header">
@@ -135,6 +135,16 @@
                         <div class="mb-2">
                             <h:commandLink value="Menú" class="btn btn-dashboard btn-outline-dark me-1" action="/faces/index" />
                             <h:commandLink value="Ventas" class="btn btn-dashboard btn-outline-dark me-1" action="/faces/ventas/empleado/index" />
+                            <span class="ms-2">
+                                <p:commandLink ajax="false" styleClass="btn btn-sm btn-danger me-1" title="Exportar PDF">
+                                    PDF
+                                    <p:dataExporter target="dtReserv" type="pdf" fileName="Reservaciones_Empleado" />
+                                </p:commandLink>
+                                <p:commandLink ajax="false" styleClass="btn btn-sm btn-success" title="Exportar Excel">
+                                    Excel
+                                    <p:dataExporter target="dtReserv" type="xls" fileName="Reservaciones_Empleado" />
+                                </p:commandLink>
+                            </span>
                         </div>
                         
                         <!-- Filtros de búsqueda compactos -->
@@ -144,23 +154,37 @@
                             </div>
                             <div class="card-body" style="padding: 10px;">
                                 <div class="row g-2">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <h:outputLabel for="searchId" value="ID:" styleClass="form-label" />
                                         <p:inputNumber id="searchId" value="#{reservacionBean.searchId}" 
-                                                      styleClass="form-control" />
+                                                    styleClass="form-control"
+                                                    decimalPlaces="0"
+                                                    minValue="1"
+                                                    placeholder="ID de reservación" />
                                     </div>
                                     
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <h:outputLabel for="searchOcasion" value="Ocasión:" styleClass="form-label" />
                                         <h:inputText id="searchOcasion" value="#{reservacionBean.searchOcasion}" 
                                                     styleClass="form-control" />
                                     </div>
                                     
-                                    <div class="col-md-6 d-flex align-items-end">
-                                        <h:commandButton value="Filtrar" action="#{reservacionBean.listarConFiltros()}" 
-                                                       styleClass="btn btn-dark me-1" />
-                                        <h:commandButton value="Limpiar" action="#{reservacionBean.limpiarFiltros()}" 
-                                                       styleClass="btn btn-outline-dark" />
+                                    <div class="col-md-3">
+                                        <h:outputLabel for="searchUsuario" value="Nombre Cliente:" styleClass="form-label" />
+                                        <h:inputText id="searchUsuario" value="#{reservacionBean.searchUsuario}" 
+                                                    styleClass="form-control" 
+                                                    placeholder="Nombre del cliente..." />
+                                    </div>
+                                    
+                                    <div class="col-md-5 d-flex align-items-end">
+                                        <p:commandButton value="Filtrar" action="#{reservacionBean.listarConFiltros()}" 
+                                                       styleClass="btn btn-dark me-1" 
+                                                       process="@form"
+                                                       update="dtReserv messages" />
+                                        <p:commandButton value="Limpiar" action="#{reservacionBean.limpiarFiltros()}" 
+                                                       styleClass="btn btn-outline-dark"
+                                                       process="@form"
+                                                       update="searchId searchOcasion searchUsuario dtReserv messages" />
                                     </div>
                                 </div>
                             </div>
@@ -176,41 +200,33 @@
                                     currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
                                     rowsPerPageTemplate="5,10,15,20">
                 
-                <p:column headerText="ID" style="text-align: center;">                    
+                <p:column headerText="ID" style="text-align: center;" exportable="true">                    
                     <h:outputText value="#{reserv.id_reservacion}" />
                 </p:column>
                 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Ocasión" />
-                    </f:facet>
+                <p:column headerText="Ocasión" exportable="true">
                     <h:outputText value="#{reserv.ocasion}" />
                 </p:column>
                 
-                <p:column style="text-align: center;">
-                    <f:facet name="header">
-                        <h:outputLabel value="Cantidad de Personas" />
-                    </f:facet>
+                <p:column headerText="Cantidad de Personas" style="text-align: center;" exportable="true">
                     <h:outputText value="#{reserv.catindad_personas}" />
                 </p:column>
                 
-                <p:column style="text-align: center;">
-                    <f:facet name="header">
-                        <h:outputLabel value="Cantidad de Mesas" />
-                    </f:facet>
+                <p:column headerText="Cantidad de Mesas" style="text-align: center;" exportable="true">
                     <h:outputText value="#{reserv.cantidad_mesas}" />
                 </p:column>
                 
-                <p:column style="text-align: center;">
-                    <f:facet name="header">
-                        <h:outputLabel value="Fecha de Reservación" />
-                    </f:facet>
+                <p:column headerText="Fecha de Reservación" style="text-align: center;" exportable="true">
                     <h:outputText value="#{reserv.fecha_reservacion}">
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>
                 </p:column>
                 
-                <p:column style="text-align: center;">
+                <p:column headerText="Cliente" exportable="true">
+                    <h:outputText value="#{reserv.nombre_usuario}" />
+                </p:column>
+                
+                <p:column headerText="Opciones" style="text-align: center;" exportable="false">
                     <f:facet name="header">
                         <h:outputLabel value="Opciones" />
                     </f:facet>

@@ -62,4 +62,46 @@ public class DetalleVentaDAO {
         ps.setInt(1, id);
         ps.executeUpdate();
     }
+    
+    public List<DetalleVenta> listarConFiltros(Integer idVenta, Integer idProducto, String descripcion) throws Exception {
+        List<DetalleVenta> lista = new ArrayList<>();
+        conn = ConnBD.conectar();
+        StringBuilder sql = new StringBuilder("SELECT * FROM detalle_venta WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+        
+        if (idVenta != null && idVenta > 0) {
+            sql.append(" AND id_venta = ?");
+            params.add(idVenta);
+        }
+        
+        if (idProducto != null && idProducto > 0) {
+            sql.append(" AND id_producto = ?");
+            params.add(idProducto);
+        }
+        
+        if (descripcion != null && !descripcion.trim().isEmpty()) {
+            sql.append(" AND descripcion LIKE ?");
+            params.add("%" + descripcion + "%");
+        }
+        
+        sql.append(" ORDER BY id_detalleV DESC");
+        
+        ps = conn.prepareStatement(sql.toString());
+        for (int i = 0; i < params.size(); i++) {
+            ps.setObject(i + 1, params.get(i));
+        }
+        
+        rs = ps.executeQuery();
+        while(rs.next()) {
+            DetalleVenta d = new DetalleVenta();
+            d.setId_detalleV(rs.getInt("id_detalleV"));
+            d.setId_venta(rs.getInt("id_venta"));
+            d.setId_producto(rs.getInt("id_producto"));
+            d.setDescripcion(rs.getString("descripcion"));
+            d.setCantidad_productos(rs.getInt("cantidad_productos"));
+            d.setPrecio_unitario(rs.getDouble("precio_unitario"));
+            lista.add(d);
+        }
+        return lista;
+    }
 }
