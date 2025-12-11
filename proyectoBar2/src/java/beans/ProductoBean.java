@@ -21,14 +21,26 @@ public class ProductoBean implements Serializable {
 
     private ProductoDAO dao = new ProductoDAO();
 
-    public Producto getProducto() { return producto; }
-    public void setProducto(Producto producto) { this.producto = producto; }
+    public Producto getProducto() { 
+        return producto; 
+    }
+    public void setProducto(Producto producto) { 
+        this.producto = producto; 
+    }
 
-    public String getFiltroNombre() { return filtroNombre; }
-    public void setFiltroNombre(String filtroNombre) { this.filtroNombre = filtroNombre; }
+    public String getFiltroNombre() { 
+        return filtroNombre; 
+    }
+    public void setFiltroNombre(String filtroNombre) { 
+        this.filtroNombre = filtroNombre; 
+    }
 
-    public String getFiltroTipo() { return filtroTipo; }
-    public void setFiltroTipo(String filtroTipo) { this.filtroTipo = filtroTipo; }
+    public String getFiltroTipo() { 
+        return filtroTipo; 
+    }
+    public void setFiltroTipo(String filtroTipo) { 
+        this.filtroTipo = filtroTipo; 
+    }
 
     public List<Producto> getListaFiltrada() {
         if (listaFiltrada == null) {  
@@ -93,8 +105,7 @@ public class ProductoBean implements Serializable {
                 boolean coincide = true;
 
                 if (filtroNombre != null && !filtroNombre.isEmpty()) {
-                    coincide &= p.getNombre().toLowerCase()
-                            .contains(filtroNombre.toLowerCase());
+                    coincide &= p.getNombre().toLowerCase().contains(filtroNombre.toLowerCase());
                 }
 
                 if (filtroTipo != null && !filtroTipo.isEmpty()) {
@@ -107,7 +118,7 @@ public class ProductoBean implements Serializable {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();    
         }
     }
 
@@ -118,4 +129,15 @@ public class ProductoBean implements Serializable {
             e.printStackTrace();
         }
     }
+    
+public void exportarPDF() {
+    System.out.println("Exportando PDF...");
+    // Aquí colocarás el código real para generar el PDF
+}
+
+public void exportarExcel() {
+    System.out.println("Exportando Excel...");
+    // Aquí colocarás el código real para generar el Excel
+}
+
 }
