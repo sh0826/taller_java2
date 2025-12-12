@@ -171,7 +171,6 @@
                 
                 <br/><br/>
                 
-                <!-- Filtros -->
                 <div class="card mb-3">
                     <div class="card-header">
                         <h5 class="mb-0" style="color: #C89B3C;">Filtros de Búsqueda</h5>
@@ -203,6 +202,10 @@
                                         style="margin-left: 10px;" />
                     </div>
                 </div>
+
+            <div class="mb-3">
+        <h2 class="text-center text-primary">Administrar Boletas</h2>            
+            <h:form>
                 
                 <h:dataTable value="#{boletaBean.listaFiltrada}" var="boleta" 
                             styleClass="tabla-dark w-100"
@@ -261,6 +264,7 @@
                     </h:column>
                 </h:dataTable>            
             </h:form>
+        </div>
         </div>
     </h:body>
 </ui:define>

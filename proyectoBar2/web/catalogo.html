@@ -2,13 +2,11 @@
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
-        <f:event type="preRenderView" listener="#{eventoBean.listar}" />
-        
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<f:event type="preRenderView" listener="#{producto.listar}" />
+
 <style>
     body {
         background: #f8f9fa;
@@ -302,6 +300,7 @@
 
     }
 </style>
+
 <nav class="navbar-custom d-flex justify-content-between align-items-center">
     <img src="/proyectoBar2/imagenes/logo1.svg" alt="Logo" style="height:150px" />
     <div>
@@ -320,42 +319,27 @@
 
 
 <h:form>
-    <div class="stats-container">
-        <div class="stat-card">
-            <div class="stat-label">Total de Eventos</div>
-            <div class="stat-value">#{eventoBean.totalEventos}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Próximos Eventos</div>
-            <div class="stat-value">#{eventoBean.proximosEventos}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Capacidad Total</div>
-            <div class="stat-value">#{eventoBean.capacidadTotal}</div>
-        </div>
-    </div>
-
-    <h:panelGroup rendered="#{empty eventoBean.lstEvento}">
+    <h:panelGroup rendered="#{empty productoBean.lstProducto}">
         <div class="empty-state">
             <div class="empty-state-icon">📅</div>
-            <div class="empty-state-message">No hay eventos registrados</div>
+            <div class="empty-state-message">No hay productos registrados</div>
             <h:commandLink value="Crear Primer Evento" styleClass="btn-new-event" action="nuevo" />
         </div>
     </h:panelGroup>
 
-    <div class="events-grid" rendered="#{not empty eventoBean.lstEvento}">
-        <ui:repeat value="#{eventoBean.lstEvento}" var="evento">
+    <div class="events-grid" rendered="#{not empty productoBean.lstProducto}">
+        <ui:repeat value="#{producto.lstProducto}" var="producto">
             <div class="event-card">
                 <div class="event-image-container">
-                    <h:graphicImage value="/ImgEventos/#{evento.id_evento}.png" alt="#{evento.nombre_evento}"
-                        styleClass="event-image" rendered="#{not empty evento.imagen}" />
-                    <div class="event-image-placeholder" rendered="#{empty evento.imagen}">
+                    <h:graphicImage value="/ImgProductos/#{producto.id_producto}.png" alt="#{producto.nombre}"
+                        styleClass="event-image" rendered="#{not empty prodcuto.imagen}" />
+                    <div class="event-image-placeholder" rendered="#{empty producto.imagen}">
                         🎉
                     </div>
                 </div>
 
                 <div class="event-content">
-                    <h3 class="event-title">#{evento.nombre_evento}</h3>
+                    <h3 class="event-title">#{producto.nombre}</h3>
 
                     <p class="event-description">#{evento.descripcion}</p>
 

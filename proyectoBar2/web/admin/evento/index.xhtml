@@ -89,7 +89,7 @@
                         style="width: 100%; padding: 5px; background: #262626; color: #eee; border: 1px solid #444;" />
 
                     <h:outputLabel value="" />
-                    <h:panelGroup span="3">
+                    <h:panelGroup>
                         <p:commandButton value="Buscar" action="#{eventoBean.buscar}" update="dtEventos messages"
                             process="@form" styleClass="boton" style="margin-right: 10px;" ajax="true" />
                         <p:commandButton value="Limpiar Filtros" action="#{eventoBean.limpiarFiltros}"
@@ -165,7 +165,7 @@
 
                     <p:column headerText="Imagen">
                         <center>
-                            <img src="#{evento.imagen}" height="30" />
+                            <h:graphicImage value="/ImgEventos/#{evento.id_evento}.png" height="30" />
                         </center>
                         <f:facet name="exportar">
                             <h:outputText value="#{evento.imagen}" />

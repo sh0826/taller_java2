@@ -142,7 +142,7 @@ public class EventoBean implements Serializable {
                 // Actualizar la ruta de la imagen en la base de datos
                 evento.setId_evento(idGenerado);
                 // Usar ruta relativa (compatible con las rutas existentes)
-                evento.setImagen("../ImgEventos/" + idGenerado + ".png");
+                evento.setImagen("ImgEventos/" + idGenerado + ".png");
                 getEventoDAO().actualizar(evento);
             }
             
@@ -252,7 +252,7 @@ public class EventoBean implements Serializable {
                 in.close();
                 
                 // Establecer la ruta correcta de la imagen (ruta relativa compatible)
-                evento.setImagen("../ImgEventos/" + nombreArchivo);
+                evento.setImagen("ImgEventos/" + nombreArchivo);
             } catch (IOException e){
                 e.printStackTrace();
                 FacesMessage msg = new FacesMessage(
