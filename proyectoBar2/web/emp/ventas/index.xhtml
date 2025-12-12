@@ -70,7 +70,7 @@
         <h:form>
             <p:messages id="messages" showDetail="true" closable="true" />
           <!-- Panel de Filtros -->
-            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px; display: block !important; visibility: visible !important;">
                 <h3 style="color: #C89B3C; margin-top: 0;">Filtros de Búsqueda</h3>
                 <h:panelGrid columns="2" cellpadding="5" style="width: 100%;">
                     <h:outputLabel value="Buscar por Nombre:" style="color: #C89B3C;" />
@@ -108,11 +108,7 @@
                     </h:panelGroup>
                 </h:panelGrid>
             </div>
-            <div class="text-center mb-1">
-                    <h:commandLink value="Nueva Venta"
-                                   styleClass="boton"
-                                   action="/faces/emp/ventas/create" />
-                </div>
+           
             
             <div class="container">
                 
@@ -189,11 +185,7 @@
                            actionListener="#{ventaBean.verDetalle(venta.id_venta)}"
                            action="/faces/emp/detalleVenta/index?faces-redirect=true" />
             <br/>
-            <h:commandLink value="Eliminar"
-                           styleClass="boton"
-                           actionListener="#{ventaBean.eliminar(venta.id_venta)}"
-                           onclick="return confirm('¿Está seguro de ELIMINAR la Venta ID: #{venta.id_venta}?');" />
-        </div>
+            </div>
     </p:column>
 </p:dataTable>
                 
