@@ -239,7 +239,7 @@
             </div>
             
             <div style="margin: 20px 0; text-align: center;">
-                <p:commandButton value="#{detalleVentaBean.mostrarAgrupado ? 'Ver Detalles Individuales' : 'Ver Totales por Producto'}" 
+                <p:commandButton value="#{detalleVentaBean.mostrarAgrupado ? 'Ver Detalles Individuales' : 'Ver Totales por Descripción'}" 
                                  action="#{detalleVentaBean.alternarVista}" 
                                  update="dtDetalleVenta dtDetalleVentaAgrupado formDetalleVenta"
                                  process="@this"
@@ -258,7 +258,7 @@
             <!-- Tabla de Detalles Agrupados por Producto -->
             <h:panelGroup rendered="#{detalleVentaBean.mostrarAgrupado}">
             <div class="container">
-                <h3 style="color: #C89B3C; margin: 20px 0;">Totales de Ventas por Producto</h3>
+                <h3 style="color: #C89B3C; margin: 20px 0;">Totales de Ventas por Descripción</h3>
                 <p:dataTable id="dtDetalleVentaAgrupado" value="#{detalleVentaBean.listaAgrupada}" var="d" 
                             styleClass="table table-bordered shadow-sm miAutoTabla"
                             style="font-size:15px;"
@@ -278,6 +278,10 @@
                     
                     <p:column headerText="Descripción">
                         <h:outputText value="#{d.descripcion}" style="display:block; padding:10px 5px; color:black;" />
+                    </p:column>
+                    
+                    <p:column headerText="Cantidad de Compras">
+                        <h:outputText value="#{d.cantidadCompras}" style="display:block; padding:10px 5px; color:black; font-weight: bold; color: #C89B3C;" />
                     </p:column>
                     
                     <p:column headerText="Total Cantidad Vendida">

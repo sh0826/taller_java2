@@ -132,8 +132,8 @@ public class DetalleVentaDAO {
     }
     
     /**
-     * Agrupa los detalles de venta por producto, sumando las cantidades totales
-     * y mostrando el precio unitario del producto
+     * Agrupa los detalles de venta por descripción, sumando las cantidades totales,
+     * contando cuántas compras se hicieron y mostrando el precio unitario
      */
     public List<DetalleVentaAgrupado> listarAgrupadoPorProducto(Integer idVenta) throws Exception {
         List<DetalleVentaAgrupado> lista = new ArrayList<>();
@@ -141,10 +141,11 @@ public class DetalleVentaDAO {
         
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT dv.id_producto, ");
-        sql.append("       MAX(dv.descripcion) as descripcion, ");
+        sql.append("       dv.descripcion, ");
         sql.append("       COALESCE(p.nombre, 'Producto Desconocido') as nombre_producto, ");
         sql.append("       SUM(dv.cantidad_productos) as total_cantidad, ");
-        sql.append("       MAX(dv.precio_unitario) as precio_unitario ");
+        sql.append("       MAX(dv.precio_unitario) as precio_unitario, ");
+        sql.append("       COUNT(*) as cantidad_compras ");
         sql.append("FROM detalle_venta dv ");
         sql.append("LEFT JOIN producto p ON dv.id_producto = p.id_producto ");
         sql.append("WHERE 1=1 ");
@@ -156,8 +157,8 @@ public class DetalleVentaDAO {
             params.add(idVenta);
         }
         
-        sql.append("GROUP BY dv.id_producto ");
-        sql.append("ORDER BY total_cantidad DESC, dv.id_producto");
+        sql.append("GROUP BY dv.id_producto, dv.descripcion ");
+        sql.append("ORDER BY total_cantidad DESC, dv.descripcion");
         
         ps = conn.prepareStatement(sql.toString());
         for (int i = 0; i < params.size(); i++) {
@@ -172,6 +173,7 @@ public class DetalleVentaDAO {
             d.setNombreProducto(rs.getString("nombre_producto"));
             d.setTotalCantidad(rs.getInt("total_cantidad"));
             d.setPrecioUnitario(rs.getDouble("precio_unitario"));
+            d.setCantidadCompras(rs.getInt("cantidad_compras"));
             lista.add(d);
         }
         return lista;

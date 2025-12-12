@@ -13,142 +13,199 @@
     <ui:define name="contenido">
     <h:head>
         <title>Editar Reservación</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
         <style>
             body {
-                background: #f5f5f5;
-                min-height: 100vh;
-                padding: 15px 0;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: #111 !important;
+                color: #C89B3C !important;
             }
-            .card {
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                background: white;
-            }
-            .card-header {
-                background: #000 !important;
-                color: white !important;
-                border-radius: 8px 8px 0 0 !important;
-                padding: 12px 20px !important;
-            }
-            .card-body {
+            
+            .dashboard-container {
+                margin: 20px 0;
                 padding: 20px;
+                background: #1a1a1a;
+                border: 1px solid #333;
+                border-radius: 5px;
             }
+            
+            h2 {
+                color: #C89B3C !important;
+            }
+            
+            .nav-item {
+                color: #eee !important;
+                padding: 10px 18px;
+                text-decoration: none !important;
+                background: #262626;
+                border-radius: 5px;
+                transition: 0.2s;
+                display: inline-block;
+                border: none;
+            }
+
+            .nav-item:hover {
+                background: #C89B3C !important;
+                color: black !important;
+                font-weight: bold;
+            }
+            
+            a.nav-item {
+                color: #eee !important;
+                text-decoration: none !important;
+            }
+            
+            a.nav-item:hover {
+                background: #C89B3C !important;
+                color: black !important;
+                font-weight: bold;
+            }
+            
             .form-label {
-                font-size: 12px;
-                font-weight: 600;
-                color: #333;
-                margin-bottom: 5px;
+                color: #C89B3C !important;
+                font-weight: bold;
+                margin-bottom: 8px;
             }
+            
             .form-control,
             .form-select {
-                font-size: 13px;
-                padding: 6px 10px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
+                background: #262626 !important;
+                color: #eee !important;
+                border: 1px solid #444 !important;
+                padding: 10px 12px;
             }
+            
             .form-control:focus,
             .form-select:focus {
-                border-color: #000;
-                box-shadow: 0 0 0 0.2rem rgba(0,0,0,0.25);
+                background: #262626 !important;
+                color: #eee !important;
+                border-color: #C89B3C !important;
+                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
+                outline: none;
             }
+            
             .btn-primary {
-                background: #000;
-                border: 1px solid #000;
-                color: white;
-                padding: 8px 20px;
-                font-size: 13px;
-                font-weight: 600;
+                background: #6D0823 !important;
+                border-color: #6D0823 !important;
+                color: white !important;
+                padding: 10px 20px;
             }
+            
             .btn-primary:hover {
-                background: #333;
-                border-color: #333;
+                background: #C89B3C !important;
+                border-color: #C89B3C !important;
+                color: black !important;
+                font-weight: bold;
             }
+            
             .btn-secondary {
-                background: white;
-                border: 1px solid #333;
-                color: #000;
-                padding: 8px 20px;
-                font-size: 13px;
+                background: #262626 !important;
+                border-color: #333 !important;
+                color: #C89B3C !important;
+                padding: 10px 20px;
             }
+            
             .btn-secondary:hover {
-                background: #f5f5f5;
+                background: #333 !important;
+                color: #C89B3C !important;
             }
+            
             .text-danger {
-                font-size: 11px;
+                color: #ff6b6b !important;
             }
+            
             .form-text {
-                font-size: 11px;
-                color: #666;
+                color: #C89B3C !important;
+                font-size: 12px;
+            }
+            
+            /* Estilos para PrimeFaces Calendar */
+            .ui-calendar {
+                width: 100%;
+            }
+            
+            .ui-calendar .ui-inputfield {
+                background: #262626 !important;
+                color: #eee !important;
+                border: 1px solid #444 !important;
+                padding: 10px 12px !important;
+                width: 100% !important;
+            }
+            
+            .ui-calendar .ui-inputfield:focus {
+                border-color: #C89B3C !important;
+                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3) !important;
             }
         </style>
     </h:head>
-    <h:body>
+    <h:body style="background-color: #111 !important;">
         <f:event type="preRenderView" listener="#{reservacionBean.listar()}" />
-        <div class="container" style="max-width: 600px; margin-top: 20px;">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="h5 mb-0" style="font-weight: 600;">EDITAR RESERVACIÓN</h2>
-                </div>
-                <div class="card-body">
-                    <h:form id="formReservacion">
-                        <p:messages id="messages" showDetail="true" closable="true" />
-                        
-                        <h:inputHidden value="#{reservacionBean.reservacion.id_reservacion}" />
-                        
-                        <div class="mb-3">
-                            <h:outputLabel for="ocasion" value="Ocasión:" styleClass="form-label" />
-                            <h:inputText id="ocasion" value="#{reservacionBean.reservacion.ocasion}" 
-                                        styleClass="form-control" required="true" 
-                                        requiredMessage="La ocasión es requerida" />
-                            <h:message for="ocasion" styleClass="text-danger" />
-                        </div>
-                        
-                        <div class="mb-3">
-                            <h:outputLabel for="cantidadPersonas" value="Cantidad de Personas (Máximo 80):" styleClass="form-label" />
-                            <h:inputText id="cantidadPersonas" value="#{reservacionBean.reservacion.catindad_personas}" 
-                                        styleClass="form-control" required="true" 
-                                        requiredMessage="La cantidad de personas es requerida">
-                                <f:convertNumber integerOnly="true" />
-                                <f:validateLongRange minimum="1" maximum="44" />
-                            </h:inputText>
-                            <h:message for="cantidadPersonas" styleClass="text-danger" />
-                            <small class="form-text">Máximo 44 personas</small>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <h:outputLabel for="cantidadMesas" value="Cantidad de Mesas (Máximo 11):" styleClass="form-label" />
-                            <h:inputText id="cantidadMesas" value="#{reservacionBean.reservacion.cantidad_mesas}" 
-                                        styleClass="form-control" required="true" 
-                                        requiredMessage="La cantidad de mesas es requerida">
-                                <f:convertNumber integerOnly="true" />
-                                <f:validateLongRange minimum="1" maximum="11" />
-                            </h:inputText>
-                            <h:message for="cantidadMesas" styleClass="text-danger" />
-                            <small class="form-text">📌 Recordatorio: Tiene 11 mesas disponibles</small>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <h:outputLabel for="fechaReservacion" value="Fecha de Reservación:" styleClass="form-label" />
-                            <p:calendar id="fechaReservacion" value="#{reservacionBean.reservacion.fecha_reservacion}" 
-                                       pattern="dd/MM/yyyy" locale="es" showOn="button" 
-                                       mindate="#{reservacionBean.fechaHoy}"
-                                       styleClass="form-control" required="true" 
-                                       requiredMessage="La fecha de reservación es requerida" />
-                            <h:message for="fechaReservacion" styleClass="text-danger" />
-                        </div>
-                        
-                        <div class="d-flex justify-content-between mt-4">
-                            <h:commandButton value="Actualizar" action="#{reservacionBean.actualizar()}" 
-                                           styleClass="btn btn-primary" />
-                            <h:commandButton value="Cancelar" action="/faces/cliente/reservacion/index" 
-                                           styleClass="btn btn-secondary" immediate="true" />
-                        </div>
-                    </h:form>
-                </div>
+        
+        <div class="dashboard-container">
+            <!-- Botón Menú Anterior arriba -->
+            <div class="mb-3" style="margin-top: 20px;">
+                <h:form>
+                    <h:commandLink value="Menú Anterior"
+                                   styleClass="nav-item"
+                                   action="/faces/cliente/reservacion/index?faces-redirect=true" />
+                </h:form>
             </div>
+            
+            <h2 class="text-center mb-4" style="color: #C89B3C !important;">Editar Reservación</h2>
+            
+            <h:form id="formReservacion">
+                <p:messages id="messages" showDetail="true" closable="true" />
+                
+                <h:inputHidden value="#{reservacionBean.reservacion.id_reservacion}" />
+                
+                <div class="mb-3">
+                    <h:outputLabel for="ocasion" value="Ocasión:" styleClass="form-label" />
+                    <h:inputText id="ocasion" value="#{reservacionBean.reservacion.ocasion}" 
+                                styleClass="form-control" required="true" 
+                                requiredMessage="La ocasión es requerida" />
+                    <h:message for="ocasion" styleClass="text-danger" />
+                </div>
+                
+                <div class="mb-3">
+                    <h:outputLabel for="cantidadPersonas" value="Cantidad de Personas (Máximo 44):" styleClass="form-label" />
+                    <h:inputText id="cantidadPersonas" value="#{reservacionBean.reservacion.catindad_personas}" 
+                                styleClass="form-control" required="true" 
+                                requiredMessage="La cantidad de personas es requerida">
+                        <f:convertNumber integerOnly="true" />
+                        <f:validateLongRange minimum="1" maximum="44" />
+                    </h:inputText>
+                    <h:message for="cantidadPersonas" styleClass="text-danger" />
+                    <small class="form-text">Máximo 44 personas</small>
+                </div>
+                
+                <div class="mb-3">
+                    <h:outputLabel for="cantidadMesas" value="Cantidad de Mesas (Máximo 11):" styleClass="form-label" />
+                    <h:inputText id="cantidadMesas" value="#{reservacionBean.reservacion.cantidad_mesas}" 
+                                styleClass="form-control" required="true" 
+                                requiredMessage="La cantidad de mesas es requerida">
+                        <f:convertNumber integerOnly="true" />
+                        <f:validateLongRange minimum="1" maximum="11" />
+                    </h:inputText>
+                    <h:message for="cantidadMesas" styleClass="text-danger" />
+                    <small class="form-text">📌 Recordatorio: Tiene 11 mesas disponibles</small>
+                </div>
+                
+                <div class="mb-3">
+                    <h:outputLabel for="fechaReservacion" value="Fecha de Reservación:" styleClass="form-label" />
+                    <p:calendar id="fechaReservacion" value="#{reservacionBean.reservacion.fecha_reservacion}" 
+                               pattern="dd/MM/yyyy" locale="es" showOn="button" 
+                               mindate="#{reservacionBean.fechaHoy}"
+                               styleClass="form-control" required="true" 
+                               requiredMessage="La fecha de reservación es requerida" />
+                    <h:message for="fechaReservacion" styleClass="text-danger" />
+                </div>
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <h:commandButton value="Actualizar" action="#{reservacionBean.actualizar()}" 
+                                   styleClass="btn btn-primary" />
+                    <h:commandButton value="Cancelar" action="/faces/cliente/reservacion/index" 
+                                   styleClass="btn btn-secondary" immediate="true" />
+                </div>
+            </h:form>
         </div>
     </h:body>
 </ui:define>

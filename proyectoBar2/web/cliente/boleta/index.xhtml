@@ -156,8 +156,8 @@
                 <!-- Botón Menú Anterior arriba -->
                 <div class="mb-3" style="margin-top: 20px;">
                     <h:commandLink value="Menú Anterior"
-                                   styleClass="btn btn-secondary"
-                                   action="/faces/cliente/index" />
+                                   styleClass="nav-item"
+                                   action="/cliente/index?faces-redirect=true" />
                 </div>
                 
                 <h2 class="text-center mb-4" style="color: #C89B3C !important;">Administrar Boletas</h2>
@@ -202,10 +202,6 @@
                                         style="margin-left: 10px;" />
                     </div>
                 </div>
-                
-            <div class="mb-3">
-        <h2 class="text-center text-primary">Administrar Boletas</h2>            
-            <h:form>
                 
                 <h:dataTable value="#{boletaBean.listaFiltrada}" var="boleta" 
                             styleClass="tabla-dark w-100"
@@ -262,9 +258,8 @@
                                        action="#{boletaBean.eliminar(boleta.id_boleta)}" 
                                        onclick="return confirm('¿Está seguro de ELIMINAR la Boleta #{boleta.id_boleta}?');" />
                     </h:column>
-                </h:dataTable>            
+                </h:dataTable>
             </h:form>
-        </div>
         </div>
     </h:body>
 </ui:define>

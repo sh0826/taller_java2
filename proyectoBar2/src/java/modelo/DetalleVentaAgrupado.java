@@ -10,6 +10,7 @@ public class DetalleVentaAgrupado {
     private String nombreProducto;
     private Integer totalCantidad; // Suma de todas las cantidades vendidas
     private Double precioUnitario; // Precio unitario del producto
+    private Integer cantidadCompras; // Cantidad de veces que se compró (COUNT de registros)
     
     public DetalleVentaAgrupado() {}
     
@@ -60,6 +61,14 @@ public class DetalleVentaAgrupado {
 
     public void setPrecioUnitario(Double precioUnitario) {
         this.precioUnitario = precioUnitario;
+    }
+    
+    public Integer getCantidadCompras() {
+        return cantidadCompras;
+    }
+    
+    public void setCantidadCompras(Integer cantidadCompras) {
+        this.cantidadCompras = cantidadCompras;
     }
     
     public Double getTotalVenta() {

@@ -7,331 +7,193 @@
     template="/templates/clienteLayout.xhtml" xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="contenido">
-
-    <h:head>
-        <title>Nueva Boleta</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
-        <style>
-            body {
-                background: #111 !important;
-                min-height: 100vh;
-                padding: 15px 0;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            }
-            .card {
-                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-                border: 1px solid #333;
-                border-radius: 8px;
-                background: #1a1a1a;
-            }
-            .card-header {
-                background: #000 !important;
-                color: #C89B3C !important;
-                border-radius: 8px 8px 0 0 !important;
-                padding: 12px 20px !important;
-            }
-            .card-body {
-                padding: 20px;
-                background: #1a1a1a;
-            }
-            .form-label {
-                font-size: 14px;
-                font-weight: 600;
-                color: #C89B3C !important;
-                margin-bottom: 5px;
-            }
-            .form-control,
-            .form-select {
-                font-size: 13px;
-                padding: 8px 12px;
-                border: 1px solid #444;
-                border-radius: 4px;
-                background: #262626;
-                color: #eee;
-            }
-            .form-control:focus,
-            .form-select:focus {
-                border-color: #C89B3C;
-                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
-                outline: none;
-            }
-            .btn-primary {
-                background: #6D0823;
-                border: 1px solid #6D0823;
-                color: white;
-                padding: 8px 20px;
-                font-size: 13px;
-                font-weight: 600;
-            }
-            .btn-primary:hover {
-                background: #C89B3C;
-                border-color: #C89B3C;
-                color: black;
-            }
-            .btn-secondary {
-                background: #262626;
-                border: 1px solid #333;
-                color: #C89B3C;
-                padding: 8px 20px;
-                font-size: 13px;
-            }
-            .btn-secondary:hover {
-                background: #333;
-                color: #C89B3C;
-            }
-            .text-danger {
-                font-size: 11px;
-                color: #ff6b6b !important;
-            }
-            .form-text {
-                font-size: 12px;
-                color: #C89B3C !important;
-                font-style: italic;
-            }
-            h2 {
-                color: #C89B3C !important;
-            }
-        </style>
-    </h:head>
-    <h:body style="background-color: #111 !important;">
-        <div class="container" style="max-width: 600px; margin-top: 20px;">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="h5 mb-0" style="font-weight: 600; color: #C89B3C !important;">NUEVA BOLETA</h2>
-                </div>
-                <div class="card-body">
-                    <h:form id="frmBoleta">
-                        <p:messages id="messages" showDetail="true" closable="true" />
-                        
-                        <!-- IDs ocultos -->
-                        <h:inputHidden value="#{boletaBean.boleta.id_boleta}" />
-                        <h:inputHidden value="#{boletaBean.boleta.id_usuario}" />
-
-                        <div class="mb-3">
-                            <h:outputLabel for="evento" value="Evento:" styleClass="form-label" />
-                            <h:selectOneMenu id="evento"
-                                             value="#{boletaBean.boleta.id_evento}"
-                                             styleClass="form-select">
-                                <f:selectItem itemLabel="Seleccione un evento..." itemValue="-1" />
-                                <f:selectItems value="#{boletaBean.lstEven}" 
-                                               var="evento"
-                                               itemLabel="#{evento.nombre_evento}" 
-                                               itemValue="#{evento.id_evento}" />
-                                <f:ajax listener="#{boletaBean.cargarPrecioEvento}"
-                                        render="precio" />
-                            </h:selectOneMenu>
-                            <h:message for="evento" styleClass="text-danger" />
-                        </div>
-
-                        <div class="mb-3">
-                            <h:outputLabel for="precio" value="Precio:" styleClass="form-label" />
-                            <h:inputText id="precio"
-                                         value="#{boletaBean.boleta.precio_boleta}"
-                                         readonly="true"
-                                         styleClass="form-control"/>
-                        </div>
-
-                        <div class="mb-3">
-                            <h:outputLabel for="cantidad" value="Cantidad de Boletos:" styleClass="form-label" />
-                            <h:inputText id="cantidad"
-                                         value="#{boletaBean.boleta.cantidad_boletos}"
-                                         styleClass="form-control"
-                                         required="true"
-                                         requiredMessage="Debe especificar la cantidad de boletos" />
-                            <h:message for="cantidad" styleClass="text-danger" />
-                        </div>
-
-                        <div class="mb-3">
-                            <h:outputLabel for="idUsuario" value="Usuario:" styleClass="form-label" />
-                            <h:inputText id="idUsuario"
-                                         value="#{boletaBean.usuarioNombre}"
-                                         disabled="true"
-                                         styleClass="form-control" />
-                        </div>
-
-                        <div class="d-flex justify-content-between mt-4">
-                            <h:commandButton value="Guardar" 
-                                           action="#{boletaBean.guardar}" 
-                                           styleClass="btn btn-primary" />
-                            <h:commandButton value="Cancelar" 
-                                           action="index" 
-                                           styleClass="btn btn-secondary" 
-                                           immediate="true" />
-                        </div>
-                    </h:form>
-                </div>
-            </div>
-        </div>
-    </h:body>
         <f:metadata>
             <f:event type="preRenderView" listener="#{boletaBean.preRender}" />
         </f:metadata>
 
-        <h:head>
-            <title>Nueva Boleta</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-                integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-                crossorigin="anonymous" />
-            <style>
-                body {
-                    background: #111 !important;
-                    min-height: 100vh;
-                    padding: 15px 0;
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                }
+    <h:head>
+        <title>Nueva Boleta</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
+        <style>
+            body {
+                background: #111 !important;
+                color: #C89B3C !important;
+            }
+            
+            .dashboard-container {
+                margin: 20px 0;
+                padding: 20px;
+                background: #1a1a1a;
+                border: 1px solid #333;
+                border-radius: 5px;
+            }
+            
+            h2 {
+                color: #C89B3C !important;
+            }
+            
+            .nav-item {
+                color: #eee !important;
+                padding: 10px 18px;
+                text-decoration: none !important;
+                background: #262626;
+                border-radius: 5px;
+                transition: 0.2s;
+                display: inline-block;
+                border: none;
+            }
 
-                .card {
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-                    border: 1px solid #333;
-                    border-radius: 8px;
-                    background: #1a1a1a;
-                }
-
-                .card-header {
-                    background: #000 !important;
-                    color: #C89B3C !important;
-                    border-radius: 8px 8px 0 0 !important;
-                    padding: 12px 20px !important;
-                }
-
-                .card-body {
-                    padding: 20px;
-                    background: #1a1a1a;
-                }
-
-                .form-label {
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #C89B3C !important;
-                    margin-bottom: 5px;
-                }
-
-                .form-control,
-                .form-select {
-                    font-size: 13px;
-                    padding: 8px 12px;
-                    border: 1px solid #444;
-                    border-radius: 4px;
-                    background: #262626;
-                    color: #eee;
-                }
-
-                .form-control:focus,
-                .form-select:focus {
-                    border-color: #C89B3C;
-                    box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
-                    outline: none;
-                }
-
-                .btn-primary {
-                    background: #6D0823;
-                    border: 1px solid #6D0823;
-                    color: white;
-                    padding: 8px 20px;
-                    font-size: 13px;
-                    font-weight: 600;
-                }
-
-                .btn-primary:hover {
-                    background: #C89B3C;
-                    border-color: #C89B3C;
-                    color: black;
-                }
-
-                .btn-secondary {
-                    background: #262626;
-                    border: 1px solid #333;
-                    color: #C89B3C;
-                    padding: 8px 20px;
-                    font-size: 13px;
-                }
-
-                .btn-secondary:hover {
-                    background: #333;
-                    color: #C89B3C;
-                }
-
-                .text-danger {
-                    font-size: 11px;
-                    color: #ff6b6b !important;
-                }
-
-                .form-text {
-                    font-size: 12px;
-                    color: #C89B3C !important;
-                    font-style: italic;
-                }
-
-                h2 {
-                    color: #C89B3C !important;
-                }
-            </style>
-        </h:head>
-        <h:body style="background-color: #111 !important;">
-            <div class="container" style="max-width: 600px; margin-top: 20px;">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="h5 mb-0" style="font-weight: 600; color: #C89B3C !important;">NUEVA BOLETA</h2>
-                    </div>
-                    <div class="card-body">
-                        <h:form id="frmBoleta">
-                            <!-- Mensajes de error/éxito -->
-                            <p:messages id="messages" showDetail="true" closable="true" />
-                            <h:messages globalOnly="true" styleClass="alert alert-dismissible fade show"
-                                errorClass="alert-danger" infoClass="alert-success" warnClass="alert-warning"
-                                style="margin-bottom: 20px;" />
-
-                            <!-- IDs ocultos -->
-                            <h:inputHidden value="#{boletaBean.boleta.id_boleta}" />
-                            <h:inputHidden value="#{boletaBean.boleta.id_usuario}" />
-
-                            <!-- EVENTO -->
-                            <div class="mb-3">
-                                <h:outputLabel value="Evento:" for="evento" styleClass="form-label" />
-                                <h:selectOneMenu id="evento" value="#{boletaBean.boleta.id_evento}" class="form-select">
-                                    <f:selectItem itemLabel="Seleccione un evento..." itemValue="-1" />
-                                    <f:selectItems value="#{boletaBean.lstEven}" var="evento"
-                                        itemLabel="#{evento.nombre_evento}" itemValue="#{evento.id_evento}" />
-                                    <f:ajax listener="#{boletaBean.cargarPrecioEvento}" render="precio" />
-                                </h:selectOneMenu>
-                            </div>
-
-                            <!-- PRECIO -->
-                            <div class="mb-3">
-                                <h:outputLabel value="Precio:" for="precio" styleClass="form-label" />
-                                <h:inputText id="precio" value="#{boletaBean.boleta.precio_boleta}" readonly="true"
-                                    class="form-control" />
-                            </div>
-
-                            <!-- CANTIDAD -->
-                            <div class="mb-3">
-                                <h:outputLabel value="Cantidad de Boletos:" for="cantidad" styleClass="form-label" />
-                                <h:inputText id="cantidad" value="#{boletaBean.boleta.cantidad_boletos}"
-                                    class="form-control" required="true"
-                                    requiredMessage="Debe especificar la cantidad de boletos" />
-                                <h:message for="cantidad" class="text-danger" />
-                            </div>
-
-                            <!-- USUARIO -->
-                            <div class="mb-3">
-                                <h:outputLabel value="Usuario:" for="idUsuario" styleClass="form-label" />
-                                <h:inputText id="idUsuario" value="#{boletaBean.usuarioNombre}" disabled="true"
-                                    class="form-control" />
-                            </div>
-
-                            <!-- BOTONES -->
-                            <div class="d-flex justify-content-between mt-4">
-                                <h:commandButton class="btn btn-primary" value="Guardar"
-                                    action="#{boletaBean.guardar}" />
-
-                                <h:commandButton class="btn btn-secondary" value="Cancelar" action="index"
-                                    immediate="true" />
-                            </div>
-                        </h:form>
-                    </div>
-                </div>
+            .nav-item:hover {
+                background: #C89B3C !important;
+                color: black !important;
+                font-weight: bold;
+            }
+            
+            a.nav-item {
+                color: #eee !important;
+                text-decoration: none !important;
+            }
+            
+            a.nav-item:hover {
+                background: #C89B3C !important;
+                color: black !important;
+                font-weight: bold;
+            }
+            
+            .form-label {
+                color: #C89B3C !important;
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+            
+            .form-control,
+            .form-select {
+                background: #262626 !important;
+                color: #eee !important;
+                border: 1px solid #444 !important;
+                padding: 10px 12px;
+                width: 100%;
+            }
+            
+            .form-control:focus,
+            .form-select:focus {
+                background: #262626 !important;
+                color: #eee !important;
+                border-color: #C89B3C !important;
+                box-shadow: 0 0 5px rgba(200, 155, 60, 0.3);
+                outline: none;
+            }
+            
+            .btn-primary {
+                background: #6D0823 !important;
+                border-color: #6D0823 !important;
+                color: white !important;
+                padding: 10px 20px;
+            }
+            
+            .btn-primary:hover {
+                background: #C89B3C !important;
+                border-color: #C89B3C !important;
+                color: black !important;
+                font-weight: bold;
+            }
+            
+            .btn-secondary {
+                background: #262626 !important;
+                border-color: #333 !important;
+                color: #C89B3C !important;
+                padding: 10px 20px;
+            }
+            
+            .btn-secondary:hover {
+                background: #333 !important;
+                color: #C89B3C !important;
+            }
+            
+            .text-danger {
+                color: #ff6b6b !important;
+            }
+            
+            .form-text {
+                color: #C89B3C !important;
+                font-size: 12px;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-color: #111 !important;">
+        <div class="dashboard-container">
+            <!-- Botón Menú Anterior arriba -->
+            <div class="mb-3" style="margin-top: 20px;">
+                <h:form>
+                    <h:commandLink value="Menú Anterior"
+                                   styleClass="nav-item"
+                                   action="/faces/cliente/boleta/index?faces-redirect=true" />
+                </h:form>
             </div>
-        </h:body>
+            
+            <h2 class="text-center mb-4" style="color: #C89B3C !important;">Nueva Boleta</h2>
+            
+            <h:form id="frmBoleta">
+                <p:messages id="messages" showDetail="true" closable="true" />
+                
+                <!-- IDs ocultos -->
+                <h:inputHidden value="#{boletaBean.boleta.id_boleta}" />
+                <h:inputHidden value="#{boletaBean.boleta.id_usuario}" />
+
+                <div class="mb-3">
+                    <h:outputLabel for="evento" value="Evento:" styleClass="form-label" />
+                    <h:selectOneMenu id="evento"
+                                     value="#{boletaBean.boleta.id_evento}"
+                                     styleClass="form-select">
+                        <f:selectItem itemLabel="Seleccione un evento..." itemValue="-1" />
+                        <f:selectItems value="#{boletaBean.lstEven}" 
+                                       var="evento"
+                                       itemLabel="#{evento.nombre_evento}" 
+                                       itemValue="#{evento.id_evento}" />
+                        <f:ajax listener="#{boletaBean.cargarPrecioEvento}"
+                                render="precio" />
+                    </h:selectOneMenu>
+                    <h:message for="evento" styleClass="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <h:outputLabel for="precio" value="Precio:" styleClass="form-label" />
+                    <h:inputText id="precio"
+                                 value="#{boletaBean.boleta.precio_boleta}"
+                                 readonly="true"
+                                 styleClass="form-control"/>
+                </div>
+
+                <div class="mb-3">
+                    <h:outputLabel for="cantidad" value="Cantidad de Boletos:" styleClass="form-label" />
+                    <h:inputText id="cantidad"
+                                 value="#{boletaBean.boleta.cantidad_boletos}"
+                                 styleClass="form-control"
+                                 required="true"
+                                 requiredMessage="Debe especificar la cantidad de boletos" />
+                    <h:message for="cantidad" styleClass="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <h:outputLabel for="idUsuario" value="Usuario:" styleClass="form-label" />
+                    <h:inputText id="idUsuario"
+                                 value="#{boletaBean.usuarioNombre}"
+                                 disabled="true"
+                                 styleClass="form-control" />
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <h:commandButton value="Guardar" 
+                                   action="#{boletaBean.guardar}" 
+                                   styleClass="btn btn-primary" />
+                    <h:commandButton value="Cancelar" 
+                                   action="/cliente/boleta/index?faces-redirect=true" 
+                                   styleClass="btn btn-secondary" 
+                                   immediate="true" />
+                </div>
+            </h:form>
+        </div>
+    </h:body>
     </ui:define>
 
 </ui:composition>
