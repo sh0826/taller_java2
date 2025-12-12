@@ -90,11 +90,11 @@ public class ProductoBean implements Serializable {
 
     public void guardar() {
         try {
-            // Procesar imagen si se subió un archivo
+
             if (archivoImagen != null && archivoImagen.getSize() > 0) {
                 String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
                 
-                // Obtener nombre del archivo
+
                 String nombreArchivo = getFileName(archivoImagen);
                 String extension = ".png"; // Extensión por defecto
                 
@@ -103,7 +103,7 @@ public class ProductoBean implements Serializable {
                         extension = nombreArchivo.substring(nombreArchivo.lastIndexOf("."));
                     }
                 } else {
-                    // Si no se puede obtener el nombre, intentar obtenerlo del content-type
+
                     String contentType = archivoImagen.getContentType();
                     if (contentType != null) {
                         if (contentType.contains("jpeg") || contentType.contains("jpg")) {
@@ -116,10 +116,8 @@ public class ProductoBean implements Serializable {
                     }
                 }
                 
-                // Crear directorio dentro de web/ para que sea accesible desde el navegador
                 String imgPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/ImgProductos");
                 if (imgPath == null) {
-                    // Fallback: usar el path raíz + ImgProductos
                     imgPath = path + "ImgProductos";
                 }
                 
@@ -131,11 +129,9 @@ public class ProductoBean implements Serializable {
                     }
                 }
                 
-                // Generar nombre único para el archivo
                 String nombreFinal = System.currentTimeMillis() + extension;
                 File archivo = new File(dir, nombreFinal);
                 
-                // Guardar archivo
                 try (InputStream input = archivoImagen.getInputStream();
                      FileOutputStream output = new FileOutputStream(archivo)) {
                     
@@ -146,13 +142,10 @@ public class ProductoBean implements Serializable {
                     }
                 }
                 
-                // Guardar ruta en el producto (ruta absoluta desde el contexto)
                 producto.setImagen("/ImgProductos/" + nombreFinal);
             }
             
-            // Si no hay imagen y es un producto existente, mantener la imagen actual
             if (producto.getId_producto() > 0 && (producto.getImagen() == null || producto.getImagen().isEmpty())) {
-                // Obtener la imagen actual del producto
                 try {
                     List<Producto> productos = dao.listar();
                     for (Producto prod : productos) {
@@ -199,7 +192,7 @@ public class ProductoBean implements Serializable {
                 for (String token : tokens) {
                     if (token.trim().startsWith("filename")) {
                         String fileName = token.substring(token.indexOf("=") + 2, token.length() - 1);
-                        // Limpiar el nombre del archivo (puede venir con ruta completa)
+
                         if (fileName.contains("\\")) {
                             fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
                         }
@@ -283,8 +276,7 @@ public class ProductoBean implements Serializable {
             OutputStream outputStream = response.getOutputStream();
             
             List<Producto> productos = getListaFiltrada();
-            
-            // Construir contenido de texto primero
+
             StringBuilder textContent = new StringBuilder();
             textContent.append("BT\n/F1 12 Tf\n50 750 Td\n");
             textContent.append("(LISTA DE PRODUCTOS) Tj\n");
@@ -304,37 +296,31 @@ public class ProductoBean implements Serializable {
             }
             textContent.append("ET\n");
             
-            // Generar PDF con offsets calculados
             List<Integer> offsets = new ArrayList<>();
             StringBuilder pdf = new StringBuilder();
             
-            // PDF Header
             pdf.append("%PDF-1.4\n");
             
-            // Objeto 1: Catalog
+
             offsets.add(pdf.length());
             pdf.append("1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n");
-            
-            // Objeto 2: Pages
+
             offsets.add(pdf.length());
             pdf.append("2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n");
-            
-            // Objeto 3: Page
+
             offsets.add(pdf.length());
             pdf.append("3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n");
             pdf.append("/Contents 4 0 R\n/Resources <<\n/Font <<\n/F1 5 0 R\n>>\n>>\n>>\nendobj\n");
-            
-            // Objeto 4: Contents
+
             offsets.add(pdf.length());
             pdf.append("4 0 obj\n<<\n/Length ").append(textContent.length()).append("\n>>\nstream\n");
             pdf.append(textContent.toString());
             pdf.append("endstream\nendobj\n");
             
-            // Objeto 5: Font
+     
             offsets.add(pdf.length());
             pdf.append("5 0 obj\n<<\n/Type /Font\n/Subtype /Type1\n/BaseFont /Helvetica\n>>\nendobj\n");
-            
-            // xref
+   
             int xrefPos = pdf.length();
             pdf.append("xref\n0 ").append(offsets.size() + 1).append("\n");
             pdf.append("0000000000 65535 f \n");
@@ -342,7 +328,7 @@ public class ProductoBean implements Serializable {
                 pdf.append(String.format("%010d 00000 n \n", offset));
             }
             
-            // trailer
+
             pdf.append("trailer\n<<\n/Size ").append(offsets.size() + 1).append("\n/Root 1 0 R\n>>\n");
             pdf.append("startxref\n").append(xrefPos).append("\n%%EOF");
             
@@ -378,7 +364,6 @@ public class ProductoBean implements Serializable {
             
             OutputStream outputStream = response.getOutputStream();
             
-            // Generar contenido Excel (formato HTML que Excel puede abrir)
             StringBuilder excelContent = new StringBuilder();
             excelContent.append("<html xmlns:o='urn:schemas-microsoft-com:office:office' ");
             excelContent.append("xmlns:x='urn:schemas-microsoft-com:office:excel' ");
@@ -392,7 +377,6 @@ public class ProductoBean implements Serializable {
             excelContent.append("</head>\n<body>\n");
             excelContent.append("<table>\n");
             
-            // Encabezados
             excelContent.append("<tr style='background-color:#4472C4; color:white; font-weight:bold;'>\n");
             excelContent.append("<td>ID</td>\n");
             excelContent.append("<td>Nombre</td>\n");
@@ -401,7 +385,6 @@ public class ProductoBean implements Serializable {
             excelContent.append("<td>Precio</td>\n");
             excelContent.append("</tr>\n");
             
-            // Datos
             List<Producto> productos = getListaFiltrada();
             for (Producto p : productos) {
                 excelContent.append("<tr>\n");

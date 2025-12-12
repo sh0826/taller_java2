@@ -32,11 +32,10 @@ public class DetalleVentaBean {
     private List<Producto> listaProductos;
     private ProductoDAO productoDAO = new ProductoDAO();
     
-    // Filtros
     private Integer filtroIdVenta;
     private Integer filtroIdProducto;
     private String filtroDescripcion = "";
-    private boolean mostrarAgrupado = false; // Control para mostrar vista agrupada o normal
+    private boolean mostrarAgrupado = false;
 
     public DetalleVenta getDetalle() { return detalle; }
     public void setDetalle(DetalleVenta detalle) { this.detalle = detalle; }
@@ -66,18 +65,17 @@ public class DetalleVentaBean {
         if (listaFiltrada == null) {
             try {
                 if (filtroIdVenta != null && filtroIdVenta > 0) {
-                    // Si hay un filtro de ID de venta, filtrar automáticamente
+
                     Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
                     listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
                     
-                    // Si no hay detalles pero hay una venta seleccionada, crear un detalle virtual con el total
                     if ((listaFiltrada == null || listaFiltrada.isEmpty()) && ventaSeleccionada != null && ventaSeleccionada.getTotal() != null) {
                         DetalleVenta detalleTotal = new DetalleVenta();
-                        detalleTotal.setId_detalleV(0); // ID virtual
+                        detalleTotal.setId_detalleV(0);
                         detalleTotal.setId_venta(ventaSeleccionada.getId_venta());
-                        detalleTotal.setId_producto(0); // Sin producto
+                        detalleTotal.setId_producto(0);
                         detalleTotal.setDescripcion("Total de la Venta");
-                        detalleTotal.setCantidad_productos(1); // Cantidad = 1
+                        detalleTotal.setCantidad_productos(1);
                         detalleTotal.setPrecio_unitario(ventaSeleccionada.getTotal().doubleValue()); // Precio unitario = total
                         listaFiltrada = new ArrayList<>();
                         listaFiltrada.add(detalleTotal);
@@ -92,29 +90,20 @@ public class DetalleVentaBean {
         return listaFiltrada;
     }
     
-    /**
-     * Obtiene la lista de detalles agrupados por producto
-     * Muestra el total de ventas de cada producto en TODAS las ventas y su precio unitario
-     * Si hay un filtro de venta, muestra solo los productos de esa venta pero con el total general
-     */
     public List<DetalleVentaAgrupado> getListaAgrupada() {
         if (listaAgrupada == null) {
             try {
-                // Si hay un filtro de venta, primero obtenemos los productos de esa venta
-                // y luego calculamos el total de ventas de cada producto en todas las ventas
+
                 if (filtroIdVenta != null && filtroIdVenta > 0) {
-                    // Obtener todos los productos con sus totales (sin filtrar por venta)
+
                     List<DetalleVentaAgrupado> todosProductos = dao.listarAgrupadoPorProducto(null);
-                    // Obtener los productos de la venta actual
                     List<DetalleVenta> detallesVenta = dao.listarConFiltros(filtroIdVenta, null, null);
-                    // Filtrar solo los productos que están en esta venta
                     List<Integer> productosEnVenta = new ArrayList<>();
                     for (DetalleVenta dv : detallesVenta) {
                         if (!productosEnVenta.contains(dv.getId_producto())) {
                             productosEnVenta.add(dv.getId_producto());
                         }
                     }
-                    // Crear lista filtrada con los productos de esta venta pero con totales generales
                     listaAgrupada = new ArrayList<>();
                     for (DetalleVentaAgrupado da : todosProductos) {
                         if (productosEnVenta.contains(da.getId_producto())) {
@@ -122,7 +111,7 @@ public class DetalleVentaBean {
                         }
                     }
                 } else {
-                    // Sin filtro de venta, mostrar todos los productos con sus totales
+ 
                     listaAgrupada = dao.listarAgrupadoPorProducto(null);
                 }
             } catch (Exception e) {
@@ -150,31 +139,31 @@ public class DetalleVentaBean {
             Object idVentaObj = facesContext.getExternalContext().getSessionMap().get("id_venta_filtro");
             if (idVentaObj != null) {
                 filtroIdVenta = ((Number) idVentaObj).intValue();
-                // Cargar la información de la venta
+
                 ventaSeleccionada = ventaDAO.buscarPorId(filtroIdVenta);
-                // Aplicar el filtro automáticamente
-                listaFiltrada = null; // Forzar recarga
-                listaAgrupada = null; // Forzar recarga de lista agrupada
+
+                listaFiltrada = null; 
+                listaAgrupada = null; 
                 try {
                     Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
                     listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
                     
-                    // Si no hay detalles pero hay una venta seleccionada, crear un detalle virtual con el total
+ 
                     if ((listaFiltrada == null || listaFiltrada.isEmpty()) && ventaSeleccionada != null && ventaSeleccionada.getTotal() != null) {
                         DetalleVenta detalleTotal = new DetalleVenta();
-                        detalleTotal.setId_detalleV(0); // ID virtual
+                        detalleTotal.setId_detalleV(0);
                         detalleTotal.setId_venta(ventaSeleccionada.getId_venta());
-                        detalleTotal.setId_producto(0); // Sin producto
+                        detalleTotal.setId_producto(0);
                         detalleTotal.setDescripcion("Total de la Venta");
-                        detalleTotal.setCantidad_productos(1); // Cantidad = 1
-                        detalleTotal.setPrecio_unitario(ventaSeleccionada.getTotal().doubleValue()); // Precio unitario = total
+                        detalleTotal.setCantidad_productos(1);
+                        detalleTotal.setPrecio_unitario(ventaSeleccionada.getTotal().doubleValue());
                         listaFiltrada = new ArrayList<>();
                         listaFiltrada.add(detalleTotal);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                // NO limpiar el valor de la sesión aquí, para que se mantenga al recargar
+    
             }
         }
     }
@@ -191,12 +180,12 @@ public class DetalleVentaBean {
     
     public void filtrar() {
         try {
-            // Si filtroIdProducto es 0 (Todos), pasar null
+        
             Integer idProductoFiltro = (filtroIdProducto != null && filtroIdProducto == 0) ? null : filtroIdProducto;
-            listaFiltrada = null; // Forzar recarga
-            listaAgrupada = null; // Forzar recarga de lista agrupada
+            listaFiltrada = null; 
+            listaAgrupada = null;
             listaFiltrada = dao.listarConFiltros(filtroIdVenta, idProductoFiltro, filtroDescripcion);
-            // Si hay un ID de venta, cargar la información de la venta
+  
             if (filtroIdVenta != null && filtroIdVenta > 0) {
                 ventaSeleccionada = ventaDAO.buscarPorId(filtroIdVenta);
             }
@@ -205,13 +194,10 @@ public class DetalleVentaBean {
         }
     }
     
-    /**
-     * Alterna entre vista normal y vista agrupada
-     */
     public void alternarVista() {
         mostrarAgrupado = !mostrarAgrupado;
-        listaAgrupada = null; // Forzar recarga
-        listaFiltrada = null; // Forzar recarga
+        listaAgrupada = null; 
+        listaFiltrada = null; 
     }
     
     public void limpiarFiltros() {
@@ -247,23 +233,23 @@ public class DetalleVentaBean {
         try {
             int idVenta = 0;
             
-            // Si hay una venta seleccionada, usar su ID
+
             if (ventaSeleccionada != null && ventaSeleccionada.getId_venta() > 0) {
                 idVenta = ventaSeleccionada.getId_venta();
                 detalle.setId_venta(idVenta);
             } else if (filtroIdVenta != null && filtroIdVenta > 0) {
-                // Si no hay venta seleccionada pero hay un filtro, usar el filtro
+
                 idVenta = filtroIdVenta;
                 detalle.setId_venta(idVenta);
             } else {
-                // Mostrar error si no hay ID de venta
+  
                 FacesContext.getCurrentInstance().addMessage(null, 
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                         "Error", "Debe seleccionar una venta o filtrar por ID de venta"));
                 return;
             }
 
-            // Validar que se haya seleccionado un producto
+ 
             if (detalle.getId_producto() <= 0) {
                 FacesContext.getCurrentInstance().addMessage(null, 
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, 
@@ -271,7 +257,7 @@ public class DetalleVentaBean {
                 return;
             }
             
-            // Validar cantidad
+   
             if (detalle.getCantidad_productos() == null || detalle.getCantidad_productos() <= 0) {
                 FacesContext.getCurrentInstance().addMessage(null, 
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, 
@@ -282,15 +268,15 @@ public class DetalleVentaBean {
             if(detalle.getId_detalleV() > 0) {
                 dao.modificar(detalle);
             } else {
-                // Insertar el detalle (esto también disminuirá el stock)
+   
                 dao.insertar(detalle);
                 
-                // Actualizar el total de la venta sumando todos los detalles
+   
                 ventaDao ventaDAO = new ventaDao();
                 boolean totalActualizado = ventaDAO.actualizarTotalDesdeDetalles(idVenta);
                 
                 if (totalActualizado) {
-                    // Recargar la venta seleccionada para mostrar el nuevo total
+           
                     ventaSeleccionada = ventaDAO.buscarPorId(idVenta);
                     FacesContext.getCurrentInstance().addMessage(null, 
                         new FacesMessage(FacesMessage.SEVERITY_INFO, 
@@ -303,7 +289,7 @@ public class DetalleVentaBean {
             }
             
             detalle = new DetalleVenta();
-            // Limpiar la lista filtrada para que se recargue
+
             listaFiltrada = null;
             listaAgrupada = null;
             actualizarLista();
@@ -327,10 +313,7 @@ public class DetalleVentaBean {
             e.printStackTrace(); 
         }
     }
-    
-    /**
-     * Actualiza el método de pago de la venta seleccionada
-     */
+   
     public void actualizarMetodoPago() {
         try {
             if (ventaSeleccionada == null || ventaSeleccionada.getId_venta() <= 0) {
@@ -389,7 +372,6 @@ public class DetalleVentaBean {
             
             List<DetalleVenta> detalles = getListaFiltrada();
             
-            // Construir contenido de texto primero
             StringBuilder textContent = new StringBuilder();
             textContent.append("BT\n/F1 12 Tf\n50 750 Td\n");
             textContent.append("(LISTA DE DETALLES DE VENTA) Tj\n");
@@ -410,7 +392,7 @@ public class DetalleVentaBean {
             }
             textContent.append("ET\n");
             
-            // Generar PDF con offsets calculados
+
             List<Integer> offsets = new ArrayList<>();
             StringBuilder pdf = new StringBuilder();
             
