@@ -135,7 +135,9 @@
                             <div class="mb-3">
                                 <h:outputLabel value="Precio:" for="precio" styleClass="form-label" />
                                 <h:inputText id="precio" value="#{boletaBean.boleta.precio_boleta}" readonly="true"
-                                    class="form-control" />
+                                    class="form-control">
+                                    <f:convertNumber type="currency" currencySymbol="$" locale="es_CO" />
+                                </h:inputText>
                             </div>
 
                             <!-- CANTIDAD -->

@@ -114,11 +114,11 @@
                     <p:column headerText="Precio">
                         <h:outputText value="#{boleta.precio_boleta}"
                             style="display:block; padding:10px 5px; color:black;">
-                            <f:convertNumber pattern="#,##0.00" />
+                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
                         </h:outputText>
                         <f:facet name="exportar">
                             <h:outputText value="#{boleta.precio_boleta}">
-                                <f:convertNumber pattern="#,##0.00" />
+                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
                             </h:outputText>
                         </f:facet>
                     </p:column>

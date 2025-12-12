@@ -151,13 +151,39 @@ public class EventoDAO {
     
     public void eliminar (int id_evento){
         try {
-            String sql = "DELETE FROM evento WHERE id_evento = ?";
-            ps = con.prepareStatement(sql);
+            // Desactivar auto-commit para manejar transacción
+            con.setAutoCommit(false);
+            
+            // 1. Eliminar primero las boletas asociadas
+            String sqlBoleta = "DELETE FROM boleta WHERE id_evento = ?";
+            ps = con.prepareStatement(sqlBoleta);
             ps.setInt(1, id_evento);
-            
             ps.executeUpdate();
-        } catch (SQLException e){
             
+            // 2. Eliminar el evento
+            String sqlEvento = "DELETE FROM evento WHERE id_evento = ?";
+            ps = con.prepareStatement(sqlEvento);
+            ps.setInt(1, id_evento);
+            ps.executeUpdate();
+            
+            // Confirmar transacción
+            con.commit();
+            
+        } catch (SQLException e){
+            try {
+                // Si hay error, revertir cambios
+                con.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            try {
+                // Restaurar auto-commit
+                con.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
     

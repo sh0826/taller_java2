@@ -325,16 +325,6 @@
         Recuerda que para comprar tu boleta deberas registrarte y/o iniciar sesión.
     </p>
 
-    <h:panelGroup rendered="#{empty eventoBean.lstEvento}">
-        <div class="empty-state">
-            <div class="empty-state-icon">📅</div>
-            <div class="empty-state-message">No hay eventos registrados</div>
-            <!-- Removed the commandLink as it requires a form action and might not be needed for simple display, or should be outside invalid check if it's for creation by admin, but keeping it simple for now as per original code structure intent but ensuring it renders correctly -->
-            <h:form>
-                <h:commandLink value="Crear Primer Evento" styleClass="btn-new-event" action="nuevo" />
-            </h:form>
-        </div>
-    </h:panelGroup>
 
     <h:panelGroup rendered="#{not empty eventoBean.lstEvento}">
         <div class="events-grid">

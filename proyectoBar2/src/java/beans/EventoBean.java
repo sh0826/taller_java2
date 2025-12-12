@@ -84,7 +84,7 @@ public class EventoBean implements Serializable {
         
         try {
             //Validación capacidad establecimiento
-            int capacidadEstablecimiento = 50;
+            int capacidadEstablecimiento = 80;
             if (evento.getCapacidad_maxima() > capacidadEstablecimiento){
                 FacesMessage msg = new FacesMessage (
                 FacesMessage.SEVERITY_ERROR,
