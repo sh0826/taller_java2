@@ -251,18 +251,51 @@ public class ventaDao {
     }
     
     public boolean eliminar(int id) {
-        String sql = "DELETE FROM venta WHERE id_venta = ?";
+        String sqlDetalle = "DELETE FROM detalle_venta WHERE id_venta = ?";
+        String sqlVenta = "DELETE FROM venta WHERE id_venta = ?";
         
-        try (Connection conn = ConnBD.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement psDetalle = null;
+        PreparedStatement psVenta = null;
+        
+        try {
+            conn = ConnBD.conectar();
+            conn.setAutoCommit(false); // Iniciar transacción
             
-            ps.setInt(1, id);
-            int filas = ps.executeUpdate();
+            // 1. Eliminar detalles
+            psDetalle = conn.prepareStatement(sqlDetalle);
+            psDetalle.setInt(1, id);
+            psDetalle.executeUpdate();
+            
+            // 2. Eliminar venta
+            psVenta = conn.prepareStatement(sqlVenta);
+            psVenta.setInt(1, id);
+            int filas = psVenta.executeUpdate();
+            
+            conn.commit(); // Confirmar cambios
             return filas > 0;
             
         } catch (SQLException e) {
             System.err.println("Error al eliminar venta: " + e.getMessage());
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             return false;
+        } finally {
+            try {
+                if (psDetalle != null) psDetalle.close();
+                if (psVenta != null) psVenta.close();
+                if (conn != null) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
     

@@ -217,8 +217,12 @@ public class ProductoBean implements Serializable {
         try {
             dao.eliminar(id);
             actualizarLista();
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Producto eliminado correctamente"));
         } catch (Exception e) {
             e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
         }
     }
 

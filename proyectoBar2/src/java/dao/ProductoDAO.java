@@ -63,6 +63,17 @@ public class ProductoDAO {
 
     public void eliminar(int id) throws Exception {
         conn = ConnBD.conectar();
+        
+        // Verificar si existe en detalle_venta
+        String sqlCheck = "SELECT COUNT(*) FROM detalle_venta WHERE id_producto=?";
+        PreparedStatement psCheck = conn.prepareStatement(sqlCheck);
+        psCheck.setInt(1, id);
+        ResultSet rsCheck = psCheck.executeQuery();
+        
+        if (rsCheck.next() && rsCheck.getInt(1) > 0) {
+            throw new Exception("No se puede eliminar el producto porque está asociado a una o más ventas.");
+        }
+        
         String sql = "DELETE FROM producto WHERE id_producto=?";
         ps = conn.prepareStatement(sql);
         ps.setInt(1, id);
