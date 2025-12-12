@@ -2,13 +2,11 @@
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
-        <f:event type="preRenderView" listener="#{eventoBean.listar}" />
-        
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<f:event type="preRenderView" listener="#{eventoBean.listar}" />
+
 <style>
     body {
         background: #f8f9fa;
@@ -307,7 +305,7 @@
     <div>
         <a href="conocenos.xhtml">Conócenos</a>
         <a href="catalogo.xhtml">Catálogo</a>
-        <a href="eventos.xhtml">Eventos</a>
+        <a href="evento.xhtml">Eventos</a>
 
         <a href="/proyectoBar2/faces/inicio_sesion/login.xhtml" style="color:#C89B3C;">
             Iniciar sesión
@@ -320,79 +318,83 @@
 
 
 <h:form>
-    <div class="stats-container">
-        <div class="stat-card">
-            <div class="stat-label">Total de Eventos</div>
-            <div class="stat-value">#{eventoBean.totalEventos}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Próximos Eventos</div>
-            <div class="stat-value">#{eventoBean.proximosEventos}</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Capacidad Total</div>
-            <div class="stat-value">#{eventoBean.capacidadTotal}</div>
-        </div>
-    </div>
+    <h1 style="font-size: 40px; text-align: center; color: brown;">
+        Eventos
+    </h1>
+    <p style="font-size: 20px;  text-align: center;">
+        Recuerda que para comprar tu boleta deberas registrarte y/o iniciar sesión.
+    </p>
 
     <h:panelGroup rendered="#{empty eventoBean.lstEvento}">
         <div class="empty-state">
             <div class="empty-state-icon">📅</div>
             <div class="empty-state-message">No hay eventos registrados</div>
-            <h:commandLink value="Crear Primer Evento" styleClass="btn-new-event" action="nuevo" />
+            <!-- Removed the commandLink as it requires a form action and might not be needed for simple display, or should be outside invalid check if it's for creation by admin, but keeping it simple for now as per original code structure intent but ensuring it renders correctly -->
+            <h:form>
+                <h:commandLink value="Crear Primer Evento" styleClass="btn-new-event" action="nuevo" />
+            </h:form>
         </div>
     </h:panelGroup>
 
-    <div class="events-grid" rendered="#{not empty eventoBean.lstEvento}">
-        <ui:repeat value="#{eventoBean.lstEvento}" var="evento">
-            <div class="event-card">
-                <div class="event-image-container">
-                    <h:graphicImage value="/ImgEventos/#{evento.id_evento}.png" alt="#{evento.nombre_evento}"
-                        styleClass="event-image" rendered="#{not empty evento.imagen}" />
-                    <div class="event-image-placeholder" rendered="#{empty evento.imagen}">
-                        🎉
+    <h:panelGroup rendered="#{not empty eventoBean.lstEvento}">
+        <div class="events-grid">
+            <ui:repeat value="#{eventoBean.lstEvento}" var="evento">
+                <div class="event-card">
+                    <div class="event-image-container">
+                        <!-- Use HTML img for better control and onerror handling -->
+                        <img src="#{request.contextPath}/ImgEventos/#{evento.id_evento}.png"
+                            alt="#{evento.nombre_evento}" class="event-image"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            style="#{empty evento.imagen ? 'display:none' : ''}" />
+
+                        <div class="event-image-placeholder"
+                            style="#{empty evento.imagen ? 'display:flex' : 'display:none'}">
+                            🎉
+                        </div>
+                    </div>
+
+                    <div class="event-content">
+                        <h3 class="event-title">#{evento.nombre_evento}</h3>
+
+                        <p class="event-description">#{evento.descripcion}</p>
+
+                        <div class="event-details">
+                            <div class="event-detail-item">
+                                <span class="event-detail-icon">📅</span>
+                                <span>
+                                    <h:outputText value="#{evento.fecha}" rendered="#{not empty evento.fecha}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </span>
+                            </div>
+
+                            <h:panelGroup rendered="#{not empty evento.hora_inicio}">
+                                <div class="event-detail-item">
+                                    <span class="event-detail-icon">🕐</span>
+                                    <span>
+                                        <h:outputText value="#{evento.hora_inicio}">
+                                            <f:convertDateTime pattern="HH:mm" type="time" />
+                                        </h:outputText>
+                                    </span>
+                                </div>
+                            </h:panelGroup>
+
+                            <div class="event-detail-item">
+                                <span class="event-detail-icon">👥</span>
+                                <span>Capacidad: #{evento.capacidad_maxima} personas</span>
+                            </div>
+                        </div>
+
+                        <div class="event-price">
+                            $<h:outputText value="#{evento.precio_boleta}">
+                                <f:convertNumber pattern="#,##0.00" />
+                            </h:outputText>
+                        </div>
                     </div>
                 </div>
-
-                <div class="event-content">
-                    <h3 class="event-title">#{evento.nombre_evento}</h3>
-
-                    <p class="event-description">#{evento.descripcion}</p>
-
-                    <div class="event-details">
-                        <div class="event-detail-item">
-                            <span class="event-detail-icon">📅</span>
-                            <span>
-                                <h:outputText value="#{evento.fecha}" rendered="#{not empty evento.fecha}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:outputText>
-                            </span>
-                        </div>
-
-                        <div class="event-detail-item" rendered="#{not empty evento.hora_inicio}">
-                            <span class="event-detail-icon">🕐</span>
-                            <span>
-                                <h:outputText value="#{evento.hora_inicio}">
-                                    <f:convertDateTime pattern="HH:mm" type="time" />
-                                </h:outputText>
-                            </span>
-                        </div>
-
-                        <div class="event-detail-item">
-                            <span class="event-detail-icon">👥</span>
-                            <span>Capacidad: #{evento.capacidad_maxima} personas</span>
-                        </div>
-                    </div>
-
-                    <div class="event-price">
-                        $<h:outputText value="#{evento.precio_boleta}">
-                            <f:convertNumber pattern="#,##0.00" />
-                        </h:outputText>
-                    </div>
-                </div>
-            </div>
-        </ui:repeat>
-    </div>
+            </ui:repeat>
+        </div>
+    </h:panelGroup>
 </h:form>
 
 </html>

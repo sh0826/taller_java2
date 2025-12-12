@@ -133,7 +133,7 @@
 
                 <!-- FECHA -->
                 <div class="form-group">
-                    <label class="form-label" for="fec">Fecha:</label>
+                    <label class="form-label" for="fec">Fecha (yyyy-MM-dd):</label>
                     <h:inputText id="fec" value="#{eventoBean.evento.fecha}" styleClass="form-control" required="true"
                         requiredMessage="Debe especificar una Fecha">
                         <f:convertDateTime pattern="yyyy-MM-dd" />
@@ -143,7 +143,7 @@
 
                 <!-- HORA -->
                 <div class="form-group">
-                    <label class="form-label" for="hora">Hora de Inicio:</label>
+                    <label class="form-label" for="hora">Hora de Inicio (HH:mm):</label>
                     <h:inputText id="hora" value="#{eventoBean.horaInicioDate}" styleClass="form-control"
                         required="true" requiredMessage="Debe especificar una Hora">
                         <f:convertDateTime pattern="HH:mm" type="time" />

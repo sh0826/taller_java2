@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <title>Conócenos - Ágora Vibes Pub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .navbar-custom {
+            background: #000;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            /* Centra verticalmente */
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .navbar-custom img {
+            height: 100%;
+            /* Ocupa todo el alto de la navbar */
+            width: 230px;
+        }
+
+        .navbar-custom a {
+            color: white;
+            margin-right: 20px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .navbar-custom a:hover {
+            color: #C89B3C;
+        }
+
+        .title-section {
+            color: #a30000;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .producto-img {
+            height: 300px;
+            width: 100%;
+            object-fit: contain;
+            padding: 10px;
+        }
+    </style>
+</h:head>
+<h:body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar-custom d-flex justify-content-between align-items-center">
+        <img src="/proyectoBar2/imagenes/logo1.svg" alt="Logo" style="height:150px" />
+        <div>
+            <a href="conocenos.xhtml">Conócenos</a>
+            <a href="catalogo.xhtml">Catálogo</a>
+            <a href="evento.xhtml">Eventos</a>
+
+            <a href="/proyectoBar2/faces/inicio_sesion/login.xhtml" style="color:#C89B3C;">
+                Iniciar sesión
+            </a>
+            <a href="/proyectoBar2/faces/inicio_sesion/crear_cliente.xhtml" style="color:#C89B3C;">
+                Registrarse
+            </a>
+        </div>
+    </nav>
+    <br />
+
+    <div class="container">
+        <h1 class="title-section" style="text-align: center; font-size: 40px">Catálogo</h1>
+        <br />
+        <div class="row g-4">
+
+            <!-- Producto 1 -->
+            <div class="col-12 col-sm-6 col-md-3 mb-4">
+                <div class="card text-center producto" style="background:#000000;">
+                    <h:graphicImage value="/resources/imagenes/heretic.png" alt="Heretic" styleClass="producto-img" />
+                    <h4 style="color:#fff; font-size:35px; margin-top:26px;"><b>Heretic</b></h4>
+                    <h3 style="color:#5E5C5C;"><b>Precio: $130.000</b></h3>
+                    <h3 style="color:#8A0B0B;"><b>Contenido: 700ml</b></h3>
+                </div>
+            </div>
+
+            <!-- Producto 2 -->
+            <div class="col-12 col-sm-6 col-md-3 mb-4">
+                <div class="card text-center producto" style="background:#000000;">
+                    <h:graphicImage value="imagenes/monkey.png" alt="Monkey Shoulder" styleClass="producto-img" />
+                    <h3 style="color:#fff; font-size:31px; margin-top:32px;"><b>Monkey Shoulder</b></h3>
+                    <h3 style="color:#5E5C5C;"><b>Precio: $210.000</b></h3>
+                    <h3 style="color:#8A0B0B;"><b>Contenido: 700ml</b></h3>
+                </div>
+            </div>
+
+            <!-- Producto 3 -->
+            <div class="col-12 col-sm-6 col-md-3 mb-4">
+                <div class="card text-center producto" style="background:#000000;">
+                    <h:graphicImage value="imagenes/reposado.png" alt="Nectar Reposado" styleClass="producto-img" />
+                    <h3 style="color:#fff; font-size:30px;"><b>Aguardiente Nectar Reposado</b></h3>
+                    <h3 style="color:#5E5C5C;"><b>Precio: $100.000</b></h3>
+                    <h3 style="color:#8A0B0B;"><b>Contenido: 700ml</b></h3>
+                </div>
+            </div>
+
+            <!-- Producto 4 -->
+            <div class="col-12 col-sm-6 col-md-3 mb-4">
+                <div class="card text-center producto" style="background:#000000;">
+                    <h:graphicImage value="imagenes/olmeca.png" alt="Olmeca Chocolate" styleClass="producto-img" />
+                    <h3 style="color:#fff; font-size:31px;"><b>Tequila Olmeca Dark Chocolate</b></h3>
+                    <h3 style="color:#5E5C5C;"><b>Precio: $170.000</b></h3>
+                    <h3 style="color:#8A0B0B;"><b>Contenido: 700ml</b></h3>
+                </div>
+            </div>
+
+            <!-- Producto 5 -->
+            <div class="col-12 col-sm-6 col-md-3 mb-4">
+                <div class="card text-center producto" style="background:#000000;">
+                    <h:graphicImage value="imagenes/belirum.png" alt="Delirium" styleClass="producto-img" />
+                    <h4 style="color:#FFEDED; font-size:30px; margin-top:30px;"><b>Cerveza Delirium Nocturnum
+                            Botella</b></h4>
+                    <h3 style="color:#5E5C5C;"><b>Precio: $30.000</b></h3>
+                    <h3 style="color:#8A0B0B;"><b>Contenido: 330ml</b></h3>
+                </div>
+            </div>
+
+            <!-- Producto 6 -->
+            <div class="col-12 col-sm-6 col-md-3 mb-4">
+                <div class="card text-center producto" style="background:#000000;">
+                    <h:graphicImage value="imagenes/Jack.png" alt="Jack Daniels Fire" styleClass="producto-img" />
+                    <h3 style="color:#fff; font-size:29px; margin-top:30px;"><b>Jack Daniels Tennessee FIRE</b></h3>
+                    <h3 style="color:#5E5C5C;"><b>Precio: $170.000</b></h3>
+                    <h3 style="color:#8A0B0B;"><b>Contenido: 700ml</b></h3>
+                </div>
+            </div>
+
+            <!-- Producto 7 -->
+            <div class="col-12 col-sm-6 col-md-3 mb-4">
+                <div class="card text-center producto" style="background:#000000;">
+                    <h:graphicImage value="imagenes/corona.png" alt="Corona" styleClass="producto-img" />
+                    <h3 style="color:#fff; font-size:30px; margin-top:61px;"><b>Cerveza Corona</b></h3>
+                    <h3 style="color:#5E5C5C;"><b>Precio: $8.000</b></h3>
+                    <h3 style="color:#8A0B0B;"><b>Contenido: 330ml</b></h3>
+                </div>
+            </div>
+
+            <!-- Producto 8 -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card text-center producto" style="background:#000000;">
+                    <h:graphicImage value="imagenes/frangelico.png" alt="Frangelico" styleClass="producto-img" />
+                    <h3 style="color:#fff; font-size:35px; margin-top:56px;"><b>Frangelico</b></h3>
+                    <h3 style="color:#5E5C5C;"><b>Precio: $210.500</b></h3>
+                    <h3 style="color:#8A0B0B;"><b>Contenido: 700ml</b></h3>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</h:body>
+
+</html>
