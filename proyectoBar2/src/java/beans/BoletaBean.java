@@ -49,9 +49,14 @@ public class BoletaBean implements Serializable {
     }
     
     public void preRender() {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
-            listarEven();
-            listar();
+        System.out.println("=== BOLETABEAN: PRE RENDER START ===");
+        // Check if list is empty OR if it's not a postback
+        if (!FacesContext.getCurrentInstance().isPostback() || lstEven == null || lstEven.isEmpty()) {
+            System.out.println("=== BOLETABEAN: LOADING DATA (Not postback or List empty) ===");
+            listarEven(); // Cargar eventos para el dropdown
+            listar(); // Cargar la lista de boletas
+        } else {
+             System.out.println("=== BOLETABEAN: IS POSTBACK AND LIST HAS DATA - SKIPPING LOAD ===");
         }
     }
 
@@ -122,8 +127,14 @@ public class BoletaBean implements Serializable {
     }
     
     public void listarEven(){
+        System.out.println("=== BOLETABEAN: listarEven() CALLED ===");
         EventoDAO evenDAO = new EventoDAO();
         lstEven = evenDAO.listar();
+        if(lstEven == null) {
+             System.out.println("=== BOLETABEAN: lstEven is NULL ===");
+        } else {
+             System.out.println("=== BOLETABEAN: lstEven size: " + lstEven.size() + " ===");
+        }
     }
     
     public void nuevoBoleta(){

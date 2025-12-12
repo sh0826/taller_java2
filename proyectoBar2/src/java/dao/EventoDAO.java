@@ -49,7 +49,8 @@ public class EventoDAO {
                 listaEvento.add(evento);
             }
         } catch (SQLException e){
-            
+            System.err.println("=== EVENTODAO A ERROR: " + e.getMessage());
+            e.printStackTrace();
         }
         return listaEvento;
     }
