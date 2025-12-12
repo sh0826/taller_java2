@@ -88,4 +88,45 @@ public class ProductoDAO {
         }
         return null;
     }
+    
+    /**
+     * Disminuye el stock de un producto en la cantidad especificada
+     * @param idProducto ID del producto
+     * @param cantidad Cantidad a disminuir del stock
+     * @return true si se actualizó correctamente, false si no hay suficiente stock o el producto no existe
+     */
+    public boolean disminuirStock(int idProducto, int cantidad) throws Exception {
+        conn = ConnBD.conectar();
+        
+        // Primero verificar que el producto existe y tiene suficiente stock
+        String sqlVerificar = "SELECT stock FROM producto WHERE id_producto = ?";
+        ps = conn.prepareStatement(sqlVerificar);
+        ps.setInt(1, idProducto);
+        rs = ps.executeQuery();
+        
+        if (!rs.next()) {
+            System.err.println("Error: El producto con ID " + idProducto + " no existe");
+            return false;
+        }
+        
+        int stockActual = rs.getInt("stock");
+        if (stockActual < cantidad) {
+            System.err.println("Error: Stock insuficiente. Stock actual: " + stockActual + ", Cantidad solicitada: " + cantidad);
+            return false;
+        }
+        
+        // Actualizar el stock
+        String sqlActualizar = "UPDATE producto SET stock = stock - ? WHERE id_producto = ?";
+        ps = conn.prepareStatement(sqlActualizar);
+        ps.setInt(1, cantidad);
+        ps.setInt(2, idProducto);
+        
+        int filas = ps.executeUpdate();
+        if (filas > 0) {
+            System.out.println("Stock actualizado: Producto ID " + idProducto + " - Stock disminuido en " + cantidad);
+            return true;
+        }
+        
+        return false;
+    }
 }

@@ -283,5 +283,38 @@ public class ventaDao {
             return 1; // Valor por defecto
         }
     }
+    
+    /**
+     * Actualiza el total de una venta sumando todos los detalles de venta asociados
+     * @param idVenta ID de la venta a actualizar
+     * @return true si se actualizó correctamente, false en caso de error
+     */
+    public boolean actualizarTotalDesdeDetalles(int idVenta) {
+        String sql = "UPDATE venta v SET v.total = (" +
+                     "SELECT COALESCE(SUM(dv.cantidad_productos * dv.precio_unitario), 0) " +
+                     "FROM detalle_venta dv " +
+                     "WHERE dv.id_venta = v.id_venta" +
+                     ") WHERE v.id_venta = ?";
+        
+        try (Connection conn = ConnBD.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, idVenta);
+            int filas = ps.executeUpdate();
+            
+            if (filas > 0) {
+                System.out.println("Total de venta ID " + idVenta + " actualizado correctamente");
+                return true;
+            } else {
+                System.err.println("No se encontró la venta con ID " + idVenta);
+                return false;
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar total de venta: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 

@@ -97,48 +97,57 @@
         
         <h2>Detalles de Venta</h2>
     
-        <!-- Información de la Venta -->
-        <h:panelGroup rendered="#{detalleVentaBean.ventaSeleccionada != null}">
-            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
-                <h3 style="color: #C89B3C; margin-top: 0; padding-bottom: 10px; border-bottom: 1px solid #333;">
-                    Información de la Venta
-                </h3>
-                <div style="padding: 20px; color: #eee;">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
-                        <div>
-                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">ID Venta:</strong>
-                            <span style="color: #eee;">#{detalleVentaBean.ventaSeleccionada.id_venta}</span>
-                        </div>
-                        <div>
-                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Fecha:</strong>
-                            <span style="color: #eee;">
-                                <h:outputText value="#{detalleVentaBean.ventaSeleccionada.fecha}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                </h:outputText>
-                            </span>
-                        </div>
-                        <div>
-                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Total:</strong>
-                            <span style="color: #eee;">
-                                <h:outputText value="#{detalleVentaBean.ventaSeleccionada.total}">
-                                    <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
-                                </h:outputText>
-                            </span>
-                        </div>
-                        <div>
-                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Método de Pago:</strong>
-                            <span style="color: #eee;">#{detalleVentaBean.ventaSeleccionada.metodo_pago}</span>
-                        </div>
-                        <div style="grid-column: 1 / -1;">
-                            <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Cliente:</strong>
-                            <span style="color: #eee;">#{detalleVentaBean.ventaSeleccionada.nombre_usuario}</span>
+         <h:form id="formDetalleVenta">
+            <!-- Información de la Venta -->
+            <h:panelGroup rendered="#{detalleVentaBean.ventaSeleccionada != null}">
+                <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+                    <h3 style="color: #C89B3C; margin-top: 0; padding-bottom: 10px; border-bottom: 1px solid #333;">
+                        Información de la Venta
+                    </h3>
+                    <div style="padding: 20px; color: #eee;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                            <div>
+                                <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">ID Venta:</strong>
+                                <span style="color: #eee;">#{detalleVentaBean.ventaSeleccionada.id_venta}</span>
+                            </div>
+                            <div>
+                                <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Fecha:</strong>
+                                <span style="color: #eee;">
+                                    <h:outputText value="#{detalleVentaBean.ventaSeleccionada.fecha}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                </span>
+                            </div>
+                            <div>
+                                <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Total:</strong>
+                                <span style="color: #eee;">
+                                    <h:outputText value="#{detalleVentaBean.ventaSeleccionada.total}">
+                                        <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </span>
+                            </div>
+                            <div>
+                                <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Método de Pago:</strong>
+                                <h:selectOneMenu value="#{detalleVentaBean.ventaSeleccionada.metodo_pago}" 
+                                               styleClass="form-select" 
+                                               style="width: 100%; margin-top: 5px;">
+                                    <f:selectItem itemLabel="Efectivo" itemValue="efectivo" />
+                                    <f:selectItem itemLabel="Tarjeta" itemValue="tarjeta" />
+                                    <f:selectItem itemLabel="Transferencia" itemValue="transferencia" />
+                                </h:selectOneMenu>
+                                <h:commandButton value="Actualizar Método de Pago" 
+                                               styleClass="boton" 
+                                               style="margin-top: 10px;"
+                                               action="#{detalleVentaBean.actualizarMetodoPago()}" />
+                            </div>
+                            <div style="grid-column: 1 / -1;">
+                                <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Cliente:</strong>
+                                <span style="color: #eee;">#{detalleVentaBean.ventaSeleccionada.nombre_usuario}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </h:panelGroup>
-        
-         <h:form id="formDetalleVenta">
+            </h:panelGroup>
             <p:messages id="messages" showDetail="true" closable="true" />
             
             <!-- Panel de Filtros -->
@@ -200,12 +209,25 @@
                     
                     <div>
                         <h:outputLabel value="Cantidad:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
-                        <h:inputText value="#{detalleVentaBean.detalle.cantidad_productos}" styleClass="form-control" style="width: 100%;"/>
+                        <h:inputText id="cantidadInput" value="#{detalleVentaBean.detalle.cantidad_productos}" styleClass="form-control" style="width: 100%;">
+                            <f:ajax event="keyup" render="precioFinal" execute="@this precioUnitario"/>
+                            <f:ajax event="change" render="precioFinal" execute="@this precioUnitario"/>
+                        </h:inputText>
                     </div>
                     
                     <div>
                         <h:outputLabel value="Precio Unitario:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
-                        <h:inputText id="precioUnitario" value="#{detalleVentaBean.detalle.precio_unitario}" styleClass="form-control" style="width: 100%;"/>
+                        <h:inputText id="precioUnitario" value="#{detalleVentaBean.detalle.precio_unitario}" styleClass="form-control" style="width: 100%;">
+                            <f:ajax event="keyup" render="precioFinal" execute="@this cantidadInput"/>
+                            <f:ajax event="change" render="precioFinal" execute="@this cantidadInput"/>
+                        </h:inputText>
+                    </div>
+                    
+                    <div style="grid-column: 1 / -1;">
+                        <h:outputLabel value="Precio Final (Cantidad × Precio Unitario):" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
+                        <h:outputText id="precioFinal" value="#{detalleVentaBean.detalle.precioFinal}" style="color: #C89B3C; font-size: 18px; font-weight: bold; display: block; padding: 10px; background: #262626; border: 1px solid #444; border-radius: 5px;">
+                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                        </h:outputText>
                     </div>
                 </div>
                 
@@ -303,10 +325,10 @@
                         </f:facet>
                     </p:column>
                     
-                    <p:column headerText="ID Producto">
-                        <h:outputText value="#{d.id_producto}" style="display:block; padding:10px 5px; color:black;" />
+                    <p:column headerText="Producto">
+                        <h:outputText value="#{d.nombre_producto != null ? d.nombre_producto : 'N/A'}" style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
                         <f:facet name="exportar">
-                            <h:outputText value="#{d.id_producto}" />
+                            <h:outputText value="#{d.nombre_producto != null ? d.nombre_producto : 'N/A'}" />
                         </f:facet>
                     </p:column>
                     
@@ -318,7 +340,7 @@
                     </p:column>
                     
                     <p:column headerText="Cantidad">
-                        <h:outputText value="#{d.cantidad_productos}" style="display:block; padding:10px 5px; color:black;" />
+                        <h:outputText value="#{d.cantidad_productos}" style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
                         <f:facet name="exportar">
                             <h:outputText value="#{d.cantidad_productos}" />
                         </f:facet>
@@ -330,6 +352,17 @@
                         </h:outputText>
                         <f:facet name="exportar">
                             <h:outputText value="#{d.precio_unitario}">
+                                <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                    </p:column>
+                    
+                    <p:column headerText="Precio Final">
+                        <h:outputText value="#{d.precioFinal}" style="display:block; padding:10px 5px; color:#C89B3C; font-weight: bold; font-size: 16px;">
+                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                        </h:outputText>
+                        <f:facet name="exportar">
+                            <h:outputText value="#{d.precioFinal}">
                                 <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
                             </h:outputText>
                         </f:facet>

@@ -7,6 +7,7 @@ public class DetalleVenta {
     private String descripcion;
     private Integer cantidad_productos;
     private Double precio_unitario;
+    private String nombre_producto; // Nombre del producto (obtenido del JOIN)
 
     public DetalleVenta() {}
 
@@ -56,6 +57,25 @@ public class DetalleVenta {
 
     public void setPrecio_unitario(Double precio_unitario) {
         this.precio_unitario = precio_unitario;
+    }
+    
+    public String getNombre_producto() {
+        return nombre_producto;
+    }
+    
+    public void setNombre_producto(String nombre_producto) {
+        this.nombre_producto = nombre_producto;
+    }
+    
+    /**
+     * Calcula el precio final (subtotal) multiplicando cantidad por precio unitario
+     * @return Precio final calculado
+     */
+    public Double getPrecioFinal() {
+        if (cantidad_productos != null && precio_unitario != null) {
+            return cantidad_productos * precio_unitario;
+        }
+        return 0.0;
     }
     
 }

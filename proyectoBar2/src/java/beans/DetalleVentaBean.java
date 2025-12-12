@@ -245,12 +245,16 @@ public class DetalleVentaBean {
         System.out.println("Esto es guardar");
 
         try {
+            int idVenta = 0;
+            
             // Si hay una venta seleccionada, usar su ID
             if (ventaSeleccionada != null && ventaSeleccionada.getId_venta() > 0) {
-                detalle.setId_venta(ventaSeleccionada.getId_venta());
+                idVenta = ventaSeleccionada.getId_venta();
+                detalle.setId_venta(idVenta);
             } else if (filtroIdVenta != null && filtroIdVenta > 0) {
                 // Si no hay venta seleccionada pero hay un filtro, usar el filtro
-                detalle.setId_venta(filtroIdVenta);
+                idVenta = filtroIdVenta;
+                detalle.setId_venta(idVenta);
             } else {
                 // Mostrar error si no hay ID de venta
                 FacesContext.getCurrentInstance().addMessage(null, 
@@ -259,14 +263,49 @@ public class DetalleVentaBean {
                 return;
             }
 
+            // Validar que se haya seleccionado un producto
+            if (detalle.getId_producto() <= 0) {
+                FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                        "Error", "Debe seleccionar un producto"));
+                return;
+            }
+            
+            // Validar cantidad
+            if (detalle.getCantidad_productos() == null || detalle.getCantidad_productos() <= 0) {
+                FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                        "Error", "La cantidad debe ser mayor a 0"));
+                return;
+            }
+
             if(detalle.getId_detalleV() > 0) {
                 dao.modificar(detalle);
             } else {
+                // Insertar el detalle (esto también disminuirá el stock)
                 dao.insertar(detalle);
+                
+                // Actualizar el total de la venta sumando todos los detalles
+                ventaDao ventaDAO = new ventaDao();
+                boolean totalActualizado = ventaDAO.actualizarTotalDesdeDetalles(idVenta);
+                
+                if (totalActualizado) {
+                    // Recargar la venta seleccionada para mostrar el nuevo total
+                    ventaSeleccionada = ventaDAO.buscarPorId(idVenta);
+                    FacesContext.getCurrentInstance().addMessage(null, 
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                            "Éxito", "Detalle agregado y stock actualizado. Total de venta recalculado."));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, 
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, 
+                            "Advertencia", "Detalle agregado pero no se pudo actualizar el total de la venta."));
+                }
             }
+            
             detalle = new DetalleVenta();
             // Limpiar la lista filtrada para que se recargue
             listaFiltrada = null;
+            listaAgrupada = null;
             actualizarLista();
         } catch(Exception e){
             e.printStackTrace();
@@ -286,6 +325,45 @@ public class DetalleVentaBean {
             actualizarLista();
         } catch(Exception e){ 
             e.printStackTrace(); 
+        }
+    }
+    
+    /**
+     * Actualiza el método de pago de la venta seleccionada
+     */
+    public void actualizarMetodoPago() {
+        try {
+            if (ventaSeleccionada == null || ventaSeleccionada.getId_venta() <= 0) {
+                FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                        "Error", "No hay una venta seleccionada"));
+                return;
+            }
+            
+            if (ventaSeleccionada.getMetodo_pago() == null || ventaSeleccionada.getMetodo_pago().trim().isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                        "Error", "Debe seleccionar un método de pago"));
+                return;
+            }
+            
+            ventaDao ventaDAO = new ventaDao();
+            boolean actualizado = ventaDAO.actualizar(ventaSeleccionada);
+            
+            if (actualizado) {
+                FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                        "Éxito", "Método de pago actualizado correctamente"));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, 
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                        "Error", "No se pudo actualizar el método de pago"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                    "Error", "Error al actualizar método de pago: " + e.getMessage()));
         }
     }
     
