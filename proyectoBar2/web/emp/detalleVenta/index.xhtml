@@ -141,23 +141,23 @@
          <h:form id="formDetalleVenta">
             <p:messages id="messages" showDetail="true" closable="true" />
             
-            <!-- Panel de Filtros -->
+            <!-- Panel de Filtros (solo lectura para empleados) -->
             <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
                 <h3 style="color: #C89B3C; margin-top: 0;">Filtros de Búsqueda</h3>
                 <h:panelGrid columns="4" cellpadding="5" style="width: 100%;">
                     <h:outputLabel value="Filtrar por ID Venta:" style="color: #C89B3C;"/>
                     <h:inputText id="filtroIdVenta" value="#{detalleVentaBean.filtroIdVenta}" 
                                  styleClass="form-control" 
-                                 readonly="#{detalleVentaBean.ventaSeleccionada != null}"/>
+                                 readonly="true"/>
                     
                     <h:outputLabel value="Filtrar por Producto:" style="color: #C89B3C;"/>
-                    <h:selectOneMenu id="filtroIdProducto" value="#{detalleVentaBean.filtroIdProducto}" styleClass="form-select">
+                    <h:selectOneMenu id="filtroIdProducto" value="#{detalleVentaBean.filtroIdProducto}" styleClass="form-select" disabled="true">
                         <f:selectItem itemLabel="Todos" itemValue="0"/>
                         <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
                     </h:selectOneMenu>
                     
                     <h:outputLabel value="Filtrar por Descripción:" style="color: #C89B3C;"/>
-                    <h:inputText id="filtroDescripcion" value="#{detalleVentaBean.filtroDescripcion}" styleClass="form-control"/>
+                    <h:inputText id="filtroDescripcion" value="#{detalleVentaBean.filtroDescripcion}" styleClass="form-control" readonly="true"/>
                     
                     <h:panelGroup/>
                     <h:panelGroup>
@@ -166,54 +166,16 @@
                                          update="dtDetalleVenta messages"
                                          process="@form"
                                          styleClass="boton"
-                                         style="margin-right: 10px;"/>
+                                         style="margin-right: 10px;"
+                                         disabled="true"/>
                         <p:commandButton value="Limpiar" 
                                          action="#{detalleVentaBean.limpiarFiltros()}" 
                                          update="dtDetalleVenta filtroIdVenta filtroIdProducto filtroDescripcion messages"
                                          process="@this"
-                                         styleClass="boton"/>
+                                         styleClass="boton"
+                                         disabled="true"/>
                     </h:panelGroup>
                 </h:panelGrid>
-            </div>
-            
-            <!-- Formulario para agregar detalles - Fuera del cuadro -->
-            <div style="margin: 20px 0;">
-                <h3 style="color: #C89B3C; margin-top: 0; margin-bottom: 15px;">Agregar Detalle</h3>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                    <div>
-                        <h:outputLabel value="Producto:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
-                        <h:selectOneMenu id="productoSelect" value="#{detalleVentaBean.detalle.id_producto}" styleClass="form-select" style="width: 100%;">
-                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                            <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
-                            <f:ajax event="change" 
-                                    listener="#{detalleVentaBean.cargarPrecioProducto()}" 
-                                    render="precioUnitario" 
-                                    execute="@this"/>
-                        </h:selectOneMenu>
-                    </div>
-                    
-                    <div>
-                        <h:outputLabel value="Descripción:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
-                        <h:inputText value="#{detalleVentaBean.detalle.descripcion}" styleClass="form-control" style="width: 100%;"/>
-                    </div>
-                    
-                    <div>
-                        <h:outputLabel value="Cantidad:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
-                        <h:inputText value="#{detalleVentaBean.detalle.cantidad_productos}" styleClass="form-control" style="width: 100%;"/>
-                    </div>
-                    
-                    <div>
-                        <h:outputLabel value="Precio Unitario:" style="color: #C89B3C; display: block; margin-bottom: 5px; font-weight: bold;"/>
-                        <h:inputText id="precioUnitario" value="#{detalleVentaBean.detalle.precio_unitario}" styleClass="form-control" style="width: 100%;"/>
-                    </div>
-                </div>
-                
-                <div style="text-align: left; margin-top: 10px;">
-                    <h:commandButton value="Guardar" 
-                                     action="#{detalleVentaBean.guardar()}" 
-                                     styleClass="boton"/>
-                </div>
             </div>
             
             <div style="margin: 20px 0; text-align: center;">
@@ -231,6 +193,10 @@
                               action="#{detalleVentaBean.exportarExcel}">
                     <p:graphicImage value="/iconos/xls.png" width="35" />
                 </p:commandLink>
+                <h:commandLink value="Volver a Ventas" 
+                               styleClass="boton" 
+                               style="margin-left: 10px;"
+                               action="/faces/emp/ventas/index?faces-redirect=true" />
             </div>
             
             <!-- Tabla de Detalles Agrupados por Producto -->
@@ -303,10 +269,10 @@
                         </f:facet>
                     </p:column>
                     
-                    <p:column headerText="ID Producto">
-                        <h:outputText value="#{d.id_producto}" style="display:block; padding:10px 5px; color:black;" />
+                    <p:column headerText="Producto">
+                        <h:outputText value="#{d.nombre_producto != null ? d.nombre_producto : 'N/A'}" style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
                         <f:facet name="exportar">
-                            <h:outputText value="#{d.id_producto}" />
+                            <h:outputText value="#{d.nombre_producto != null ? d.nombre_producto : 'N/A'}" />
                         </f:facet>
                     </p:column>
                     
@@ -318,7 +284,7 @@
                     </p:column>
                     
                     <p:column headerText="Cantidad">
-                        <h:outputText value="#{d.cantidad_productos}" style="display:block; padding:10px 5px; color:black;" />
+                        <h:outputText value="#{d.cantidad_productos}" style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
                         <f:facet name="exportar">
                             <h:outputText value="#{d.cantidad_productos}" />
                         </f:facet>
@@ -335,17 +301,15 @@
                         </f:facet>
                     </p:column>
                     
-                    <p:column headerText="Acciones" exportable="false">
-                        <div style="padding:10px 8px; text-align:center;">
-                            <h:commandButton value="Editar" 
-                                           action="#{detalleVentaBean.editar(d)}" 
-                                           styleClass="boton"
-                                           style="margin-right: 5px;"/>
-                            <h:commandButton value="Eliminar" 
-                                             action="#{detalleVentaBean.eliminar(d.id_detalleV)}" 
-                                             onclick="return confirm('¿Está seguro de eliminar este detalle?');" 
-                                             styleClass="boton"/>
-                        </div>
+                    <p:column headerText="Precio Final">
+                        <h:outputText value="#{d.precioFinal}" style="display:block; padding:10px 5px; color:#C89B3C; font-weight: bold; font-size: 16px;">
+                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                        </h:outputText>
+                        <f:facet name="exportar">
+                            <h:outputText value="#{d.precioFinal}">
+                                <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
                     </p:column>
                     
                     <!-- Fila especial para mostrar el total cuando no hay detalles -->
