@@ -34,14 +34,14 @@ public class reservacionDao {
         }
         
         // Validación: La cantidad de personas debe estar entre 1 y 80
-        if (res.getCatindad_personas() <= 0 || res.getCatindad_personas() > 80) {
-            System.err.println("Error: La cantidad de personas debe estar entre 1 y 80. Valor recibido: " + res.getCatindad_personas());
+        if (res.getCatindad_personas() <= 0 || res.getCatindad_personas() > 44) {
+            System.err.println("Error: La cantidad de personas debe estar entre 1 y 44. Valor recibido: " + res.getCatindad_personas());
             return false;
         }
         
-        // Validación: La cantidad de mesas debe estar entre 1 y 20
-        if (res.getCantidad_mesas() <= 0 || res.getCantidad_mesas() > 20) {
-            System.err.println("Error: La cantidad de mesas debe estar entre 1 y 20. Valor recibido: " + res.getCantidad_mesas());
+        // Validación: La cantidad de mesas debe estar entre 1 y 11
+        if (res.getCantidad_mesas() <= 0 || res.getCantidad_mesas() > 11) {
+            System.err.println("Error: La cantidad de mesas debe estar entre 1 y 11. Valor recibido: " + res.getCantidad_mesas());
             return false;
         }
         

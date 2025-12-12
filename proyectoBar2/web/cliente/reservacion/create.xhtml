@@ -114,15 +114,15 @@
                         </div>
                         
                         <div class="mb-3">
-                            <h:outputLabel for="cantidadPersonas" value="Cantidad de Personas (Máximo 80):" styleClass="form-label" />
+                            <h:outputLabel for="cantidadPersonas" value="Cantidad de Personas (Máximo 44):" styleClass="form-label" />
                             <h:inputText id="cantidadPersonas" value="#{reservacionBean.reservacion.catindad_personas}" 
                                         styleClass="form-control" required="true" 
                                         requiredMessage="La cantidad de personas es requerida">
                                 <f:convertNumber integerOnly="true" />
-                                <f:validateLongRange minimum="1" maximum="80" />
+                                <f:validateLongRange minimum="1" maximum="44" />
                             </h:inputText>
                             <h:message for="cantidadPersonas" styleClass="text-danger" />
-                            <small class="form-text">Máximo 80 personas</small>
+                            <small class="form-text">Máximo 44 personas</small>
                         </div>
                         
                         <div class="mb-3">
@@ -131,10 +131,10 @@
                                         styleClass="form-control" required="true" 
                                         requiredMessage="La cantidad de mesas es requerida">
                                 <f:convertNumber integerOnly="true" />
-                                <f:validateLongRange minimum="1" maximum="4" />
+                                <f:validateLongRange minimum="1" maximum="11" />
                             </h:inputText>
                             <h:message for="cantidadMesas" styleClass="text-danger" />
-                            <small class="form-text">📌 Recordatorio: Cada mesa tiene disponibles 4 asientos</small>
+                            <small class="form-text">📌 Recordatorio: Tiene 11 mesas disponibles</small>
                         </div>
                         
                         <div class="mb-3">

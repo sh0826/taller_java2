@@ -93,8 +93,8 @@ public class reservacionBean {
             return null;
         }
         
-        if (reservacion.getCatindad_personas() < 1 || reservacion.getCatindad_personas() > 80) { // Validar rango 1-80
-            System.err.println("Error: La cantidad de personas debe estar entre 1 y 80. Valor: " + reservacion.getCatindad_personas());
+        if (reservacion.getCatindad_personas() < 1 || reservacion.getCatindad_personas() > 44) { // Validar rango 1-80
+            System.err.println("Error: La cantidad de personas debe estar entre 1 y 44. Valor: " + reservacion.getCatindad_personas());
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad de personas debe estar entre 1 y 80"));
             return null;
         }
@@ -105,9 +105,9 @@ public class reservacionBean {
             return null;
         }
         
-        if (reservacion.getCantidad_mesas() < 1 || reservacion.getCantidad_mesas() > 20) { // Validar rango 1-20
-            System.err.println("Error: La cantidad de mesas debe estar entre 1 y 20. Valor: " + reservacion.getCantidad_mesas());
-            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad de mesas debe estar entre 1 y 20"));
+        if (reservacion.getCantidad_mesas() < 1 || reservacion.getCantidad_mesas() > 11) { // Validar rango 1-11
+            System.err.println("Error: La cantidad de mesas debe estar entre 1 y 11. Valor: " + reservacion.getCantidad_mesas());
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad de mesas debe estar entre 1 y 11"));
             return null;
         }
         
@@ -157,13 +157,13 @@ public class reservacionBean {
             return null;
         }
         
-        if (reservacion.getCatindad_personas() <= 0 || reservacion.getCatindad_personas() > 80) {
-            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad de personas debe estar entre 1 y 80"));
+        if (reservacion.getCatindad_personas() <= 0 || reservacion.getCatindad_personas() > 44) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad de personas debe estar entre 1 y 44"));
             return null;
         }
         
-        if (reservacion.getCantidad_mesas() <= 0 || reservacion.getCantidad_mesas() > 20) {
-            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad de mesas debe estar entre 1 y 20"));
+        if (reservacion.getCantidad_mesas() <= 0 || reservacion.getCantidad_mesas() > 11) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad de mesas debe estar entre 1 y 11"));
             return null;
         }
         
