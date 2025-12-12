@@ -1,13 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="/templates/empLayout.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="/templates/empLayout.xhtml" xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="contenido">
         <style>
@@ -92,14 +89,15 @@
                 font-weight: bold;
             }
         </style>
-        
+
         <f:event type="preRenderView" listener="#{detalleVentaBean.inicializarDesdeSesion()}" />
-        
+
         <h2>Detalles de Venta</h2>
-    
+
         <!-- Información de la Venta -->
         <h:panelGroup rendered="#{detalleVentaBean.ventaSeleccionada != null}">
-            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+            <div
+                style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
                 <h3 style="color: #C89B3C; margin-top: 0; padding-bottom: 10px; border-bottom: 1px solid #333;">
                     Información de la Venta
                 </h3>
@@ -121,7 +119,7 @@
                             <strong style="color: #C89B3C; display: block; margin-bottom: 5px;">Total:</strong>
                             <span style="color: #eee;">
                                 <h:outputText value="#{detalleVentaBean.ventaSeleccionada.total}">
-                                    <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                                    <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2" />
                                 </h:outputText>
                             </span>
                         </div>
@@ -137,207 +135,226 @@
                 </div>
             </div>
         </h:panelGroup>
-        
-         <h:form id="formDetalleVenta">
+
+        <h:form id="formDetalleVenta">
             <p:messages id="messages" showDetail="true" closable="true" />
-            
-            <!-- Panel de Filtros (solo lectura para empleados) -->
-            <div style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
+
+            <!-- Panel de Filtros -->
+            <div
+                style="margin: 20px 0; padding: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 5px;">
                 <h3 style="color: #C89B3C; margin-top: 0;">Filtros de Búsqueda</h3>
                 <h:panelGrid columns="4" cellpadding="5" style="width: 100%;">
-                    <h:outputLabel value="Filtrar por ID Venta:" style="color: #C89B3C;"/>
-                    <h:inputText id="filtroIdVenta" value="#{detalleVentaBean.filtroIdVenta}" 
-                                 styleClass="form-control" 
-                                 readonly="true"/>
-                    
-                    <h:outputLabel value="Filtrar por Producto:" style="color: #C89B3C;"/>
-                    <h:selectOneMenu id="filtroIdProducto" value="#{detalleVentaBean.filtroIdProducto}" styleClass="form-select" disabled="true">
-                        <f:selectItem itemLabel="Todos" itemValue="0"/>
-                        <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}" itemValue="#{p.id_producto}"/>
+                    <h:outputLabel value="Filtrar por ID Venta:" style="color: #C89B3C;" />
+                    <h:inputText id="filtroIdVenta" value="#{detalleVentaBean.filtroIdVenta}"
+                        styleClass="form-control" />
+
+                    <h:outputLabel value="Filtrar por Producto:" style="color: #C89B3C;" />
+                    <h:selectOneMenu id="filtroIdProducto" value="#{detalleVentaBean.filtroIdProducto}"
+                        styleClass="form-select">
+                        <f:selectItem itemLabel="Todos" itemValue="0" />
+                        <f:selectItems value="#{detalleVentaBean.listaProductos}" var="p" itemLabel="#{p.nombre}"
+                            itemValue="#{p.id_producto}" />
                     </h:selectOneMenu>
-                    
-                    <h:outputLabel value="Filtrar por Descripción:" style="color: #C89B3C;"/>
-                    <h:inputText id="filtroDescripcion" value="#{detalleVentaBean.filtroDescripcion}" styleClass="form-control" readonly="true"/>
-                    
-                    <h:panelGroup/>
+
+                    <h:outputLabel value="Filtrar por Descripción:" style="color: #C89B3C;" />
+                    <h:inputText id="filtroDescripcion" value="#{detalleVentaBean.filtroDescripcion}"
+                        styleClass="form-control" />
+
+                    <h:panelGroup />
                     <h:panelGroup>
-                        <p:commandButton value="Filtrar" 
-                                         action="#{detalleVentaBean.filtrar()}" 
-                                         update="dtDetalleVenta messages"
-                                         process="@form"
-                                         styleClass="boton"
-                                         style="margin-right: 10px;"
-                                         disabled="true"/>
-                        <p:commandButton value="Limpiar" 
-                                         action="#{detalleVentaBean.limpiarFiltros()}" 
-                                         update="dtDetalleVenta filtroIdVenta filtroIdProducto filtroDescripcion messages"
-                                         process="@this"
-                                         styleClass="boton"
-                                         disabled="true"/>
+                        <p:commandButton value="Filtrar" action="#{detalleVentaBean.filtrar()}"
+                            update="dtDetalleVenta messages" process="@form" styleClass="boton"
+                            style="margin-right: 10px;" />
+                        <p:commandButton value="Limpiar" action="#{detalleVentaBean.limpiarFiltros()}"
+                            update="dtDetalleVenta filtroIdVenta filtroIdProducto filtroDescripcion messages"
+                            process="@this" styleClass="boton" />
                     </h:panelGroup>
                 </h:panelGrid>
             </div>
-            
+
             <div style="margin: 20px 0; text-align: center;">
-                <p:commandButton value="#{detalleVentaBean.mostrarAgrupado ? 'Ver Detalles Individuales' : 'Ver Totales por Descripción'}" 
-                                 action="#{detalleVentaBean.alternarVista}" 
-                                 update="dtDetalleVenta dtDetalleVentaAgrupado formDetalleVenta"
-                                 process="@this"
-                                 styleClass="boton"
-                                 style="margin-right: 10px;"/>
-                <p:commandLink ajax="false" styleClass="me-2" title="Exportar a PDF"
-                              action="#{detalleVentaBean.exportarPDF}">
-                    <p:graphicImage value="/iconos/pdf.png" width="30" />
-                </p:commandLink>
-                <p:commandLink ajax="false" title="Exportar a Excel"
-                              action="#{detalleVentaBean.exportarExcel}">
-                    <p:graphicImage value="/iconos/xls.png" width="35" />
-                </p:commandLink>
-                <h:commandLink value="Volver a Ventas" 
-                               styleClass="boton" 
-                               style="margin-left: 10px;"
-                               action="/faces/emp/ventas/index?faces-redirect=true" />
+                <p:commandButton
+                    value="#{detalleVentaBean.mostrarAgrupado ? 'Ver Detalles Individuales' : 'Ver Totales por Producto'}"
+                    action="#{detalleVentaBean.alternarVista}"
+                    update="dtDetalleVenta dtDetalleVentaAgrupado formDetalleVenta" process="@this" styleClass="boton"
+                    style="margin-right: 10px;" />
+                <h:commandLink value="Volver a Ventas" styleClass="boton" style="margin-left: 10px;"
+                    action="/faces/emp/ventas/index?faces-redirect=true" />
             </div>
-            
+
             <!-- Tabla de Detalles Agrupados por Producto -->
             <h:panelGroup rendered="#{detalleVentaBean.mostrarAgrupado}">
-            <div class="container">
-                <h3 style="color: #C89B3C; margin: 20px 0;">Totales de Ventas por Descripción</h3>
-                <p:dataTable id="dtDetalleVentaAgrupado" value="#{detalleVentaBean.listaAgrupada}" var="d" 
-                            styleClass="table table-bordered shadow-sm miAutoTabla"
-                            style="font-size:15px;"
-                            emptyMessage="No hay productos con ventas registradas"
-                            paginator="true" paginatorPosition="bottom" rows="15"
-                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                            currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
-                            rowsPerPageTemplate="15,30,50">
-                    
-                    <p:column headerText="ID Producto">
-                        <h:outputText value="#{d.id_producto}" style="display:block; padding:10px 5px; color:black;" />
-                    </p:column>
-                    
-                    <p:column headerText="Nombre del Producto">
-                        <h:outputText value="#{d.nombreProducto}" style="display:block; padding:10px 5px; color:black;" />
-                    </p:column>
-                    
-                    <p:column headerText="Descripción">
-                        <h:outputText value="#{d.descripcion}" style="display:block; padding:10px 5px; color:black;" />
-                    </p:column>
-                    
-                    <p:column headerText="Cantidad de Compras">
-                        <h:outputText value="#{d.cantidadCompras}" style="display:block; padding:10px 5px; color:black; font-weight: bold; color: #C89B3C;" />
-                    </p:column>
-                    
-                    <p:column headerText="Total Cantidad Vendida">
-                        <h:outputText value="#{d.totalCantidad}" style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
-                    </p:column>
-                    
-                    <p:column headerText="Precio Unitario">
-                        <h:outputText value="#{d.precioUnitario}" style="display:block; padding:10px 5px; color:black;">
-                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
-                        </h:outputText>
-                    </p:column>
-                    
-                    <p:column headerText="Total Venta">
-                        <h:outputText value="#{d.totalVenta}" style="display:block; padding:10px 5px; color:black; font-weight: bold; color: #C89B3C;">
-                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
-                        </h:outputText>
-                    </p:column>
-                    
-                </p:dataTable>
-            </div>
+                <div class="container">
+
+                    <p:dataTable id="dtDetalleVentaAgrupado" value="#{detalleVentaBean.listaAgrupada}" var="d"
+                        styleClass="table table-bordered shadow-sm miAutoTabla" style="font-size:15px;"
+                        emptyMessage="No hay productos con ventas registradas" paginator="true"
+                        paginatorPosition="bottom" rows="15"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
+                        rowsPerPageTemplate="15,30,50">
+
+                        <p:column headerText="ID Producto">
+                            <h:outputText value="#{d.id_producto}"
+                                style="display:block; padding:10px 5px; color:black;" />
+                        </p:column>
+
+                        <p:column headerText="Nombre del Producto">
+                            <h:outputText value="#{d.nombreProducto}"
+                                style="display:block; padding:10px 5px; color:black;" />
+                        </p:column>
+
+                        <p:column headerText="Descripción">
+                            <h:outputText value="#{d.descripcion}"
+                                style="display:block; padding:10px 5px; color:black;" />
+                        </p:column>
+
+                        <p:column headerText="Cantidad de Compras">
+                            <h:outputText value="#{d.cantidadCompras}"
+                                style="display:block; padding:10px 5px; color:black; font-weight: bold; color: #C89B3C;" />
+                        </p:column>
+
+                        <p:column headerText="Total Cantidad Vendida">
+                            <h:outputText value="#{d.totalCantidad}"
+                                style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
+                        </p:column>
+
+                        <p:column headerText="Precio Unitario">
+                            <h:outputText value="#{d.precioUnitario}"
+                                style="display:block; padding:10px 5px; color:black;">
+                                <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Total Venta">
+                            <h:outputText value="#{d.totalVenta}"
+                                style="display:block; padding:10px 5px; color:black; font-weight: bold; color: #C89B3C;">
+                                <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2" />
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+                </div>
+                <div style="margin-top: 10px; text-align: center;">
+                    <p:commandLink ajax="false" styleClass="boton" style="margin-right: 10px;">
+                        <h:outputText value="📄 Click para sacar el reporte de PDF" />
+                        <p:dataExporter target="dtDetalleVentaAgrupado" type="pdf" fileName="DetalleVentaAgrupado" />
+                    </p:commandLink>
+
+                    <p:commandLink ajax="false" styleClass="boton">
+                        <h:outputText value="📊 Click para sacar el reporte de Excel" />
+                        <p:dataExporter target="dtDetalleVentaAgrupado" type="xls" fileName="DetalleVentaAgrupado" />
+                    </p:commandLink>
+                </div>
             </h:panelGroup>
 
             <h:panelGroup rendered="#{!detalleVentaBean.mostrarAgrupado}">
-            <div class="container">
-                <p:dataTable id="dtDetalleVenta" value="#{detalleVentaBean.listaFiltrada}" var="d" 
-                            styleClass="table table-bordered shadow-sm miAutoTabla"
-                            style="font-size:15px;"
-                            emptyMessage="No hay detalles de venta registrados"
-                            paginator="true" paginatorPosition="bottom" rows="15"
-                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                            currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
-                            rowsPerPageTemplate="15,30,50">
-                    
-                    <p:column headerText="ID">
-                        <h:outputText value="#{d.id_detalleV}" style="display:block; padding:10px 5px; color:black;" />
-                        <f:facet name="exportar">
-                            <h:outputText value="#{d.id_detalleV}" />
-                        </f:facet>
-                    </p:column>
-                    
-                    <p:column headerText="ID Venta">
-                        <h:outputText value="#{d.id_venta}" style="display:block; padding:10px 5px; color:black;" />
-                        <f:facet name="exportar">
-                            <h:outputText value="#{d.id_venta}" />
-                        </f:facet>
-                    </p:column>
-                    
-                    <p:column headerText="Producto">
-                        <h:outputText value="#{d.nombre_producto != null ? d.nombre_producto : 'N/A'}" style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
-                        <f:facet name="exportar">
-                            <h:outputText value="#{d.nombre_producto != null ? d.nombre_producto : 'N/A'}" />
-                        </f:facet>
-                    </p:column>
-                    
-                    <p:column headerText="Descripción">
-                        <h:outputText value="#{d.descripcion}" style="display:block; padding:10px 5px; color:black;" />
-                        <f:facet name="exportar">
-                            <h:outputText value="#{d.descripcion}" />
-                        </f:facet>
-                    </p:column>
-                    
-                    <p:column headerText="Cantidad">
-                        <h:outputText value="#{d.cantidad_productos}" style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
-                        <f:facet name="exportar">
-                            <h:outputText value="#{d.cantidad_productos}" />
-                        </f:facet>
-                    </p:column>
-                    
-                    <p:column headerText="Precio Unitario">
-                        <h:outputText value="#{d.precio_unitario}" style="display:block; padding:10px 5px; color:black;">
-                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
-                        </h:outputText>
-                        <f:facet name="exportar">
-                            <h:outputText value="#{d.precio_unitario}">
-                                <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                <div class="container">
+                    <p:dataTable id="dtDetalleVenta" value="#{detalleVentaBean.listaFiltrada}" var="d"
+                        styleClass="table table-bordered shadow-sm miAutoTabla" style="font-size:15px;"
+                        emptyMessage="No hay detalles de venta registrados" paginator="true" paginatorPosition="bottom"
+                        rows="15"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords}"
+                        rowsPerPageTemplate="15,30,50">
+
+                        <p:column headerText="ID">
+                            <h:outputText value="#{d.id_detalleV}"
+                                style="display:block; padding:10px 5px; color:black;" />
+                            <f:facet name="exportar">
+                                <h:outputText value="#{d.id_detalleV}" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column headerText="ID Venta">
+                            <h:outputText value="#{d.id_venta}" style="display:block; padding:10px 5px; color:black;" />
+                            <f:facet name="exportar">
+                                <h:outputText value="#{d.id_venta}" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column headerText="Producto">
+                            <h:outputText value="#{d.nombre_producto != null ? d.nombre_producto : 'N/A'}"
+                                style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
+                            <f:facet name="exportar">
+                                <h:outputText value="#{d.nombre_producto != null ? d.nombre_producto : 'N/A'}" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column headerText="Descripción">
+                            <h:outputText value="#{d.descripcion}"
+                                style="display:block; padding:10px 5px; color:black;" />
+                            <f:facet name="exportar">
+                                <h:outputText value="#{d.descripcion}" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{d.cantidad_productos}"
+                                style="display:block; padding:10px 5px; color:black; font-weight: bold;" />
+                            <f:facet name="exportar">
+                                <h:outputText value="#{d.cantidad_productos}" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column headerText="Precio Unitario">
+                            <h:outputText value="#{d.precio_unitario}"
+                                style="display:block; padding:10px 5px; color:black;">
+                                <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2" />
                             </h:outputText>
-                        </f:facet>
-                    </p:column>
-                    
-                    <p:column headerText="Precio Final">
-                        <h:outputText value="#{d.precioFinal}" style="display:block; padding:10px 5px; color:#C89B3C; font-weight: bold; font-size: 16px;">
-                            <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
-                        </h:outputText>
-                        <f:facet name="exportar">
-                            <h:outputText value="#{d.precioFinal}">
-                                <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
-                            </h:outputText>
-                        </f:facet>
-                    </p:column>
-                    
-                    <!-- Fila especial para mostrar el total cuando no hay detalles -->
-                    <h:panelGroup rendered="#{empty detalleVentaBean.listaFiltrada and detalleVentaBean.ventaSeleccionada != null}">
-                        <p:row>
-                            <p:column colspan="5" style="text-align: right; font-weight: bold; padding: 10px;">
-                                <h:outputText value="Total de la Venta" style="color: black;" />
-                            </p:column>
-                            <p:column style="text-align: center; padding: 10px;">
-                                <h:outputText value="1" style="color: black;" />
-                            </p:column>
-                            <p:column style="text-align: center; padding: 10px;">
-                                <h:outputText value="#{detalleVentaBean.ventaSeleccionada.total}" style="color: black;">
-                                    <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2"/>
+                            <f:facet name="exportar">
+                                <h:outputText value="#{d.precio_unitario}">
+                                    <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2" />
                                 </h:outputText>
-                            </p:column>
-                            <p:column/>
-                        </p:row>
-                    </h:panelGroup>
-                    
-                </p:dataTable>
-            </div>
+                            </f:facet>
+                        </p:column>
+
+                        <p:column headerText="Precio Final">
+                            <h:outputText value="#{d.precioFinal}"
+                                style="display:block; padding:10px 5px; color:#C89B3C; font-weight: bold; font-size: 16px;">
+                                <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2" />
+                            </h:outputText>
+                            <f:facet name="exportar">
+                                <h:outputText value="#{d.precioFinal}">
+                                    <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2" />
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+
+                        <!-- Fila especial para mostrar el total cuando no hay detalles -->
+                        <h:panelGroup
+                            rendered="#{empty detalleVentaBean.listaFiltrada and detalleVentaBean.ventaSeleccionada != null}">
+                            <p:row>
+                                <p:column colspan="5" style="text-align: right; font-weight: bold; padding: 10px;">
+                                    <h:outputText value="Total de la Venta" style="color: black;" />
+                                </p:column>
+                                <p:column style="text-align: center; padding: 10px;">
+                                    <h:outputText value="1" style="color: black;" />
+                                </p:column>
+                                <p:column style="text-align: center; padding: 10px;">
+                                    <h:outputText value="#{detalleVentaBean.ventaSeleccionada.total}"
+                                        style="color: black;">
+                                        <f:convertNumber type="currency" currencySymbol="$ " maxFractionDigits="2" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column />
+                            </p:row>
+                        </h:panelGroup>
+
+                    </p:dataTable>
+                </div>
+                <div style="margin-top: 10px; text-align: center;">
+                    <p:commandLink ajax="false" styleClass="boton" style="margin-right: 10px;">
+                        <h:outputText value="📄 Click para sacar el reporte de PDF" />
+                        <p:dataExporter target="dtDetalleVenta" type="pdf" fileName="DetalleVenta" />
+                    </p:commandLink>
+
+                    <p:commandLink ajax="false" styleClass="boton">
+                        <h:outputText value="📊 Click para sacar el reporte de Excel" />
+                        <p:dataExporter target="dtDetalleVenta" type="xls" fileName="DetalleVenta" />
+                    </p:commandLink>
+                </div>
             </h:panelGroup>
         </h:form>
     </ui:define>
 </ui:composition>
-

@@ -239,26 +239,17 @@
             </div>
             
             <div style="margin: 20px 0; text-align: center;">
-                <p:commandButton value="#{detalleVentaBean.mostrarAgrupado ? 'Ver Detalles Individuales' : 'Ver Totales por Descripción'}" 
+                <p:commandButton value="#{detalleVentaBean.mostrarAgrupado ? 'Ver Detalles Individuales' : 'Ver Totales por Productos'}" 
                                  action="#{detalleVentaBean.alternarVista}" 
                                  update="dtDetalleVenta dtDetalleVentaAgrupado formDetalleVenta"
                                  process="@this"
                                  styleClass="boton"
                                  style="margin-right: 10px;"/>
-                <p:commandLink ajax="false" styleClass="me-2" title="Exportar a PDF"
-                              action="#{detalleVentaBean.exportarPDF}">
-                    <p:graphicImage value="/iconos/pdf.png" width="30" />
-                </p:commandLink>
-                <p:commandLink ajax="false" title="Exportar a Excel"
-                              action="#{detalleVentaBean.exportarExcel}">
-                    <p:graphicImage value="/iconos/xls.png" width="35" />
-                </p:commandLink>
             </div>
             
             <!-- Tabla de Detalles Agrupados por Producto -->
             <h:panelGroup rendered="#{detalleVentaBean.mostrarAgrupado}">
             <div class="container">
-                <h3 style="color: #C89B3C; margin: 20px 0;">Totales de Ventas por Descripción</h3>
                 <p:dataTable id="dtDetalleVentaAgrupado" value="#{detalleVentaBean.listaAgrupada}" var="d" 
                             styleClass="table table-bordered shadow-sm miAutoTabla"
                             style="font-size:15px;"
@@ -336,7 +327,7 @@
                         </f:facet>
                     </p:column>
                     
-                    <p:column headerText="Descripción">
+                    <p:column headerText="Nombre del Cliente">
                         <h:outputText value="#{d.descripcion}" style="display:block; padding:10px 5px; color:black;" />
                         <f:facet name="exportar">
                             <h:outputText value="#{d.descripcion}" />
@@ -406,6 +397,17 @@
                 </p:dataTable>
             </div>
             </h:panelGroup>
+            <div style="margin-top: 10px; text-align: center;">
+                    <p:commandLink ajax="false" styleClass="boton" title="Exportar a PDF"
+                                   
+                              action="#{detalleVentaBean.exportarPDF}">
+                    <p:graphicImage value="/iconos/pdf.png" width="30" />
+                </p:commandLink>
+                <p:commandLink ajax="false" title="Exportar a Excel"
+                              action="#{detalleVentaBean.exportarExcel}">
+                    <p:graphicImage value="/iconos/xls.png" width="35" />
+                </p:commandLink>
+            </div>
         </h:form>
     </ui:define>
 </ui:composition>

@@ -65,7 +65,7 @@ public class reservacionBean {
             lstReserv = reservDAO.listar(); // Fallback: cargar todas
         }
         
-        lstReservFiltered = new ArrayList<>(); // Limpiar la lista filtrada
+        lstReservFiltered = new ArrayList<>(lstReserv); // Inicializar con todos los registros
         filtrosAplicados = false;
     }
     
@@ -257,7 +257,7 @@ public class reservacionBean {
         if (idValue == null && ocasionValue == null && usuarioValue == null) {
             System.out.println("No hay filtros, mostrando todas las reservaciones");
             filtrosAplicados = false;
-            lstReservFiltered = new ArrayList<>(); // Lista vacía para que muestre todas
+            lstReservFiltered = new ArrayList<>(lstReserv); // Mostrar todas
         } else {
             filtrosAplicados = true;
             // Recorrer todas las reservaciones
@@ -301,9 +301,9 @@ public class reservacionBean {
         searchId = null; // Limpiar filtro de ID
         searchOcasion = null; // Limpiar filtro de ocasión
         searchUsuario = null; // Limpiar filtro de usuario
-        lstReservFiltered = new ArrayList<>(); // Limpiar lista filtrada
+        searchUsuario = null; // Limpiar filtro de usuario
         filtrosAplicados = false;
-        listar(); // Recargar todas las reservaciones
+        listar(); // Recargar todas las reservaciones (ya actualiza lstReservFiltered)
         return null; // Mantener en la misma página
     }
 
